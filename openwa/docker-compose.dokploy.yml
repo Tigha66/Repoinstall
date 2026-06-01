@@ -6,6 +6,20 @@
 #
 # Run from openwa/ :
 #   docker compose --env-file .env.production -f docker-compose.dokploy.yml up -d
+#
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║  Traefik network mode  │  How Traefik reaches the API                  ║
+# ║────────────────────────┼───────────────────────────────────────────────║
+# ║  On dokploy-network    │  Docker provider labels (auto, via Docker     ║
+# ║  (default)             │  API) — no file-provider config needed.       ║
+# ║                        │  The labels below handle everything.          ║
+# ║────────────────────────┼───────────────────────────────────────────────║
+# ║  Host networking       │  Traefik cannot resolve container names.      ║
+# ║  (network_mode: host)  │  Port 2785 is published to 127.0.0.1 on the  ║
+# ║                        │  host. Set the file-provider backend URL to:  ║
+# ║                        │    http://127.0.0.1:2785                     ║
+# ║                        │  (NOT http://openwa-api:2785)                 ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
 # =============================================================================
 
 services:
