@@ -313,6 +313,141 @@ docker compose -f docker-compose.prod.yml down       # stop (data volume is pres
 
 ---
 
+## Option A.1 — Hostinger VPS (step-by-step)
+
+A concrete walkthrough of Option A on a **Hostinger VPS** (Ubuntu). It uses the same
+`docker-compose.prod.yml` + Caddy auto-HTTPS.
+
+> **Placeholders — replace before production** (these are NOT real values yet):
+> | Placeholder | Replace with | Used in |
+> |-------------|--------------|---------|
+> | `api.yourdomain.com` | your real API domain/subdomain | DNS, `OPENWA_DOMAIN`, `BASE_URL`, health check |
+> | `you@yourdomain.com` | your email | `ACME_EMAIL` (Let's Encrypt) |
+> | `https://your-dashboard.vercel.app` | your Vercel dashboard URL | `CORS_ORIGINS` |
+> | `YOUR_VPS_IP` | your VPS IPv4 (hPanel) | SSH, DNS A record |
+
+### Hostinger pre-flight checklist
+- [ ] **DNS A record:** `api` → `YOUR_VPS_IP` (TTL low while testing). If your domain
+      is on Hostinger: hPanel → Domains → DNS/Nameservers → add `A  api  YOUR_VPS_IP`.
+      Verify: `dig +short api.yourdomain.com` returns your VPS IP.
+- [ ] **Hostinger firewall:** hPanel → VPS → Firewall → allow inbound **22, 80, 443**
+      (80/443 are required for Caddy's Let's Encrypt challenge).
+- [ ] **Plan RAM ≥ 2 GB** recommended for Chromium/whatsapp-web.js. On 1 GB plans add
+      swap (below).
+- [ ] **Code on GitHub** (run `/pr`, then merge) and a **GitHub token or deploy key**
+      ready (the repo is private).
+
+### 1. SSH in and update
+```bash
+ssh root@YOUR_VPS_IP
+apt update && apt upgrade -y
+apt install -y git ca-certificates curl
+```
+
+### 2. (Low-RAM plans) Create a 2 GB swap file
+Recommended if your VPS has **< 2 GB RAM** — prevents Chromium OOM crashes.
+```bash
+# Skip if 'free -h' already shows a Swap line > 0
+sudo fallocate -l 2G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+# Make it persist across reboots
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+# Gentler swapping
+sudo sysctl vm.swappiness=10
+echo 'vm.swappiness=10' | sudo tee /etc/sysctl.d/99-swappiness.conf
+
+# Verify swap is active (expect a 2.0Gi swap line):
+free -h
+swapon --show
+```
+
+### 3. Install Docker
+```bash
+# Tip: Hostinger offers an "Ubuntu + Docker" OS template in hPanel — if you used
+# it, Docker is already installed and you can skip this block.
+curl -fsSL https://get.docker.com | sh
+systemctl enable --now docker          # start now + on every reboot
+docker --version && docker compose version
+```
+
+### 4. UFW firewall (host-level, defense in depth)
+Allow only SSH + HTTP + HTTPS. The OpenWA API stays **internal** (Caddy proxies it),
+so **do not** open `2785`.
+```bash
+sudo apt install -y ufw
+sudo ufw allow OpenSSH          # 22 — keep this FIRST so you don't lock yourself out
+sudo ufw allow 80/tcp           # HTTP (Let's Encrypt challenge + redirect to HTTPS)
+sudo ufw allow 443/tcp          # HTTPS
+sudo ufw --force enable
+sudo ufw status verbose
+```
+> Note: `docker-compose.prod.yml` only publishes 80/443 (Caddy). The API is on the
+> internal Docker network via `expose: 2785` — never bound to a public interface.
+> Only publish `2785` if you intentionally run your own external reverse proxy
+> (and then bind it to `127.0.0.1:2785`, not `0.0.0.0`).
+
+### 5. Clone the private repo
+Use a **Personal Access Token** (simplest) or a **deploy key**:
+```bash
+# Option 1 — token (GitHub → Settings → Developer settings → Fine-grained token,
+# read-only "Contents" on this repo). You'll be prompted for username + token:
+git clone https://github.com/Tigha66/Repoinstall.git openwa-deploy
+
+# Option 2 — deploy key (read-only SSH key for one repo):
+#   ssh-keygen -t ed25519 -f ~/.ssh/openwa_deploy -N ""
+#   cat ~/.ssh/openwa_deploy.pub        # add in GitHub repo → Settings → Deploy keys
+#   GIT_SSH_COMMAND="ssh -i ~/.ssh/openwa_deploy" \
+#     git clone git@github.com:Tigha66/Repoinstall.git openwa-deploy
+
+cd openwa-deploy/openwa
+```
+
+### 6. Configure `.env.production` (placeholders for now)
+```bash
+cp .env.production.example .env.production
+nano .env.production
+```
+Set these (replace the placeholders when you have the real values):
+```ini
+NODE_ENV=production
+OPENWA_DOMAIN=api.yourdomain.com                     # <-- REPLACE
+ACME_EMAIL=you@yourdomain.com                        # <-- REPLACE
+BASE_URL=https://api.yourdomain.com                  # <-- REPLACE
+CORS_ORIGINS=https://your-dashboard.vercel.app       # <-- REPLACE (Vercel URL)
+# data paths are already correct (/app/data/...) — leave them as-is
+```
+
+### 7. Build, start, verify
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml ps
+# Caddy needs a minute to issue the certificate on first run:
+curl -s https://api.yourdomain.com/api/health        # {"status":"ok",...}
+```
+
+### 8. Retrieve the seeded admin API key (safely)
+```bash
+docker compose -f docker-compose.prod.yml exec api cat /app/data/.api-key
+# store it in your password manager — you'll paste it into the dashboard login
+```
+
+### 9. Day-to-day commands
+```bash
+docker compose -f docker-compose.prod.yml logs -f api      # live logs
+docker compose -f docker-compose.prod.yml restart api      # restart API
+docker compose --env-file .env.production -f docker-compose.prod.yml up -d  # apply .env changes
+docker compose -f docker-compose.prod.yml down             # stop (data volume preserved)
+git pull && docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build  # update
+```
+
+> After you have the real domain + Vercel URL: update `OPENWA_DOMAIN`, `BASE_URL`,
+> `ACME_EMAIL`, `CORS_ORIGINS` in `.env.production`, re-run the `up -d` command, then
+> set `VITE_API_URL=https://api.yourdomain.com/api` in Vercel and redeploy.
+
+---
+
 ## Option B — Railway or Render  ⚠️ works *with caveats*
 
 Configs included: **`openwa/railway.json`** and **`render.yaml`** (repo root).
