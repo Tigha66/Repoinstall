@@ -26,6 +26,11 @@ services:
       - 8.8.8.8
     expose:
       - '2785'
+    # Publish to host loopback so a host-networked Traefik (which can't join
+    # dokploy-network) can still reach the API.  Traefik on the Docker network
+    # uses this port by container name; host-networked Traefik uses 127.0.0.1:2785.
+    ports:
+      - '127.0.0.1:2785:2785'
     volumes:
       - openwa-data:/app/data
     networks:
