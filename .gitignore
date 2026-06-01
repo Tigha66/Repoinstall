@@ -1,0 +1,35 @@
+# Root-level safety net (OpenWA lives in openwa/, which has its own .gitignore)
+
+# Secrets / env
+**/.env
+**/.env.local
+**/.env.*.local
+.env
+
+# Dependencies & build output
+**/node_modules/
+**/dist/
+**/build/
+
+# OpenWA runtime data (DBs, sessions, media, API keys, generated config)
+openwa/data/
+openwa/openwa
+**/*.sqlite
+**/*.sqlite-journal
+**/*.sqlite-wal
+**/*.sqlite-shm
+**/*.db
+**/.api-key
+**/.env.generated
+
+# WhatsApp engine / browser auth & cache
+**/.wwebjs_auth/
+**/.wwebjs_cache/
+**/sessions/session-*/
+
+# Exported QR images
+**/qr*.png
+
+# Logs
+**/*.log
+logs/

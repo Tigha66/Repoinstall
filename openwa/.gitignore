@@ -72,3 +72,17 @@ uploads/
 docs/plans/
 CLAUDE.md
 _docs/
+
+# Extra hardening (OpenWA runtime artifacts)
+# Bare data DB file when DATABASE_NAME has no path/extension
+/openwa
+openwa.sqlite*
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+# API key + generated config
+.api-key
+.env.generated
+# Exported QR images / WhatsApp auth
+qr*.png
+*-qr.png
