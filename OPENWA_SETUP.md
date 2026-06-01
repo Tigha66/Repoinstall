@@ -182,3 +182,85 @@ git -C openwa init -q && git -C openwa remote add origin https://github.com/rmyn
   `libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0
   libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libpango-1.0-0
   libpangocairo-1.0-0 libasound2 libatspi2.0-0 libxshmfence1 fonts-liberation`
+
+---
+
+# Deploying the dashboard to Vercel
+
+> **Vercel hosts the dashboard (frontend) ONLY.** The OpenWA **backend cannot run on
+> Vercel** — `whatsapp-web.js` needs a persistent process (headless Chromium, a
+> long-lived WebSocket to WhatsApp Web, on-disk session/browser profiles and a
+> SQLite database). Vercel functions are serverless, ephemeral and time-limited, so
+> a WhatsApp session can't stay alive there.
+>
+> **Run the backend on a persistent host** — a VPS (the repo's `docker-compose`),
+> **Railway**, **Render**, or **Fly.io** — and point the Vercel dashboard at it.
+
+## Architecture
+```
+[ Browser ] ──HTTPS──> [ Vercel: static dashboard ] ──HTTPS/WSS──> [ Backend on VPS/Railway/Render/Fly ]
+                         (this repo: openwa/dashboard)              (OpenWA API :2785, persistent)
+```
+The dashboard reads its backend location from the build-time env var
+**`VITE_API_URL`**. Locally (no env var) it falls back to `/api` and Vite proxies
+that to `http://localhost:2785`, so `npm run dev` keeps working unchanged.
+
+## Step 1 — Import the repo into Vercel
+1. Push this branch to GitHub (use the `/pr` slash command).
+2. In Vercel: **Add New… → Project → Import** your GitHub repo.
+3. Set **Root Directory** to **`openwa/dashboard`** (click *Edit* next to Root Directory).
+   Vercel will read `openwa/dashboard/vercel.json` automatically.
+
+## Step 2 — Build settings (auto-detected from vercel.json)
+| Setting | Value |
+|---------|-------|
+| Framework Preset | **Vite** |
+| Root Directory | **`openwa/dashboard`** |
+| Install Command | `npm install` |
+| Build Command | `npm run build` |
+| Output Directory | `dist` |
+
+SPA client-side routing, long-term asset caching, and a no-cache header for the
+service worker are already configured in `vercel.json` (`rewrites` + `headers`).
+
+## Step 3 — Environment variables (Vercel → Settings → Environment Variables)
+| Name | Example value | Required | Notes |
+|------|---------------|----------|-------|
+| `VITE_API_URL` | `https://api.yourdomain.com/api` | **Yes** | Absolute backend API base — **must include the `/api` path**. Add for *Production* (and *Preview* if you want). |
+| `VITE_WS_URL` | `https://api.yourdomain.com` | Optional | Socket.IO origin for live updates. If omitted, it's derived from `VITE_API_URL`'s origin automatically. |
+
+> These are `VITE_`-prefixed and therefore **public** (baked into the JS bundle).
+> Never put the API key or any secret here. After changing env vars, **redeploy**
+> so the new values are baked into the build.
+
+A copyable template lives at **`openwa/dashboard/.env.example`**.
+
+## Step 4 — Point CORS on the backend at your Vercel domain
+Once you know the Vercel URL (e.g. `https://openwa-dashboard.vercel.app`), allow it
+on the backend so the browser can call the API. In the **backend** `openwa/.env`:
+```bash
+# comma-separated list of allowed browser origins
+CORS_ORIGINS=https://openwa-dashboard.vercel.app
+# add a custom domain and/or localhost too if needed:
+# CORS_ORIGINS=https://dashboard.yourdomain.com,https://openwa-dashboard.vercel.app,http://localhost:2886
+```
+Then restart the backend (`cd openwa && ./run.sh restart`). The API does an **exact
+origin match**; a missing origin yields a 500 *“Not allowed by CORS”* and the
+dashboard login shows *Internal server error*. Include every origin you load the
+dashboard from (Vercel production domain, any custom domain, Vercel preview URLs).
+
+> Tip: Vercel **preview** deployments use changing `*.vercel.app` URLs. Either add a
+> stable custom domain, or include each preview origin you actually use.
+
+## Step 5 — Deploy & verify
+1. **Deploy** in Vercel. Open the resulting URL.
+2. Log in with your backend API key (from `openwa/data/.api-key`).
+3. If login fails with *Internal server error*, re-check **Step 4** (CORS) and that
+   `VITE_API_URL` is correct and ends with `/api`.
+
+## What I need from you later
+- **The final backend URL** (e.g. `https://api.yourdomain.com`). With it I will:
+  - set `VITE_API_URL=<that>/api` (and optionally `VITE_WS_URL=<that>`), and
+  - set `CORS_ORIGINS` on the backend to your Vercel domain.
+  Until then everything is wired through `VITE_API_URL`, so no code changes are needed —
+  you just set the env var in Vercel.

@@ -1,5 +1,8 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+// Socket.IO origin resolved from VITE_WS_URL / VITE_API_URL, falling back to the
+// current origin (dev proxy / same-origin deployments). See src/config.ts.
+import { WS_URL as SOCKET_URL } from '../config';
 
 interface SessionStatusEvent {
   sessionId: string;
@@ -24,10 +27,6 @@ interface WebSocketEvents {
   onQRCode?: (event: QRCodeEvent) => void;
   onMessage?: (event: MessageEvent) => void;
 }
-
-// Use current origin for WebSocket (goes through nginx proxy in Docker)
-// Falls back to env var or localhost for development
-const SOCKET_URL = import.meta.env.VITE_WS_URL || window.location.origin;
 
 export function useWebSocket(events: WebSocketEvents = {}) {
   const socketRef = useRef<Socket | null>(null);
