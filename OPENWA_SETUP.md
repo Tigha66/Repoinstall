@@ -185,6 +185,157 @@ git -C openwa init -q && git -C openwa remote add origin https://github.com/rmyn
 
 ---
 
+# Final architecture
+
+```
+   ┌──────────────┐      HTTPS       ┌──────────────────────────┐    WSS to     ┌────────────┐
+   │   Browser    │ ───────────────▶ │  Vercel: static dashboard │  WhatsApp Web │  WhatsApp  │
+   │ (you / users)│ ◀─────────────── │  (this repo: openwa/      │ ◀───────────▶ │  servers   │
+   └──────────────┘                  │   dashboard, Vite SPA)    │               └────────────┘
+          │                          └────────────┬─────────────┘                     ▲
+          │  HTTPS / WSS (VITE_API_URL)            │                                    │
+          ▼                                        ▼                                    │
+   ┌───────────────────────────────────────────────────────────────┐                  │
+   │  Public OpenWA BACKEND on a PERSISTENT host                    │ ─────────────────┘
+   │  (VPS+Docker  ·  Railway  ·  Render  ·  Fly.io)               │   headless Chromium
+   │  NestJS API :2785  +  whatsapp-web.js  +  SQLite  +  sessions  │   (whatsapp-web.js)
+   └───────────────────────────────────────────────────────────────┘
+```
+
+- **Dashboard → Vercel** (static; no WhatsApp logic). Talks to the backend via `VITE_API_URL`.
+- **Backend → persistent host** (the only place the WhatsApp session can live).
+- **Backend ↔ WhatsApp** over the `whatsapp-web.js` engine (headless Chromium + WebSocket).
+
+**Recommended backend host: a VPS running Docker Compose** (option A) — most reliable
+for `whatsapp-web.js` session persistence, full control of RAM/disk, and no idle
+shutdown. Railway/Render (option B) can work but with caveats (see below).
+
+---
+
+# Backend deployment
+
+## Where persistent data lives
+All durable state is under **`/app/data`** in the container — keep it on a volume/disk:
+
+| Path | Contents |
+|------|----------|
+| `/app/data/main.sqlite`   | Auth / API-key + audit database |
+| `/app/data/openwa.sqlite` | Sessions / webhooks / messages database |
+| `/app/data/sessions/`     | **WhatsApp auth + Chromium browser profile & cache** (per session) |
+| `/app/data/media/`        | Uploads / media |
+| `/app/data/plugins/`      | Plugins |
+| `/app/data/.api-key`      | Raw seeded admin API key (read once, store safely) |
+
+In Docker this is the named volume **`openwa-data`**; on Railway/Render it's the
+mounted persistent disk at `/app/data`. Lose it → you re-scan the WhatsApp QR.
+
+## Required backend environment variables
+Full template with safe placeholders: **`openwa/.env.production.example`**.
+
+| Variable | Example | Required | Notes |
+|----------|---------|----------|-------|
+| `NODE_ENV` | `production` | **Yes** | Seeds a strong random API key (not `dev-admin-key`). |
+| `PORT` | `2785` | Yes | App listens on `process.env.PORT`. |
+| `CORS_ORIGINS` | `https://your-dashboard.vercel.app` | **Yes** | Exact Vercel origin(s), comma-separated. |
+| `DATABASE_TYPE` | `sqlite` | Yes | `sqlite` (default) or `postgres`. |
+| `DATABASE_NAME` | `/app/data/openwa.sqlite` | Yes | Absolute path on the volume. |
+| `DATABASE_SYNCHRONIZE` | `true` | Yes (sqlite) | Auto-creates tables for SQLite. |
+| `ENGINE_TYPE` | `whatsapp-web.js` | Yes | WhatsApp engine. |
+| `SESSION_DATA_PATH` | `/app/data/sessions` | Yes | WhatsApp auth + browser profile. |
+| `PUPPETEER_EXECUTABLE_PATH` | `/usr/bin/chromium` | Yes (Docker) | Chromium baked into the image. |
+| `PUPPETEER_ARGS` | `--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu` | Yes | Container-safe Chromium flags. |
+| `PUPPETEER_HEADLESS` | `true` | Yes | Headless browser. |
+| `STORAGE_TYPE` / `STORAGE_LOCAL_PATH` | `local` / `/app/data/media` | Yes | Local media storage. |
+| `PLUGINS_DIR` | `/app/data/plugins` | Yes | Plugin directory. |
+| `OPENWA_DOMAIN` | `api.yourdomain.com` | VPS+Caddy | Domain for automatic HTTPS. |
+| `ACME_EMAIL` | `admin@yourdomain.com` | Optional | Let's Encrypt contact. |
+| `ENABLE_SWAGGER` | `false` | Optional | Public API docs at `/api/docs`. |
+| `API_MASTER_KEY` | *(empty)* | No | Unused by this version's auth — leave blank. |
+
+---
+
+## Option A — VPS with Docker Compose  ✅ recommended
+
+Files: `openwa/docker-compose.prod.yml` (API + Caddy auto-HTTPS), `openwa/Dockerfile`
+(multi-stage; bundles Chromium), `openwa/deploy/Caddyfile`, plus an Nginx alternative
+at `openwa/deploy/nginx.conf.example`.
+
+**Prerequisites:** a VPS (≥ 2 GB RAM recommended for Chromium), Docker + Compose
+installed, and a DNS `A` record pointing your domain (e.g. `api.yourdomain.com`) at
+the server's IP (required for automatic HTTPS).
+
+```bash
+# 1. Get the code onto the server
+git clone <your-repo-url> openwa-deploy && cd openwa-deploy/openwa
+
+# 2. Create the backend env file from the template and edit it
+cp .env.production.example .env.production
+nano .env.production          # set OPENWA_DOMAIN, CORS_ORIGINS (your Vercel URL), etc.
+
+# 3. Build + start (API + Caddy). Caddy fetches HTTPS certs automatically.
+docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+
+# 4. Check health and status
+docker compose -f docker-compose.prod.yml ps
+curl -s https://api.yourdomain.com/api/health        # {"status":"ok",...}
+
+# 5. Read the seeded admin API key (store it safely — you'll need it to log in)
+docker compose -f docker-compose.prod.yml exec api cat /app/data/.api-key
+
+# Logs / lifecycle
+docker compose -f docker-compose.prod.yml logs -f api
+docker compose -f docker-compose.prod.yml restart api
+docker compose -f docker-compose.prod.yml down       # stop (data volume is preserved)
+```
+
+- **Persistence:** the `openwa-data` named volume keeps DBs, sessions, browser cache,
+  media and plugins across restarts and rebuilds.
+- **Auto-restart after reboot:** every service uses `restart: unless-stopped`. Ensure
+  Docker starts on boot: `sudo systemctl enable docker`.
+- **HTTPS:** the bundled **Caddy** service obtains/renews Let's Encrypt certs for
+  `OPENWA_DOMAIN` and proxies HTTP+WebSocket to the API. Prefer Nginx? Remove the
+  `caddy` service, publish the API to `127.0.0.1:2785`, and use
+  `deploy/nginx.conf.example` with certbot.
+- **CORS:** set `CORS_ORIGINS` to your Vercel domain in `.env.production` (see post-deploy).
+
+---
+
+## Option B — Railway or Render  ⚠️ works *with caveats*
+
+Configs included: **`openwa/railway.json`** and **`render.yaml`** (repo root).
+I have **not deployed these live**, so treat them as starting points and verify after
+your first deploy. They build the same Docker image (Chromium included), so the engine
+itself runs fine — the real risks are **persistence and idle shutdown**, not Chromium.
+
+**Shared caveats (important):**
+- **You MUST attach persistent storage at `/app/data`.** Without it, every redeploy/
+  restart wipes the WhatsApp auth and you must re-scan the QR.
+  - *Render:* the `disk:` block in `render.yaml` (paid feature).
+  - *Railway:* add a **Volume** in the dashboard mounted at `/app/data` (can't be
+    declared in `railway.json`).
+- **No idle shutdown / single instance.** Render **free** web services spin down when
+  idle → the WhatsApp session dies. Use an **always-on paid** instance. Run **one**
+  replica only — a local disk can't be shared across scaled instances.
+- **Memory:** Chromium needs RAM; pick a plan with **≥ 2 GB**. Small/free tiers may OOM
+  when a session launches the browser.
+- **HTTPS is automatic** at `*.onrender.com` / `*.up.railway.app` (no reverse proxy
+  needed), so you don't use the Caddy/Nginx files there.
+
+**Verdict:** Railway/Render are viable for a single always-on paid instance with a
+persistent disk, but **a VPS (Option A) is more reliable** for long-lived
+`whatsapp-web.js` sessions. If you can't guarantee a persistent disk **and** an
+always-on (non-sleeping) instance, **do not use Railway/Render** for this — you'll be
+re-scanning the QR repeatedly.
+
+**Render (Blueprint):** New → Blueprint → pick this repo → it reads `render.yaml`.
+Set `CORS_ORIGINS` (your Vercel URL) in the dashboard. Confirm the disk is attached.
+
+**Railway:** New Project → Deploy from repo → set the service **Root Directory** to
+`openwa` (so it uses `openwa/railway.json` + `openwa/Dockerfile`) → add a **Volume** at
+`/app/data` → add env vars from `.env.production.example` (incl. `CORS_ORIGINS`).
+
+---
+
 # Deploying the dashboard to Vercel
 
 > **Vercel hosts the dashboard (frontend) ONLY.** The OpenWA **backend cannot run on
@@ -264,3 +415,67 @@ dashboard from (Vercel production domain, any custom domain, Vercel preview URLs
   - set `CORS_ORIGINS` on the backend to your Vercel domain.
   Until then everything is wired through `VITE_API_URL`, so no code changes are needed —
   you just set the env var in Vercel.
+
+---
+
+# End-to-end post-deploy checklist (backend + Vercel + WhatsApp)
+
+Do these in order once. `KEY` is the backend's seeded admin API key.
+
+```bash
+# ---- BACKEND (on your VPS/Railway/Render) ----
+# 1. Set backend env vars (VPS example)
+cp .env.production.example .env.production
+nano .env.production                 # NODE_ENV=production, OPENWA_DOMAIN, CORS_ORIGINS=<your Vercel URL>
+
+# 2. Start the backend
+docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+
+# 3. Confirm health (should return {"status":"ok",...})
+curl -s https://api.yourdomain.com/api/health
+
+# 4. Grab the API key
+docker compose -f docker-compose.prod.yml exec api cat /app/data/.api-key
+KEY="<paste-key>"; BASE="https://api.yourdomain.com/api"
+```
+
+```text
+# ---- VERCEL (dashboard) ----
+5. Vercel → Project → Settings → Environment Variables:
+      VITE_API_URL = https://api.yourdomain.com/api      (must include /api)
+      VITE_WS_URL  = https://api.yourdomain.com          (optional)
+   Then REDEPLOY (env vars are baked in at build time).
+
+# ---- BACKEND CORS ----
+6. Ensure CORS_ORIGINS on the backend = your Vercel URL (exact origin), e.g.
+      CORS_ORIGINS=https://openwa-dashboard.vercel.app
+   then restart the backend so it takes effect:
+      docker compose --env-file .env.production -f docker-compose.prod.yml up -d
+```
+
+```bash
+# ---- WHATSAPP SESSION (via API or the dashboard UI) ----
+# 7. Create a session
+SID=$(curl -s -X POST "$BASE/sessions" -H "X-API-Key: $KEY" \
+  -H "Content-Type: application/json" -d '{"name":"my-bot"}' \
+  | python3 -c "import json,sys;print(json.load(sys.stdin)['id'])")
+
+# 8. Start it
+curl -s -X POST "$BASE/sessions/$SID/start" -H "X-API-Key: $KEY"
+
+# 9. Fetch the QR (returns {"qrCode":"data:image/png;base64,..."}) and save it
+curl -s "$BASE/sessions/$SID/qr" -H "X-API-Key: $KEY" \
+ | python3 -c "import json,sys,base64; d=json.load(sys.stdin)['qrCode']; open('qr.png','wb').write(base64.b64decode(d.split(',')[1])); print('wrote qr.png')"
+
+# 10. Scan qr.png in WhatsApp → Settings → Linked Devices → Link a Device.
+#     Poll until status becomes "connected":
+curl -s "$BASE/sessions/$SID" -H "X-API-Key: $KEY"
+
+# 11. Send a test message
+curl -s -X POST "$BASE/sessions/$SID/messages/send-text" \
+  -H "X-API-Key: $KEY" -H "Content-Type: application/json" \
+  -d '{"chatId":"628123456789@c.us","text":"Hello from OpenWA!"}'
+```
+
+If the dashboard login shows *Internal server error*, the backend rejected the Vercel
+origin → fix `CORS_ORIGINS` (step 6) and confirm `VITE_API_URL` ends with `/api`.

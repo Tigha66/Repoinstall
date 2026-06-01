@@ -1,0 +1,59 @@
+# =============================================================================
+# OpenWA — Nginx reverse proxy example (alternative to the bundled Caddy)
+# =============================================================================
+# Use this if you prefer Nginx for TLS termination instead of Caddy.
+#
+# Prereq: run the API published on localhost only. In docker-compose.prod.yml
+# remove the `caddy` service and add to the `api` service:
+#     ports:
+#       - '127.0.0.1:2785:2785'
+#
+# TLS certificates: obtain with certbot, e.g.
+#     sudo apt-get install -y certbot python3-certbot-nginx
+#     sudo certbot --nginx -d api.yourdomain.com
+# certbot will fill in the ssl_certificate lines and set up auto-renewal.
+#
+# Install: copy to /etc/nginx/sites-available/openwa, then:
+#     sudo ln -s /etc/nginx/sites-available/openwa /etc/nginx/sites-enabled/
+#     sudo nginx -t && sudo systemctl reload nginx
+# =============================================================================
+
+# Redirect HTTP -> HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name api.yourdomain.com;        # <-- change to your domain
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name api.yourdomain.com;         # <-- change to your domain
+
+    # Managed by certbot (uncomment after running certbot, or set manually):
+    # ssl_certificate     /etc/letsencrypt/live/api.yourdomain.com/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/api.yourdomain.com/privkey.pem;
+
+    # Allow larger media uploads through the proxy
+    client_max_body_size 50m;
+
+    location / {
+        proxy_pass http://127.0.0.1:2785;
+        proxy_http_version 1.1;
+
+        # WebSocket / Socket.IO upgrade (live sessions, QR, messages)
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        # Preserve client info
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Long-lived connections for streaming/websockets
+        proxy_read_timeout 3600s;
+        proxy_send_timeout 3600s;
+    }
+}
