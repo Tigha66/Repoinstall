@@ -208,7 +208,20 @@ git -C openwa init -q && git -C openwa remote add origin https://github.com/rmyn
 
 **Recommended backend host: a VPS running Docker Compose** (option A) — most reliable
 for `whatsapp-web.js` session persistence, full control of RAM/disk, and no idle
-shutdown. Railway/Render (option B) can work but with caveats (see below).
+shutdown. **Fly.io** (option C) is the best managed alternative. Railway/Render
+(option B) work but need more care.
+
+### Host comparison
+
+| Host | Persistence | Always-on | HTTPS | Effort | Notes |
+|------|-------------|-----------|-------|--------|-------|
+| **VPS + Docker** (A) | ✅ volume, full control | ✅ | Caddy/Nginx (incl.) | Medium | **Most reliable & cheapest at scale.** You manage the box. |
+| **Fly.io** (C) | ✅ Fly volume (`/app/data`) | ✅ (disable auto-stop) | ✅ automatic | Low | **Best managed option.** Single machine + volume; great fit. |
+| **Render** (B) | ⚠️ paid disk only | ⚠️ paid (free sleeps) | ✅ automatic | Low | Free tier **sleeps** → kills session. Use a paid always-on plan. |
+| **Railway** (B) | ⚠️ volume via dashboard | ✅ (paid usage) | ✅ automatic | Low | Must attach a volume at `/app/data`; watch usage billing. |
+
+**Rule for all of them:** one always-on instance + a persistent volume at
+`/app/data`. Lose either and you re-scan the WhatsApp QR.
 
 ---
 
@@ -333,6 +346,83 @@ Set `CORS_ORIGINS` (your Vercel URL) in the dashboard. Confirm the disk is attac
 **Railway:** New Project → Deploy from repo → set the service **Root Directory** to
 `openwa` (so it uses `openwa/railway.json` + `openwa/Dockerfile`) → add a **Volume** at
 `/app/data` → add env vars from `.env.production.example` (incl. `CORS_ORIGINS`).
+
+---
+
+## Option C — Fly.io  ✅ good middle ground
+
+Config: **`openwa/fly.toml`** (backend API only — no dashboard). It builds the
+multi-stage `Dockerfile` (Chromium included), serves HTTPS, routes to internal port
+**2785**, health-checks `/api/health`, mounts a persistent volume at `/app/data`, and
+pins **one always-on machine** (no auto-stop). Run all `fly` commands from `openwa/`.
+
+**Prereqs:** install `flyctl` and sign in (`fly auth login`).
+
+```bash
+cd openwa
+
+# 1. Create the app WITHOUT deploying, reusing the committed fly.toml.
+#    (Edit `app` / `primary_region` in fly.toml first, or pass --name here.)
+fly launch --no-deploy --copy-config --name <your-openwa-app>
+#    — or create it manually:
+#    fly apps create <your-openwa-app>
+
+# 2. Create the persistent volume (same region as the app). REQUIRED.
+fly volumes create openwa_data --mount-path /app/data --region <region> --size 5
+
+# 3. Set deployment-specific secret(s). CORS_ORIGINS = your Vercel dashboard URL.
+fly secrets set CORS_ORIGINS="https://your-dashboard.vercel.app"
+#    (All other config — DATABASE_NAME, SESSION_DATA_PATH, STORAGE_LOCAL_PATH,
+#     PLUGINS_DIR, PUPPETEER_*, NODE_ENV, PORT — is already in fly.toml [env].
+#     You may instead set any of them as secrets to override, e.g.:
+#     fly secrets set NODE_ENV=production DATABASE_NAME=/app/data/openwa.sqlite \
+#       SESSION_DATA_PATH=/app/data/sessions STORAGE_LOCAL_PATH=/app/data/media \
+#       PLUGINS_DIR=/app/data/plugins )
+
+# 4. Deploy.
+fly deploy
+
+# 5. Status + logs
+fly status
+fly logs
+
+# 6. Retrieve the seeded admin API key safely (not printed in logs).
+#    SSH into the running machine and read it from the volume:
+fly ssh console -C "cat /app/data/.api-key"
+
+# 7. Test health (use your app's public hostname)
+curl -s https://<your-openwa-app>.fly.dev/api/health        # {"status":"ok",...}
+```
+
+> The public URL is `https://<your-openwa-app>.fly.dev` (or your custom domain via
+> `fly certs add api.yourdomain.com`).
+
+**Volume:** name **`openwa_data`**, mount path **`/app/data`** — holds
+`main.sqlite`, `openwa.sqlite`, `sessions/` (WhatsApp auth + browser cache), `media/`,
+`plugins/`, and `.api-key`. Without it, every deploy/restart loses the login.
+
+**Required Fly configuration** (in `fly.toml [env]` unless noted):
+`NODE_ENV=production`, `PORT=2785`, `DATABASE_TYPE=sqlite`,
+`DATABASE_NAME=/app/data/openwa.sqlite`, `DATABASE_SYNCHRONIZE=true`,
+`ENGINE_TYPE=whatsapp-web.js`, `SESSION_DATA_PATH=/app/data/sessions`,
+`STORAGE_TYPE=local`, `STORAGE_LOCAL_PATH=/app/data/media`,
+`PLUGINS_DIR=/app/data/plugins`, `PUPPETEER_HEADLESS=true`,
+`PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium`,
+`PUPPETEER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu`,
+and **`CORS_ORIGINS`** (set via `fly secrets set` = your Vercel URL).
+
+**Fly caveats:**
+- **A persistent volume is mandatory** (see above) — `fly.toml` already declares the
+  mount, but you must `fly volumes create openwa_data`.
+- **Do not scale horizontally.** A Fly volume attaches to a single machine and the
+  WhatsApp session is tied to local disk. Keep **one** instance
+  (`auto_stop_machines = false`, `min_machines_running = 1`, `fly scale count 1`).
+  Running 2+ machines would each need their own volume and their own QR login.
+- **No auto-sleep.** `auto_stop_machines` is disabled so the machine never suspends
+  (a stopped machine drops the live WhatsApp connection). Leave it off.
+- **Memory:** `fly.toml` requests 1 GB; raise to 2 GB (`fly scale memory 2048`) if you
+  run multiple sessions or hit OOM when Chromium starts.
+- **Not deployed/verified here** — config is syntax-validated only.
 
 ---
 
