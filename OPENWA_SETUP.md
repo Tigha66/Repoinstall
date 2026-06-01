@@ -23,7 +23,7 @@ The bundled **dashboard** is a Vite + React SPA and runs without Docker too.
 | `API_MASTER_KEY`      | *(empty)*                   | Not used by this version — keys are stored in the DB. Left blank to avoid confusion. |
 | `DATABASE_TYPE`       | `sqlite`                    | Zero external services. |
 | `DATABASE_NAME`       | `./data/openwa.sqlite`      | Keeps the data DB **inside `data/`** (gitignored). The default `openwa` would drop a DB file in the repo root. |
-| `CORS_ORIGINS`        | `http://localhost:2886`     | Locked to the dashboard origin instead of `*`. |
+| `CORS_ORIGINS`        | `http://localhost:2886,https://2886-…daytonaproxy01.net` | Allowed browser origins (comma-separated). **Must include the URL you open the dashboard from** — both `localhost` and the Daytona preview origin. A missing origin makes the API reject the request with a 500 "Not allowed by CORS" and the dashboard shows *Internal server error* on login. |
 | `ENABLE_SWAGGER`      | `true`                      | API docs at `/api/docs`. Set to `false` to disable in hardened deployments. |
 
 ### About the API key
