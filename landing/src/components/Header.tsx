@@ -6,34 +6,25 @@ interface HeaderProps {
 }
 
 export function Header({ menuOpen, setMenuOpen }: HeaderProps) {
-  const navLinks = [
-    { href: '#how-it-works', label: 'How it works' },
-    { href: '#demo', label: 'Demo' },
-    { href: '#pricing', label: 'Pricing' },
-    { href: '#faq', label: 'FAQ' },
-  ]
-
   return (
     <header className="header">
       <div className="container header-inner">
         <a href="#" className="logo">
-          <MessageCircle className="logo-icon" size={28} />
-          <span className="logo-text">LeadReply AI</span>
+          <MessageCircle className="logo-icon" />
+          <span>LeadReply</span>
         </a>
 
         <nav className={`nav ${menuOpen ? 'nav-open' : ''}`}>
-          {navLinks.map(link => (
-            <a key={link.href} href={link.href} className="nav-link" onClick={() => setMenuOpen(false)}>
-              {link.label}
-            </a>
-          ))}
-          <a href="#lead-form" className="btn btn-primary btn-sm nav-cta">
+          <a href="#how-it-works" className="nav-link" onClick={() => setMenuOpen(false)}>How it works</a>
+          <a href="#pricing" className="nav-link" onClick={() => setMenuOpen(false)}>Pricing</a>
+          <a href="#faq" className="nav-link" onClick={() => setMenuOpen(false)}>FAQ</a>
+          <a href="#lead-form" className="btn btn-sm btn-primary" onClick={() => setMenuOpen(false)}>
             Start Free Trial
           </a>
         </nav>
 
         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
     </header>

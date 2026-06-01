@@ -1,4 +1,4 @@
-import { Check, Star, ArrowRight } from 'lucide-react'
+import { Check } from 'lucide-react'
 
 const plans = [
   {
@@ -6,17 +6,15 @@ const plans = [
     price: '£99',
     period: '/month',
     setup: '£299 setup',
-    desc: 'Best for small local businesses that want faster WhatsApp replies and basic lead capture.',
+    desc: 'For small local businesses that want faster replies and basic lead capture.',
     features: [
       'WhatsApp FAQ assistant',
-      'Basic quote/booking questions',
+      'Basic quote questions',
       'Business hours and service info',
       'Human handoff',
-      'Lead summary via email',
-      'Monthly update',
-      'Basic support',
+      'Lead summary by email',
+      'Monthly updates',
     ],
-    cta: 'Start Free Trial',
     popular: false,
   },
   {
@@ -24,17 +22,14 @@ const plans = [
     price: '£199',
     period: '/month',
     setup: '£699 setup',
-    desc: 'Best for businesses that depend on bookings, quotes, and after-hours enquiries.',
+    desc: 'For businesses that rely on bookings, quotes, and after-hours enquiries. Everything in Starter, plus:',
     features: [
-      'Everything in Starter',
-      'Advanced quote flow',
+      'Advanced quote flows',
       'After-hours automation',
       'Google Sheets or CRM handoff',
-      'Conversation summaries',
       'Monthly performance report',
       'Priority support',
     ],
-    cta: 'Start Free Trial',
     popular: true,
   },
   {
@@ -42,17 +37,14 @@ const plans = [
     price: 'Custom',
     period: '',
     setup: 'From £1,000',
-    desc: 'Best for multi-location businesses or those needing full setup, monitoring, and integrations.',
+    desc: 'For businesses that want full setup, custom workflows, integrations, and ongoing optimisation.',
     features: [
       'Everything in Pro',
       'Multi-location support',
       'Custom workflows',
       'Integrations',
-      'Advanced reporting',
-      'Official WhatsApp Cloud API migration',
-      'Managed optimization',
+      'Ongoing optimisation',
     ],
-    cta: 'Talk to Us',
     popular: false,
   },
 ]
@@ -61,46 +53,40 @@ export function Pricing() {
   return (
     <section className="section pricing-section" id="pricing">
       <div className="container">
-        <div className="section-header">
-          <span className="section-tag">Pricing</span>
-          <h2 className="section-title">Simple, transparent pricing</h2>
-          <p className="section-subtitle">Start with a 7-day free trial. No card required. We only recommend a paid plan if the demo helps your business respond faster.</p>
-        </div>
-
-        {/* Founding Client Banner */}
-        <div className="founding-banner">
-          <Star size={20} />
-          <div>
-            <strong>🏆 Founding Client Offer:</strong> £149 setup + £49/month for the first 2 months. Limited to the first 5 local businesses. <a href="#lead-form">Claim your spot →</a>
-          </div>
+        <div className="section-center">
+          <p className="section-label">Simple pricing</p>
+          <h2 className="section-title">Start with a free trial. Pay only if it helps your business.</h2>
+          <p className="section-subtitle">
+            We only recommend a paid plan after the demo proves it helps you respond faster and capture more leads.
+          </p>
         </div>
 
         <div className="pricing-grid">
           {plans.map((plan, i) => (
-            <div key={i} className={`pricing-card ${plan.popular ? 'pricing-card-popular' : ''}`}>
+            <div key={i} className={`pricing-card ${plan.popular ? 'pricing-popular' : ''}`}>
               {plan.popular && <div className="popular-badge">Most Popular</div>}
-              <h3 className="plan-name">{plan.name}</h3>
-              <div className="plan-price">
+              <h3 className="pricing-name">{plan.name}</h3>
+              <div className="pricing-price">
                 <span className="price">{plan.price}</span>
                 <span className="period">{plan.period}</span>
               </div>
-              <p className="plan-setup">{plan.setup}</p>
-              <p className="plan-desc">{plan.desc}</p>
-              <ul className="plan-features">
+              <p className="pricing-setup">{plan.setup}</p>
+              <p className="pricing-desc">{plan.desc}</p>
+              <ul className="pricing-features">
                 {plan.features.map((f, j) => (
                   <li key={j}><Check size={16} /> {f}</li>
                 ))}
               </ul>
-              <a href="#lead-form" className={`btn ${plan.popular ? 'btn-primary' : 'btn-outline'} btn-lg btn-full`}>
-                {plan.cta} <ArrowRight size={18} />
+              <a href="#lead-form" className={`btn ${plan.popular ? 'btn-primary' : 'btn-outline'} btn-full`}>
+                {plan.name === 'Managed' ? 'Talk to Us' : 'Start Free Trial'}
               </a>
             </div>
           ))}
         </div>
 
-        <div className="pricing-reassurance">
-          <p>🔒 Cancel anytime. No long-term contracts. Start with a free trial — no card required.</p>
-        </div>
+        <p className="pricing-reassurance">
+          🔒 Cancel anytime. No long-term contracts. No card required for the trial.
+        </p>
       </div>
     </section>
   )

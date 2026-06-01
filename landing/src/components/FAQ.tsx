@@ -3,36 +3,28 @@ import { ChevronDown } from 'lucide-react'
 
 const faqs = [
   {
-    q: 'Is this spam?',
-    a: 'No. This service is designed to reply to customers who contact your business or have opted in. We do not support spam, scraped lists, or bulk cold WhatsApp campaigns.',
+    q: 'Will this spam my customers?',
+    a: 'No. LeadReply only replies to customers who contact your business first. We never send unsolicited bulk messages.',
   },
   {
-    q: 'Does it send bulk WhatsApp messages?',
-    a: 'No. The AI only replies to inbound messages — customers who message your business first. We never send unsolicited bulk messages.',
+    q: 'Can I take over the conversation?',
+    a: 'Yes. Human handoff is included. When a serious lead is ready, you or your team can take over directly.',
   },
   {
-    q: 'Do I need WhatsApp Business?',
-    a: 'Yes, you need a WhatsApp Business number. This is a dedicated business number, not your personal WhatsApp.',
+    q: 'Do I need technical skills?',
+    a: 'No. We set it up for you. You tell us about your business, and we handle the rest.',
   },
   {
-    q: 'Can I approve replies before they go live?',
-    a: 'Yes. During the trial and testing phase, you and your team test everything internally. Nothing goes live to real customers until you approve it.',
+    q: 'Is this for UK businesses?',
+    a: 'Yes, the service is designed for UK local businesses. We understand UK postcodes, pricing, and enquiry patterns.',
   },
   {
-    q: 'What happens when the assistant doesn\'t know the answer?',
-    a: 'The AI will hand off to a human (you or your team) when it can\'t confidently answer. You\'re always in control.',
+    q: 'Can I cancel?',
+    a: 'Yes. There are no long-term contracts. Cancel anytime.',
   },
   {
-    q: 'Is this the official WhatsApp?',
-    a: 'We use fast demo and pilot tooling to prove the workflow quickly. For production clients who need maximum reliability, we can help migrate to the official WhatsApp Business Platform / Cloud API.',
-  },
-  {
-    q: 'What if I want to cancel?',
-    a: 'You can cancel anytime. No long-term contracts. If you\'re on a monthly plan, cancel before your next billing date.',
-  },
-  {
-    q: 'How long does setup take?',
-    a: 'Most businesses are set up within 2–3 days. The initial discovery call takes 15 minutes, and we handle the technical setup for you.',
+    q: 'Do I need a card for the free trial?',
+    a: 'No. You can request a trial without adding card details.',
   },
 ]
 
@@ -42,21 +34,19 @@ export function FAQ() {
   return (
     <section className="section faq-section" id="faq">
       <div className="container">
-        <div className="section-header">
-          <span className="section-tag">FAQ</span>
-          <h2 className="section-title">Frequently asked questions</h2>
+        <div className="section-center">
+          <p className="section-label">FAQ</p>
+          <h2 className="section-title">Common questions</h2>
         </div>
         <div className="faq-list">
           {faqs.map((faq, i) => (
             <div key={i} className={`faq-item ${openIndex === i ? 'faq-item-open' : ''}`}>
               <button className="faq-question" onClick={() => setOpenIndex(openIndex === i ? null : i)}>
                 <span>{faq.q}</span>
-                <ChevronDown className={`faq-icon ${openIndex === i ? 'faq-icon-open' : ''}`} size={20} />
+                <ChevronDown className={`faq-icon ${openIndex === i ? 'faq-icon-open' : ''}`} size={18} />
               </button>
               {openIndex === i && (
-                <div className="faq-answer">
-                  <p>{faq.a}</p>
-                </div>
+                <div className="faq-answer"><p>{faq.a}</p></div>
               )}
             </div>
           ))}
