@@ -30,7 +30,7 @@ services:
     # To use your OWN external reverse proxy instead of the bundled Caddy, remove
     # the `caddy` service below and publish to localhost:
     #   ports:
-    #     - '127.0.0.1:2785:2785'
+    #     - 'openwa-api:2785:2785'
     expose:
       - '2785'
     volumes:
