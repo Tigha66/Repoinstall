@@ -15,7 +15,7 @@ export function FreeTrial() {
               <li><CheckCircle size={18} /> Lead capture demo</li>
               <li><CheckCircle size={18} /> Human handoff demo</li>
             </ul>
-            <a href="#pricing" className="btn btn-primary btn-lg">
+            <a href="#lead-form" className="btn btn-primary btn-lg">
               Start 7-Day Free Trial <ArrowRight size={20} />
             </a>
           </div>

@@ -1,8 +1,12 @@
 import { useState } from 'react'
-import { Send } from 'lucide-react'
+import { Send, CheckCircle, MessageCircle } from 'lucide-react'
+
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xpwdqjkl'
 
 export function LeadForm() {
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(false)
   const [formData, setFormData] = useState({
     businessName: '',
     contactName: '',
@@ -17,22 +21,50 @@ export function LeadForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // For now, open mailto with form data
-    const body = Object.entries(formData)
-      .filter(([, v]) => v)
-      .map(([k, v]) => `${k}: ${v}`)
-      .join('\n')
-    window.location.href = `mailto:hello@leadreply.ai?subject=WhatsApp AI Receptionist Free Trial&body=${encodeURIComponent(body)}`
-    setSubmitted(true)
+    setSubmitting(true)
+    setError(false)
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          _subject: `WhatsApp AI Receptionist — ${formData.businessName}`,
+        }),
+      })
+      if (response.ok) {
+        setSubmitted(true)
+      } else {
+        setError(true)
+      }
+    } catch {
+      setError(true)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (submitted) {
     return (
       <div className="lead-form-success">
-        <h3>✅ Thank you!</h3>
-        <p>Your email client should open with your details. We'll get back to you within 24 hours.</p>
+        <div className="success-icon"><CheckCircle size={48} /></div>
+        <h3>Thanks — we've received your request</h3>
+        <p>We'll review your business and contact you within 24 hours to set up your WhatsApp AI receptionist demo.</p>
+        <div className="success-next">
+          <h4>What happens next:</h4>
+          <ol>
+            <li>We review your business and common WhatsApp questions</li>
+            <li>We build your demo assistant with your services, prices, and areas</li>
+            <li>We send you a test link to try with your team</li>
+            <li>If you're happy, we go live — only real customers see it</li>
+          </ol>
+        </div>
+        <a href="mailto:hello@leadreply.ai?subject=WhatsApp AI Receptionist — Quick Question" className="btn btn-outline btn-lg">
+          <MessageCircle size={18} /> Prefer email? Contact us directly
+        </a>
       </div>
     )
   }
@@ -41,6 +73,13 @@ export function LeadForm() {
     <form className="lead-form" onSubmit={handleSubmit}>
       <h3>Request Your Free Trial</h3>
       <p>Fill in your details and we'll set up your WhatsApp assistant demo.</p>
+
+      {error && (
+        <div className="form-error">
+          <p>⚠️ Something went wrong. Please try again or email us directly at <a href="mailto:hello@leadreply.ai">hello@leadreply.ai</a></p>
+        </div>
+      )}
+
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="businessName">Business Name *</label>
@@ -85,10 +124,10 @@ export function LeadForm() {
         <label htmlFor="message">Anything else we should know?</label>
         <textarea id="message" name="message" rows={3} placeholder="Tell us about your business, how many WhatsApp enquiries you get, etc." value={formData.message} onChange={handleChange} />
       </div>
-      <button type="submit" className="btn btn-primary btn-lg btn-full">
-        <Send size={18} /> Request Free Trial
+      <button type="submit" className="btn btn-primary btn-lg btn-full" disabled={submitting}>
+        {submitting ? 'Submitting...' : <><Send size={18} /> Request Free Trial</>}
       </button>
-      <p className="form-note">No spam. No commitment. Your data is never shared.</p>
+      <p className="form-note">No spam. No commitment. Your data is never shared. We only reply to customers who contact you.</p>
     </form>
   )
 }

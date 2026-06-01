@@ -17,7 +17,6 @@ const plans = [
       'Basic support',
     ],
     cta: 'Start Free Trial',
-    ctaHref: '#pricing',
     popular: false,
   },
   {
@@ -35,8 +34,7 @@ const plans = [
       'Monthly performance report',
       'Priority support',
     ],
-    cta: 'Book a Demo',
-    ctaHref: '#demo',
+    cta: 'Start Free Trial',
     popular: true,
   },
   {
@@ -55,7 +53,6 @@ const plans = [
       'Managed optimization',
     ],
     cta: 'Talk to Us',
-    ctaHref: '#',
     popular: false,
   },
 ]
@@ -67,14 +64,14 @@ export function Pricing() {
         <div className="section-header">
           <span className="section-tag">Pricing</span>
           <h2 className="section-title">Simple, transparent pricing</h2>
-          <p className="section-subtitle">Start with a free trial. Upgrade when you see the results.</p>
+          <p className="section-subtitle">Start with a 7-day free trial. No card required. We only recommend a paid plan if the demo helps your business respond faster.</p>
         </div>
 
         {/* Founding Client Banner */}
         <div className="founding-banner">
           <Star size={20} />
           <div>
-            <strong>Founding Client Offer:</strong> £149 setup + £49/month for the first 2 months. Limited to the first 5 local businesses.
+            <strong>🏆 Founding Client Offer:</strong> £149 setup + £49/month for the first 2 months. Limited to the first 5 local businesses. <a href="#lead-form">Claim your spot →</a>
           </div>
         </div>
 
@@ -94,11 +91,15 @@ export function Pricing() {
                   <li key={j}><Check size={16} /> {f}</li>
                 ))}
               </ul>
-              <a href={plan.ctaHref} className={`btn ${plan.popular ? 'btn-primary' : 'btn-outline'} btn-lg btn-full`}>
+              <a href="#lead-form" className={`btn ${plan.popular ? 'btn-primary' : 'btn-outline'} btn-lg btn-full`}>
                 {plan.cta} <ArrowRight size={18} />
               </a>
             </div>
           ))}
+        </div>
+
+        <div className="pricing-reassurance">
+          <p>🔒 Cancel anytime. No long-term contracts. Start with a free trial — no card required.</p>
         </div>
       </div>
     </section>

@@ -763,6 +763,248 @@ ul { list-style: none; }
 .lead-form-success h3 { font-size: 24px; margin-bottom: 8px; }
 .lead-form-success p { color: var(--gray-4); }
 
+/* ── Hero Founding Offer ─────────────── */
+.hero-founding {
+  margin-top: 20px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border: 1px solid #f59e0b;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: #92400e;
+  max-width: 480px;
+}
+
+/* ── Before / After ──────────────────── */
+.before-after-section { background: var(--gray-1); }
+
+.ba-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.ba-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--gray-2);
+}
+
+.ba-before { border-color: #fca5a5; }
+.ba-after { border-color: #86efac; }
+
+.ba-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  display: inline-block;
+}
+
+.ba-label-before { background: #fee2e2; color: #dc2626; }
+.ba-label-after { background: #dcfce7; color: #16a34a; }
+
+.ba-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ba-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ba-time {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gray-3);
+  white-space: nowrap;
+  padding-top: 2px;
+  min-width: 70px;
+}
+
+.ba-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--dark);
+}
+
+.ba-lost { color: #dc2626; font-weight: 600; }
+.ba-won { color: #16a34a; font-weight: 600; }
+
+.ba-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gray-2);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.ba-summary-before { color: #dc2626; }
+.ba-summary-after { color: #16a34a; }
+.ba-summary-before svg { color: #dc2626; }
+.ba-summary-after svg { color: #16a34a; }
+
+.ba-cta {
+  text-align: center;
+}
+
+/* ── Who Is This For ─────────────────── */
+.who-section { background: var(--white); }
+
+.who-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.who-card {
+  padding: 28px;
+  border-radius: var(--radius);
+  border: 1px solid var(--gray-2);
+  transition: all var(--transition);
+}
+.who-card:hover {
+  border-color: var(--green);
+  box-shadow: var(--shadow-md);
+}
+
+.who-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: var(--green-light);
+  color: var(--green-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.who-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.who-card p { font-size: 14px; color: var(--gray-4); line-height: 1.6; }
+
+/* ── Trust Signals ──────────────────── */
+.trust-section { padding: 40px 0; background: var(--green-light); }
+
+.trust-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dark-2);
+}
+
+.trust-item svg { color: var(--green-dark); flex-shrink: 0; }
+
+/* ── Pricing Reassurance ─────────────── */
+.pricing-reassurance {
+  text-align: center;
+  margin-top: 32px;
+  font-size: 14px;
+  color: var(--gray-4);
+}
+
+/* ── Founding Banner Link ─────────────── */
+.founding-banner a {
+  color: #92400e;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* ── Form Error ──────────────────────── */
+.form-error {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+.form-error a { color: #dc2626; text-decoration: underline; font-weight: 600; }
+
+/* ── Form Success ────────────────────── */
+.success-icon {
+  color: var(--green);
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.lead-form-success {
+  text-align: center;
+  padding: 48px 32px;
+}
+
+.lead-form-success h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.lead-form-success > p {
+  font-size: 16px;
+  color: var(--gray-4);
+  margin-bottom: 32px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.success-next {
+  text-align: left;
+  max-width: 440px;
+  margin: 0 auto 32px;
+  background: var(--gray-1);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.success-next h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--dark-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.success-next ol {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.success-next li {
+  font-size: 14px;
+  color: var(--gray-4);
+  line-height: 1.6;
+}
+
+.lead-form-success .btn {
+  margin-top: 16px;
+}
+
 /* ── Lead Form Section ───────────────── */
 .lead-form-section {
   padding: 80px 0;
@@ -890,4 +1132,26 @@ ul { list-style: none; }
   .section-title { font-size: 24px; }
   .pricing-card { padding: 28px 20px; }
   .plan-price .price { font-size: 36px; }
+}
+
+/* ── Responsive: New Sections ────────── */
+@media (max-width: 1024px) {
+  .ba-grid { grid-template-columns: 1fr; }
+  .who-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .hero-founding { font-size: 13px; padding: 10px 14px; }
+  .ba-card { padding: 24px; }
+  .ba-item { flex-direction: column; gap: 4px; }
+  .ba-time { min-width: auto; }
+  .trust-grid { flex-direction: column; align-items: center; gap: 12px; }
+  .who-grid { grid-template-columns: 1fr; }
+  .success-next { padding: 16px; }
+}
+
+@media (max-width: 480px) {
+  .ba-summary { font-size: 13px; }
+  .success-next ol { padding-left: 16px; }
+  .success-next li { font-size: 13px; }
 }

@@ -27,7 +27,7 @@ export function Header({ menuOpen, setMenuOpen }: HeaderProps) {
               {link.label}
             </a>
           ))}
-          <a href="#pricing" className="btn btn-primary btn-sm nav-cta">
+          <a href="#lead-form" className="btn btn-primary btn-sm nav-cta">
             Start Free Trial
           </a>
         </nav>
