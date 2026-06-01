@@ -8,6 +8,10 @@ export function WhatWeDo() {
           <p className="section-subtitle">
             Your customers already message you on WhatsApp. But when you're working, driving, or closed for the day, those messages sit unanswered. By the time you reply, the customer may have already contacted someone else.
           </p>
+          <div className="proof-point">
+            <span className="proof-icon">💡</span>
+            <strong>Example:</strong> A cleaning business can qualify end-of-tenancy enquiries automatically — collecting the property type, postcode, and preferred date — before the owner even picks up the phone.
+          </div>
         </div>
 
         <div className="what-grid">

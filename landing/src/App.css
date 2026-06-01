@@ -289,6 +289,29 @@ ul, ol { list-style: none; }
 .section-center { text-align: center; }
 .section-center .section-subtitle { margin-left: auto; margin-right: auto; }
 
+/* ── Proof Point ─────────────────────── */
+.proof-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 520px;
+  margin: 24px auto 0;
+  padding: 14px 18px;
+  background: var(--green-muted);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--green);
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--slate);
+}
+
+.proof-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
 /* ── What We Do ──────────────────────── */
 .what-section { background: var(--white); }
 
