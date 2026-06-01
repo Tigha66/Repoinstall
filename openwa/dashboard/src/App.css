@@ -3,49 +3,81 @@
 :root {
   --primary: #25d366;
   --primary-hover: #1da851;
-  --bg-light: #f8fafc;
+  --primary-soft: rgba(37, 211, 102, 0.12);
+  --primary-ring: rgba(37, 211, 102, 0.35);
+  --gradient-primary: linear-gradient(135deg, #25d366 0%, #12b886 100%);
+  --gradient-brand: linear-gradient(135deg, #1da851 0%, #25d366 55%, #34e89e 100%);
+  --bg-light: #f1f5f9;
   --bg-white: #ffffff;
   --bg-card: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-subtle: #f8fafc;
+  --app-bg:
+    radial-gradient(1100px 540px at 8% -8%, rgba(37, 211, 102, 0.10), transparent 60%),
+    radial-gradient(1000px 520px at 100% 0%, rgba(56, 189, 248, 0.10), transparent 55%),
+    #f1f5f9;
   --text-primary: #0f172a; /* Slate 900 */
   --text-secondary: #475569; /* Slate 600 */
   --text-muted: #94a3b8; /* Slate 400 */
-  --border: #e2e8f0; /* Slate 200 */
+  --border: #e6eaf0;
+  --border-strong: #d4dbe5;
   --error: #ef4444;
   --success: #22c55e;
   --warning: #f59e0b;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --radius: 10px;
+  --info: #3b82f6;
+  --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.06);
+  --shadow-md: 0 6px 16px -6px rgb(15 23 42 / 0.12), 0 2px 6px -2px rgb(15 23 42 / 0.08);
+  --shadow-lg: 0 18px 40px -12px rgb(15 23 42 / 0.18), 0 6px 14px -8px rgb(15 23 42 / 0.10);
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-sm: 8px;
 }
 
 /* Dark Mode */
 [data-theme='dark'] {
-  --bg-light: #0f172a; /* Slate 900 */
-  --bg-white: #1e293b; /* Slate 800 */
-  --bg-card: #1e293b;
+  --primary-soft: rgba(37, 211, 102, 0.16);
+  --primary-ring: rgba(37, 211, 102, 0.40);
+  --bg-light: #0b1220;
+  --bg-white: #131c2e;
+  --bg-card: #131c2e;
+  --bg-elevated: #1a2434;
+  --bg-subtle: #0f1828;
+  --app-bg:
+    radial-gradient(1100px 540px at 6% -10%, rgba(37, 211, 102, 0.12), transparent 60%),
+    radial-gradient(1000px 520px at 100% 0%, rgba(56, 189, 248, 0.10), transparent 55%),
+    #0b1220;
   --text-primary: #f1f5f9; /* Slate 100 */
   --text-secondary: #cbd5e1; /* Slate 300 */
-  --text-muted: #64748b; /* Slate 500 */
-  --border: #334155; /* Slate 700 */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --text-muted: #7c8aa0;
+  --border: #243043;
+  --border-strong: #324158;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 8px 20px -8px rgb(0 0 0 / 0.55), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 22px 48px -14px rgb(0 0 0 / 0.65), 0 6px 16px -8px rgb(0 0 0 / 0.5);
 }
 
 /* System preference dark mode */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg-light: #0f172a;
-    --bg-white: #1e293b;
-    --bg-card: #1e293b;
+    --primary-soft: rgba(37, 211, 102, 0.16);
+    --primary-ring: rgba(37, 211, 102, 0.40);
+    --bg-light: #0b1220;
+    --bg-white: #131c2e;
+    --bg-card: #131c2e;
+    --bg-elevated: #1a2434;
+    --bg-subtle: #0f1828;
+    --app-bg:
+      radial-gradient(1100px 540px at 6% -10%, rgba(37, 211, 102, 0.12), transparent 60%),
+      radial-gradient(1000px 520px at 100% 0%, rgba(56, 189, 248, 0.10), transparent 55%),
+      #0b1220;
     --text-primary: #f1f5f9;
     --text-secondary: #cbd5e1;
-    --text-muted: #64748b;
-    --border: #334155;
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+    --text-muted: #7c8aa0;
+    --border: #243043;
+    --border-strong: #324158;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+    --shadow-md: 0 8px 20px -8px rgb(0 0 0 / 0.55), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 22px 48px -14px rgb(0 0 0 / 0.65), 0 6px 16px -8px rgb(0 0 0 / 0.5);
   }
 }
 
@@ -66,9 +98,41 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--bg-light);
+  background: var(--app-bg);
+  background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.6;
+}
+
+/* Modern scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+  background-clip: content-box;
+}
+
+/* Accessible focus ring for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--primary-soft);
+  color: var(--text-primary);
 }
 
 button {

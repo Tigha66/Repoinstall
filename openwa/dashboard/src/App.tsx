@@ -6,6 +6,7 @@ import { Layout } from './components/Layout';
 import { ToastProvider } from './components/Toast';
 import { RoleProvider, useRole, type UserRole } from './hooks/useRole';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { PWAInstall } from './components/PWAInstall';
 import './App.css';
 
 const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
@@ -122,6 +123,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <RoleProvider>
           <AppContent />
+          <PWAInstall />
         </RoleProvider>
       </QueryClientProvider>
     </ErrorBoundary>

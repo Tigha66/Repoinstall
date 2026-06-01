@@ -30,6 +30,10 @@ openwa/openwa
 # Exported QR images
 **/qr*.png
 
+# Ad-hoc screenshots / screen captures
+screencapture-*.png
+**/screencapture-*.png
+
 # Logs
 **/*.log
 logs/
