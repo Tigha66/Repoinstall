@@ -104,25 +104,36 @@ async function bootstrap() {
   );
 
   // CORS Configuration (Phase 3 Security Audit)
-  const allowedOrigins = process.env.CORS_ORIGINS?.split(',').map(o => o.trim()) || ['*'];
-  app.enableCors({
-    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-      // Allow requests with no origin (mobile apps, Postman, server-to-server)
-      if (!origin) return callback(null, true);
+  // Set CORS_ORIGINS=off (or false/none) to DISABLE the app's own CORS handling.
+  // Use this only when a reverse proxy / API gateway in front already adds CORS
+  // headers — otherwise the browser receives duplicate Access-Control-Allow-Origin
+  // headers and blocks the response. With a normal direct deployment, leave it set
+  // to your allowed origin(s) so the app emits the CORS headers itself.
+  const corsSetting = process.env.CORS_ORIGINS?.trim();
+  const corsDisabled = ['off', 'false', 'none', 'disabled'].includes((corsSetting || '').toLowerCase());
+  if (corsDisabled) {
+    console.log('[Bootstrap] App CORS disabled (CORS_ORIGINS=off) — expecting an upstream proxy to set CORS headers.');
+  } else {
+    const allowedOrigins = corsSetting ? corsSetting.split(',').map(o => o.trim()) : ['*'];
+    app.enableCors({
+      origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+        // Allow requests with no origin (mobile apps, Postman, server-to-server)
+        if (!origin) return callback(null, true);
 
-      // Check if wildcard or origin matches
-      if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'X-API-Key', 'Authorization', 'X-Request-ID'],
-    exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset'],
-    maxAge: 86400, // 24 hours
-  });
+        // Check if wildcard or origin matches
+        if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'X-API-Key', 'Authorization', 'X-Request-ID'],
+      exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset'],
+      maxAge: 86400, // 24 hours
+    });
+  }
 
   // Global prefix
   app.setGlobalPrefix('api');
