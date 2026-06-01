@@ -10,15 +10,15 @@
 # ╔══════════════════════════════════════════════════════════════════════════╗
 # ║  Traefik network mode  │  How Traefik reaches the API                  ║
 # ║────────────────────────┼───────────────────────────────────────────────║
-# ║  On dokploy-network    │  Docker provider labels (auto, via Docker     ║
-# ║  (default)             │  API) — no file-provider config needed.       ║
+# ║  On dokploy-network    │  Docker provider resolves container IP        ║
+# ║  (default)             │  from Docker API — uses .port=2785 label.     ║
 # ║                        │  The labels below handle everything.          ║
 # ║────────────────────────┼───────────────────────────────────────────────║
-# ║  Host networking       │  Traefik cannot resolve container names.      ║
-# ║  (network_mode: host)  │  Port 2785 is published to 127.0.0.1 on the  ║
-# ║                        │  host. Set the file-provider backend URL to:  ║
-# ║                        │    http://127.0.0.1:2785                     ║
-# ║                        │  (NOT http://openwa-api:2785)                 ║
+# ║  Host networking       │  Traefik cannot reach container's internal    ║
+# ║  (network_mode: host)  │  Docker IP.  The .url=http://127.0.0.1:2785   ║
+# ║                        │  label below forces Traefik to use the        ║
+# ║                        │  host loopback instead (port published by     ║
+# ║                        │  the ports: directive above).                 ║
 # ╚══════════════════════════════════════════════════════════════════════════╝
 # =============================================================================
 
@@ -41,8 +41,7 @@ services:
     expose:
       - '2785'
     # Publish to host loopback so a host-networked Traefik (which can't join
-    # dokploy-network) can still reach the API.  Traefik on the Docker network
-    # uses this port by container name; host-networked Traefik uses 127.0.0.1:2785.
+    # dokploy-network) can still reach the API through the .url label below.
     ports:
       - '127.0.0.1:2785:2785'
     volumes:
@@ -55,7 +54,7 @@ services:
       - 'traefik.http.routers.openwa.rule=Host(`${OPENWA_DOMAIN}`)'
       - 'traefik.http.routers.openwa.entrypoints=websecure'
       - 'traefik.http.routers.openwa.tls.certresolver=letsencrypt'
-      - 'traefik.http.services.openwa.loadbalancer.server.port=2785'
+      - 'traefik.http.services.openwa.loadbalancer.server.url=http://127.0.0.1:2785'
     healthcheck:
       test:
         [
