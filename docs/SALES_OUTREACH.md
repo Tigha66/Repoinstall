@@ -4,6 +4,8 @@
 **Service:** WhatsApp AI Receptionist  
 **Important:** NO spam. NO bulk cold WhatsApp messages. Only warm outreach to businesses that have opted in or been referred.
 
+> 📋 **Ready-made prospect list:** see [`LONDON_CLEANING_LEADS.md`](./LONDON_CLEANING_LEADS.md) — a researched, qualified list of London cleaning companies with verified contacts, a 10-second qualification check, **tailored per-business message templates**, and an outreach tracker.
+
 ---
 
 ## Elevator Pitch (30 seconds)
@@ -52,6 +54,8 @@
 ---
 
 ## Prospecting Sources (London Cleaning Companies)
+
+> 💡 A pre-researched, qualified shortlist already exists: [`LONDON_CLEANING_LEADS.md`](./LONDON_CLEANING_LEADS.md). Use it first, then top up with the sources below.
 
 ### Where to Find Prospects
 1. **Google Maps** — Search "cleaning company London", check WhatsApp numbers in listings

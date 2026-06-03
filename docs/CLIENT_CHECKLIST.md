@@ -2,6 +2,8 @@
 
 **Print this or save it as a form. Every new client must provide all of these before you start setup.**
 
+> 🔗 **Related:** Looking for businesses to onboard? See the prospect list in [`LONDON_CLEANING_LEADS.md`](./LONDON_CLEANING_LEADS.md) and the outreach playbook in [`SALES_OUTREACH.md`](./SALES_OUTREACH.md).
+
 ---
 
 ## 1. Business Basics
