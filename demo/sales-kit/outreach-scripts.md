@@ -93,6 +93,30 @@ Many already have a "Chat on WhatsApp" button — use their own channel.
 
 ---
 
+## 7. Professional variant — "WhatsApp receptionist" (any niche)
+Use this when you're NOT leaning on the cleaning-peer angle (e.g. barbers, dentists,
+trades, or if the peer line doesn't feel right). Matches the landing page positioning.
+
+**Subject (email):** `[Business] — your missed calls, answered automatically`
+
+**Message (WhatsApp / DM / email):**
+> Hi [name] 👋 Quick one — when a customer calls [Business] and you can't pick up,
+> that enquiry is usually lost. I set up a **WhatsApp receptionist** that instantly
+> texts those missed callers back so they start a conversation with you instead of
+> a competitor. 30-sec demo + how it works: **https://get.callpilotvoice.co.uk**
+> Happy to set it up **free for 7 days** for you — want me to? — [you], hello@callpilotvoice.co.uk
+
+**One-liner for in-person / phone:**
+> "I set businesses up with a WhatsApp receptionist — when you miss a call, the
+> customer automatically gets a WhatsApp so you don't lose them. Free for 7 days,
+> I set it all up. Want to try it?"
+
+**When to use which opener:**
+- **Cleaning businesses** → the peer version (§1–3): *"I run a cleaning company too…"* (warm, high trust).
+- **Everyone else** → this professional version. Same demo, same trial, same price.
+
+---
+
 ## ⚖️ Keep it compliant (UK)
 - Outreach to businesses: email/LinkedIn/their-own-chat is fine; always give an
   easy opt-out and don't mass-blast unsolicited WhatsApp.
