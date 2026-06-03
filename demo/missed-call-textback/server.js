@@ -171,6 +171,19 @@ async function sendWhatsApp(sessionName, chatId, text) {
   if (!res.ok) throw new Error(`whatsapp send ${res.status}: ${(await res.text()).slice(0, 150)}`);
 }
 
+// Fetch the current QR (and status) for a session — used by the live QR page.
+async function fetchSessionQr(sessionName) {
+  const sessionId = await resolveSessionId(sessionName, true);
+  const sres = await fetch(`${CONFIG.openwaBase}/sessions/${sessionId}`, { headers: { 'X-API-Key': CONFIG.apiKey } });
+  const status = sres.ok ? (await sres.json()).status : 'unknown';
+  if (status === 'ready' || status === 'connected') return { status, png: null };
+  const qres = await fetch(`${CONFIG.openwaBase}/sessions/${sessionId}/qr`, { headers: { 'X-API-Key': CONFIG.apiKey } });
+  if (!qres.ok) return { status, png: null };
+  const q = (await qres.json()).qrCode || '';
+  const b64 = q.includes(',') ? q.split(',', 1)[1] || q.split(',')[1] : q;
+  return { status, png: b64 ? Buffer.from(b64, 'base64') : null };
+}
+
 // ---------------------------------------------------------------------------
 // Telnyx SMS fallback
 // ---------------------------------------------------------------------------
@@ -314,6 +327,66 @@ const server = http.createServer(async (req, res) => {
   // QR page — scan WhatsApp from a phone browser
   if (req.method === 'GET' && pathname === '/qr') {
     return renderQrPage(res);
+  }
+
+  // Live, auto-refreshing QR page — open in a browser to link WhatsApp.
+  //   /qr?session=textback-demo
+  if (req.method === 'GET' && pathname === '/qr') {
+    const session = url.searchParams.get('session') || TENANTS.fallback.session;
+    const html = `<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Link WhatsApp — ${session}</title>
+<style>body{font-family:system-ui,sans-serif;text-align:center;background:#0b141a;color:#e9edef;padding:24px}
+img{width:280px;height:280px;background:#fff;border-radius:12px;padding:10px}
+.s{margin-top:16px;font-size:18px}.ok{color:#25d366}.muted{color:#8696a0;font-size:14px;margin-top:8px}</style></head>
+<body><h2>Link WhatsApp</h2>
+<div class="muted">Session: <b>${session}</b><br>WhatsApp → Linked Devices → Link a device → scan below</div>
+<div style="margin-top:18px"><img id="q" src="/qr.png?session=${encodeURIComponent(session)}&t=0" alt="QR"></div>
+<div class="s" id="s">Loading…</div>
+<script>
+let n=0;
+async function tick(){
+  try{
+    const r=await fetch('/qr-status?session=${encodeURIComponent(session)}');
+    const d=await r.json();
+    const s=document.getElementById('s');
+    if(d.status==='ready'||d.status==='connected'){
+      s.innerHTML='✅ Connected'+(d.phone?(' as '+d.phone):'');s.className='s ok';
+      document.getElementById('q').style.display='none';return;
+    }
+    s.textContent='Waiting for scan… ('+d.status+')';
+    document.getElementById('q').src='/qr.png?session=${encodeURIComponent(session)}&t='+(n++);
+  }catch(e){}
+  setTimeout(tick,4000);
+}
+tick();
+</script></body></html>`;
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    return res.end(html);
+  }
+
+  if (req.method === 'GET' && pathname === '/qr.png') {
+    const session = url.searchParams.get('session') || TENANTS.fallback.session;
+    try {
+      const { png } = await fetchSessionQr(session);
+      if (!png) return send(res, 204, '');
+      res.writeHead(200, { 'Content-Type': 'image/png', 'Cache-Control': 'no-store' });
+      return res.end(png);
+    } catch (e) {
+      return send(res, 500, { error: e.message });
+    }
+  }
+
+  if (req.method === 'GET' && pathname === '/qr-status') {
+    const session = url.searchParams.get('session') || TENANTS.fallback.session;
+    try {
+      const sessionId = await resolveSessionId(session, true);
+      const r = await fetch(`${CONFIG.openwaBase}/sessions/${sessionId}`, { headers: { 'X-API-Key': CONFIG.apiKey } });
+      const d = r.ok ? await r.json() : {};
+      return send(res, 200, { status: d.status || 'unknown', phone: d.phone || null });
+    } catch (e) {
+      return send(res, 200, { status: 'error', error: e.message });
+    }
   }
 
   // Reload tenants.json without restarting
