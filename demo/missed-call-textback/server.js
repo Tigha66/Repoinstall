@@ -56,6 +56,9 @@ const CONFIG = {
   webhookToken: process.env.WEBHOOK_TOKEN || '',
   cooldownMs: parseInt(process.env.COOLDOWN_MS || '300000', 10),
   telnyxApiKey: process.env.TELNYX_API_KEY || '',
+  // Bind address. Default 0.0.0.0; set to 127.0.0.1 behind a reverse proxy
+  // (e.g. Traefik on host network) so the port isn't exposed raw to the internet.
+  bindHost: process.env.BIND_HOST || '0.0.0.0',
 };
 
 const DEFAULT_MESSAGE =
@@ -270,6 +273,30 @@ function send(res, code, obj) {
   res.end(body);
 }
 
+function sendHtml(res, code, inner, refresh) {
+  const meta = refresh ? `<meta http-equiv="refresh" content="${refresh}">` : '';
+  const html = `<!doctype html><html><head><meta charset="utf-8">${meta}<meta name="viewport" content="width=device-width,initial-scale=1"><title>Connect WhatsApp</title><style>body{font-family:system-ui,sans-serif;text-align:center;padding:24px;background:#0b141a;color:#e9edef}img{width:300px;height:300px;background:#fff;padding:10px;border-radius:12px}h2{margin:8px 0}.muted{color:#8696a0;font-size:14px}</style></head><body>${inner}</body></html>`;
+  res.writeHead(code, { 'Content-Type': 'text/html; charset=utf-8' });
+  res.end(html);
+}
+
+// Self-contained QR page so a client can scan WhatsApp from a phone browser.
+async function renderQrPage(res) {
+  const tenant = TENANTS.fallback;
+  try {
+    const sessionId = await resolveSessionId(tenant.session, true);
+    const s = await fetch(`${CONFIG.openwaBase}/sessions/${sessionId}`, { headers: { 'X-API-Key': CONFIG.apiKey } }).then((r) => r.json());
+    if (s.status === 'ready') {
+      return sendHtml(res, 200, `<h2>✅ WhatsApp connected</h2><p class="muted">${tenant.businessName} · ${s.phone || ''}</p><p class="muted">You can close this page.</p>`);
+    }
+    const qr = await fetch(`${CONFIG.openwaBase}/sessions/${sessionId}/qr`, { headers: { 'X-API-Key': CONFIG.apiKey } }).then((r) => r.json()).catch(() => ({}));
+    const img = qr.qrCode ? `<img src="${qr.qrCode}" alt="QR"/>` : `<p>Generating QR… this page refreshes automatically.</p>`;
+    return sendHtml(res, 200, `<h2>Scan to connect WhatsApp</h2><p class="muted">${tenant.businessName} · session "${tenant.session}"</p>${img}<p class="muted">WhatsApp ▸ Linked devices ▸ Link a device<br>(status: ${s.status || 'starting'} · auto-refreshing)</p>`, 5);
+  } catch (e) {
+    return sendHtml(res, 200, `<h2>Session not ready</h2><p class="muted">${e.message}</p><p class="muted">Create &amp; start session "${tenant.session}" first.</p>`, 6);
+  }
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${CONFIG.port}`);
   const pathname = url.pathname.replace(/\/$/, '') || '/';
@@ -282,6 +309,11 @@ const server = http.createServer(async (req, res) => {
       defaultTenant: TENANTS.fallback.businessName,
       webhookPath: CONFIG.webhookToken ? `/telnyx/${CONFIG.webhookToken}` : '/telnyx',
     });
+  }
+
+  // QR page — scan WhatsApp from a phone browser
+  if (req.method === 'GET' && pathname === '/qr') {
+    return renderQrPage(res);
   }
 
   // Reload tenants.json without restarting
@@ -328,8 +360,8 @@ const server = http.createServer(async (req, res) => {
   send(res, 404, { error: 'not found' });
 });
 
-server.listen(CONFIG.port, '0.0.0.0', () => {
-  log(`missed-call-textback listening on :${CONFIG.port}`);
+server.listen(CONFIG.port, CONFIG.bindHost, () => {
+  log(`missed-call-textback listening on ${CONFIG.bindHost}:${CONFIG.port}`);
   log(`  OpenWA:   ${CONFIG.openwaBase}`);
   log(`  Tenants:  ${TENANTS.byNumber.size} configured | default="${TENANTS.fallback.businessName}" (session "${TENANTS.fallback.session}")`);
   log(`  Webhook:  POST ${CONFIG.webhookToken ? `/telnyx/${CONFIG.webhookToken}` : '/telnyx'}`);
