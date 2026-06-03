@@ -61,6 +61,7 @@ const CONFIG = {
 
 // In-memory state
 const answeredCalls = new Set(); // call_control_id values that got answered
+const incomingCalls = new Map(); // call_control_id -> caller number (from call.initiated)
 const lastTexted = new Map(); // normalized number -> timestamp
 
 function log(...args) {
@@ -153,6 +154,15 @@ function handleTelnyxEvent(evt) {
 
   log('telnyx event:', type, '| dir:', direction, '| from:', from);
 
+  // Remember incoming calls when they start — call.hangup does NOT carry the
+  // direction field, so we rely on what we saw at call.initiated.
+  if (type === 'call.initiated' && ccid) {
+    if (direction === 'incoming' || direction === undefined) {
+      incomingCalls.set(ccid, from);
+    }
+    return;
+  }
+
   if (type === 'call.answered' && ccid) {
     answeredCalls.add(ccid);
     return;
@@ -160,10 +170,17 @@ function handleTelnyxEvent(evt) {
 
   if (type === 'call.hangup') {
     const wasAnswered = ccid && answeredCalls.has(ccid);
-    if (ccid) answeredCalls.delete(ccid);
-    // Only text back genuine incoming, unanswered calls = a missed call.
-    if (direction === 'incoming' && !wasAnswered) {
-      sendTextBack(from);
+    const knownIncoming = ccid && incomingCalls.has(ccid);
+    const caller = from || (ccid && incomingCalls.get(ccid));
+    // cleanup
+    if (ccid) {
+      answeredCalls.delete(ccid);
+      incomingCalls.delete(ccid);
+    }
+    // A missed call = an incoming call that was never answered.
+    const wasIncoming = knownIncoming || direction === 'incoming';
+    if (wasIncoming && !wasAnswered) {
+      sendTextBack(caller);
     } else {
       log('no text-back (answered or outbound)');
     }
