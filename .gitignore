@@ -36,6 +36,10 @@ openwa/openwa
 # Exported QR images
 **/qr*.png
 
+# Live tenant config (real client data) — keep only the example template
+demo/missed-call-textback/tenants.json
+!**/tenants.example.json
+
 # Ad-hoc screenshots / screen captures
 screencapture-*.png
 **/screencapture-*.png

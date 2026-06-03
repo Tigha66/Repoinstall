@@ -1,0 +1,21 @@
+{
+  "defaultTenant": "demo",
+  "tenants": {
+    "+442038389029": {
+      "name": "demo",
+      "businessName": "Acme Barbers",
+      "session": "demo",
+      "message": "Hi! 👋 Sorry we missed your call to {business}. How can we help? Just reply here and we'll get right back to you.",
+      "smsFallback": true,
+      "smsFrom": "+442038389029"
+    },
+    "+441234567890": {
+      "name": "shoreditch-dental",
+      "businessName": "Shoreditch Dental",
+      "session": "shoreditch-dental",
+      "message": "Hi, sorry we missed your call to {business}! Reply here to book or rearrange your appointment and we'll sort it for you. 🦷",
+      "smsFallback": true,
+      "smsFrom": "+441234567890"
+    }
+  }
+}

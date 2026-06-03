@@ -87,11 +87,40 @@ Connect **the client's** WhatsApp number as a new OpenWA session and point
 
 ---
 
+## Multi-tenant (multiple clients)
+Create `tenants.json` (copy `tenants.example.json`). Each call is routed to a
+tenant by the **dialed Telnyx number** (`payload.to`), so one service can run
+many clients — each with its own WhatsApp session, branding, and SMS settings:
+```json
+{
+  "defaultTenant": "demo",
+  "tenants": {
+    "+442038389029": { "name": "demo", "businessName": "Acme Barbers",
+      "session": "demo", "message": "Hi! Sorry we missed your call to {business}…",
+      "smsFallback": true, "smsFrom": "+442038389029" }
+  }
+}
+```
+- One **OpenWA session per client** (connect *their* WhatsApp number).
+- Hot-reload after editing: `curl -X POST localhost:2789/reload`.
+- No `tenants.json`? It falls back to the single-tenant `.env` settings.
+
+## SMS fallback
+If WhatsApp delivery fails (e.g. the caller has no WhatsApp), the service can
+send an **SMS via Telnyx** instead. Enable per-tenant with `"smsFallback": true`
+and an SMS-enabled `smsFrom` number, and set `TELNYX_API_KEY` in `.env`.
+
+## Going always-on (production)
+The sandbox sleeps when idle. To run this for real clients, see **[DEPLOY.md](./DEPLOY.md)**
+(VPS + PM2, Render/Railway, or Docker). `ecosystem.config.js` keeps OpenWA + this
+service alive and auto-restarting.
+
 ## Endpoints
 | Method | Path | Purpose |
 |---|---|---|
-| GET | `/health` | status + resolved session id |
-| GET/POST | `/simulate?from=+44…` | manually fire a text-back (demo/testing) |
+| GET | `/health` | status + configured tenants |
+| GET/POST | `/simulate?from=+44…[&to=+44…]` | manually fire a text-back (demo/testing) |
+| POST | `/reload` | reload `tenants.json` without restarting |
 | POST | `/telnyx` (or `/telnyx/<WEBHOOK_TOKEN>`) | Telnyx call webhooks |
 
 ## How "missed" is detected
