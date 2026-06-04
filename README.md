@@ -31,19 +31,17 @@ keyed by the dialed Telnyx number. A cron **watchdog** auto-heals the session.
 ## 📁 What's in this repo
 | Path | Purpose |
 |---|---|
-| `demo/missed-call-textback/` | The service: `server.js`, `onboard.sh`, `rebrand.sh`, `DEPLOY.md`, `README.md` |
-| `demo/landing/index.html` | The live landing page source |
-| `demo/sales-kit/` | Go-to-market: see below |
+| `demo/missed-call-textback/` | **The LIVE service** (deployed): `server.js`, `onboard.sh`, `rebrand.sh`, `DEPLOY.md` |
+| `demo/landing/index.html` | **The LIVE landing page** source (deployed to get.callpilotvoice.co.uk) |
+| `docs/` | **All go-to-market docs** — start at `docs/README.md` (leads, outreach, pricing, onboarding) |
 | `openwa/` | The OpenWA gateway (NestJS) — the WhatsApp engine |
+| `leadreply/` | An earlier/alternative Python inbound-assistant prototype — **NOT the deployed system** |
 | `OPENWA_SETUP.md` | OpenWA run/setup guide |
 
-### Sales kit (`demo/sales-kit/`)
-- `LAUNCH-PLAN.md` — MRR plan + 14-day launch sprint
-- `outreach-scripts.md` — cold/warm message templates (cleaning-peer + professional variants)
-- `first-10-targets.md` — seeded London cleaning prospect list + how to find more
-- `pricing-one-pager.md`, `roi-calculator.md`, `trial-tracker.csv`, `lead-list-template.csv`
-- `onboard-client-checklist.md` — activate a new client in ~2 min
-- `hermes-agent-prompt.md` — **master brief for the autonomous sales agent**
+### Go-to-market → see `docs/README.md`
+Master lead list: `docs/LONDON_CLEANING_LEADS.md`. Everything else (outreach, pricing,
+ROI, onboarding, agent brief) is indexed there. The old `demo/sales-kit/` folder was merged
+into `docs/` to remove duplication.
 
 ## 🎯 Decisions already made (don't re-ask)
 - Telephony = **Telnyx** (set up). WhatsApp = **OpenWA unofficial** (migrate to official
