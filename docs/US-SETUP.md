@@ -54,3 +54,36 @@ incoming call, the service SMS-texts the caller back.
 - Use the SMS versions of the outreach in `OUTREACH-TRADES-BEAUTY.md`.
 - Charge **$99–$399** — the US pays it (Podium/GoHighLevel charge $300–$500 for similar).
 - This is exactly GoHighLevel/Podium's market — you compete on price + done-for-you setup.
+
+---
+
+## ✅ What's already configured (done via API)
+- **US tenant** added in `/opt/textback/tenants.json`: key `+15717884804` → "Mile High HVAC" demo,
+  `channel: "sms"`, `smsFrom: +15717884804`. Service routes it correctly (verified).
+- **Messaging profile** created: `RingBack US/Intl` (id `40019e92-601a-4122-9029-256d0773833c`),
+  whitelisted destinations US + GB. **US number `+15717884804` attached to it.**
+
+## 🔎 Diagnosis — why a live US SMS test fails *right now*
+The US number `+15717884804` (Telnyx longcode) reports:
+`sms: { domestic_two_way: true, international_outbound: FALSE }`
+Two separate blockers:
+1. **International outbound = OFF** → it **cannot SMS a UK (+44) number** (error: "Invalid 'to'
+   address"). This only matters for self-demoing to your UK phone.
+2. **10DLC not yet approved** → it **cannot send US→US A2P SMS** yet (your Sole-Prop brand is in
+   progress). This is the real requirement for actual US clients.
+
+## ❓ Do you need to message Telnyx support?
+- **For the real business (US client → their US customers): NO.** Just finish **10DLC** (self-serve:
+  brand → campaign → attach number). No support ticket needed.
+- **Only if you want to self-demo by texting your UK phone** from the US number: you'd need
+  **international SMS enabled** on the account (Telnyx disables it by default for fraud control;
+  enabling usually needs a quick **support request**). ⚠️ Not worth it — instead:
+  - Get a **free US number to receive** (Google Voice / TextNow) and test domestic US→US after 10DLC, **or**
+  - Just use the **UK WhatsApp demo** as proof when selling US prospects.
+
+## ▶️ To make the US demo real (after 10DLC approves)
+1. Brand approved + OTP done → create **Campaign** (Customer Care) → it gets approved.
+2. Confirm the number is on the messaging profile + campaign.
+3. Get a US receiving number (Google Voice/TextNow) → `simulate?from=+1USNUMBER&to=+15717884804`
+   → the US number texts that US number. ✅
+
