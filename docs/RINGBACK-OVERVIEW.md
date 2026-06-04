@@ -59,6 +59,19 @@ LinkedIn posts showing recovered-call results, partnerships (web designers, busi
 | **Part-time receptionist** | A person | **£1,200–£1,800** | RingBack does the "never miss a call" job for £49 |
 | **Twilio/360dialog (raw APIs)** | DIY building blocks | usage-based | RingBack is done-for-you; clients don't want to build |
 
+### 🇬🇧 UK competitors specifically
+- **AI receptionists (answer calls live):** Team-Connect (£9.99/mo), ARROW (£99/mo), Norango,
+  heyjodie (£49+), My AI Front Desk (~£38), aiphonecalls.co.uk, aianswerphone.co.uk, RingCentral
+  AI Receptionist, Smith.ai. Range £30–£150 self-serve, £99–£350 managed.
+- **Human virtual receptionists / call answering:** Moneypenny, AllDayPA, answer4u, Verbatim,
+  Face For Business, Pocket Receptionist, JAM (£50–£300/mo + per-call).
+- **Missed-call/WhatsApp tools in UK:** Podium ($400+), GoHighLevel (agencies), Wati/360dialog/
+  Zoko/Interakt (DIY WhatsApp API).
+- **Vertical software w/ comms:** Phorest, Slick, Fresha (salons); Powered Now, Commusoft, Tradify (trades).
+- **RingBack's edge in the UK:** done-for-you (not self-serve), WhatsApp-native (most rivals are
+  SMS/voice), simple & narrow, personal local service. **Don't compete on price (cheap end is
+  £9.99–£38) — compete on done-for-you + WhatsApp + personal setup.**
+
 **Your positioning in one line:**
 > *"Podium charges $400+/month. A receptionist costs £1,200. RingBack does the part that actually
 > wins you customers — texting back every missed call — for £49/month, done for you."*
