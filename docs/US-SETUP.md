@@ -23,6 +23,17 @@ Implications for a UK-based founder:
 - **Recommendation:** prioritise UK (live, no 10DLC) for revenue now; pursue US once you can use a
   US phone for the brand or form a US LLC. Don't let US block UK.
 
+## ✅ DECISION: use a US TOLL-FREE number (Telnyx support confirmed)
+For a UK sole proprietor, the cleanest US path is a **US Toll-Free number** — it **bypasses 10DLC
+entirely**, is allowed for non-US businesses, and fits missed-call text-back. Requires **Toll-Free
+Verification** (business info, use case, opt-in description) instead of a 10DLC brand.
+- No US EIN / US wireless mobile required.
+- A Telnyx toll-free number does **voice (receive calls) + SMS** — perfect for the use case.
+- Path: buy a TF number → submit Toll-Free Verification (use case = the call is the opt-in; STOP to
+  opt out) → once verified, add it as a tenant with `channel: "sms"`, `smsFrom` = the TF number.
+- (10DLC Standard brand via a US LLC is cheaper per-number for large scale later — but Toll-Free is
+  the right unblock now.)
+
 ## ⚠️ The one US-specific hurdle: 10DLC registration
 US carriers **block business (A2P) SMS** from numbers that aren't registered under **10DLC**. Before
 SMS will reliably deliver, you must (in the Telnyx portal → Messaging):
