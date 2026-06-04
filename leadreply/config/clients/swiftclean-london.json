@@ -1,0 +1,151 @@
+{
+  "business_name": "SwiftClean London",
+  "business_type": "Cleaning company",
+  "location": "London, UK",
+  "website": "https://swiftclean.example.com",
+  "whatsapp_number": "+447700000000",
+  "services": [
+    {
+      "name": "End-of-tenancy cleaning",
+      "aliases": ["end of tenancy", "eot", "move out cleaning", "tenancy cleaning", "landlord cleaning", "checkout cleaning"],
+      "description": "Full end-of-tenancy cleaning for flats, houses, landlords and tenants",
+      "ask_furnished": true,
+      "default_extras": ["Oven", "Fridge", "Carpets", "Windows", "Balcony", "Upholstery"]
+    },
+    {
+      "name": "Deep cleaning",
+      "aliases": ["deep clean", "spring clean", "full clean", "thorough clean", "one-off clean"],
+      "description": "Comprehensive deep cleaning for any property type",
+      "ask_furnished": false,
+      "default_extras": ["Oven", "Fridge", "Windows", "Carpets"]
+    },
+    {
+      "name": "Airbnb cleaning",
+      "aliases": ["airbnb", "short let", "holiday let", "guest turnover", "turnover cleaning", "bnb cleaning"],
+      "description": "Regular and one-off Airbnb turnover cleaning between guests",
+      "ask_furnished": false,
+      "default_extras": ["Linen change", "Restocking", "Key collection", "Guest welcome pack"]
+    },
+    {
+      "name": "Office cleaning",
+      "aliases": ["office", "commercial cleaning", "workplace cleaning", "workspace"],
+      "description": "Office and commercial cleaning services",
+      "ask_furnished": false,
+      "default_extras": ["Kitchen", "Toilets", "Meeting rooms", "Reception", "Carpets"]
+    },
+    {
+      "name": "After-builders cleaning",
+      "aliases": ["after builders", "renovation cleaning", "post-build", "building work", "construction clean", "dust clean"],
+      "description": "Cleaning after building work or renovation",
+      "ask_furnished": false,
+      "default_extras": ["Dust removal", "Paint splatter", "Plaster dust", "Window cleaning", "Floor scrubbing"]
+    },
+    {
+      "name": "Carpet cleaning",
+      "aliases": ["carpet", "rug cleaning", "steam clean", "carpets"],
+      "description": "Professional carpet and rug cleaning",
+      "ask_furnished": false,
+      "default_extras": ["Stain treatment", "Deodorising", "Pet treatment", "Underlay cleaning"]
+    }
+  ],
+  "areas_covered": [
+    "Central London",
+    "East London",
+    "North London",
+    "South West London",
+    "Croydon",
+    "Camden",
+    "Islington",
+    "Hackney",
+    "Wandsworth",
+    "Lambeth",
+    "Westminster",
+    "Hammersmith",
+    "Fulham",
+    "Clapham",
+    "Brixton",
+    "Greenwich",
+    "Barking",
+    "Walthamstow",
+    "Tottenham",
+    "Battersea",
+    "Putney",
+    "Streatham",
+    "Kennington"
+  ],
+  "opening_hours": {
+    "monday": "8am-6pm",
+    "tuesday": "8am-6pm",
+    "wednesday": "8am-6pm",
+    "thursday": "8am-6pm",
+    "friday": "8am-6pm",
+    "saturday": "8am-6pm",
+    "sunday": "Closed"
+  },
+  "tone_of_voice": {
+    "style": "Friendly, short, professional, helpful",
+    "do_not_use": ["mate", "innit", "gonna", "wanna", "lol", "omg", "swear words"],
+    "characteristics": [
+      "Keep messages short because this is WhatsApp",
+      "One question at a time",
+      "Friendly but not overly casual",
+      "Professional but not robotic",
+      "Use British English spelling"
+    ]
+  },
+  "handoff_rules": {
+    "triggers": [
+      "call me",
+      "can i speak to someone",
+      "speak to someone",
+      "human",
+      "manager",
+      "urgent",
+      "complaint",
+      "not happy",
+      "unhappy",
+      "wrong price",
+      "need to speak",
+      "speak to a person",
+      "real person",
+      "hurry",
+      "asap",
+      "emergency",
+      "angry",
+      "frustrated",
+      "ridiculous"
+    ],
+    "handoff_number": "+447700000000",
+    "handoff_method": "whatsapp"
+  },
+  "blocked_behaviour": [
+    "Do not invent prices",
+    "Do not guarantee availability",
+    "Do not send outbound promotions",
+    "Do not continue if owner takes over",
+    "Do not discuss unrelated topics",
+    "Do not give legal, medical, financial or tenancy advice",
+    "Do not pretend to be human — say 'I'm the business assistant' if asked"
+  ],
+  "pricing_rules": {
+    "enabled": false,
+    "policy": "Do not give exact prices. Say: 'Prices depend on the property size, service type, location and any extras needed. I can collect the details now so the team can give you an accurate quote.'"
+  },
+  "lead_delivery": {
+    "method": "google_sheet",
+    "email": "owner@swiftclean.example.com",
+    "google_sheet_id": "",
+    "fallback": "console_log"
+  },
+  "summary_template": "New cleaning lead captured\nBusiness: {{business_name}}\nCustomer name: {{customer_name}}\nCustomer phone: {{customer_phone}}\nService: {{service}}\nPostcode: {{postcode}}\nProperty type: {{property_type}}\nFurnished status: {{furnished_status}}\nExtras: {{extras}}\nPreferred date: {{preferred_date}}\nUrgency: {{urgency}}\nLead quality: {{lead_quality}}\nSuggested next step: {{suggested_next_step}}",
+  "faq": {
+    "What areas do you cover?": "We cover most of London, including Central London, East London, North London and South West London. Share your postcode and the team can confirm availability.",
+    "Do you do end-of-tenancy cleaning?": "Yes, we offer end-of-tenancy cleaning for flats, houses, landlords and tenants.",
+    "Do you clean ovens?": "Yes, oven cleaning can usually be added as an extra.",
+    "Do you clean carpets?": "Carpet cleaning may be available depending on location and property type.",
+    "Do you work weekends?": "Saturday bookings may be available. Sunday depends on availability.",
+    "Can I get a quote?": "Yes. I can collect the property details and pass them to the team for an accurate quote.",
+    "Can I speak to a person?": "Yes. I can pass your details to the team for a callback.",
+    "How much does cleaning cost?": "The price depends on the property size, service type, location, and extras. I can collect the main details so the team can confirm an accurate quote."
+  }
+}

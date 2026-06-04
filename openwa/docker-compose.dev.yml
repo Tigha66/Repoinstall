@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
     container_name: openwa-api
     ports:
-      - '127.0.0.1:2785:2785'
+      - 'openwa-api:2785:2785'
     environment:
       - NODE_ENV=development
       - PORT=2785
