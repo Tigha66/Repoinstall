@@ -34,6 +34,39 @@ This is the important part — describe the **missed-call text-back** use case c
 - **Includes phone numbers / links / age-gated:** No links required; no age-gated content.
 - Submit → campaign review (often same-day to ~3 days). Campaign fee ≈ $1.50–$10/mo.
 
+## Step 2b — Campaign: exact field-by-field (PASTE-READY)
+Telnyx → 10DLC → **Campaigns → Create**. Pick your approved brand, then:
+
+- **Use case:** `Customer Care` (for a Sole-Prop brand it may auto-select the sole-proprietor use
+  case — that's fine). **Do NOT pick Marketing.**
+- **Campaign description (paste):**
+  > Automated missed-call text-back for local businesses. When a customer calls the business and
+  > the call is not answered, a one-time SMS is sent to that caller offering assistance. The
+  > business then replies to help. No promotional or marketing content.
+- **Message flow / How do end users consent (paste):**
+  > The consumer initiates contact by calling the business's published phone number. The SMS is a
+  > direct, one-time reply to that inbound call — the call itself is the opt-in. No purchased or
+  > marketing lists are used. Consumers can reply STOP at any time to opt out.
+- **Sample message 1 (paste):**
+  > Hi! Sorry we missed your call to Mile High HVAC. How can we help? Reply here and we'll get
+  > right back to you. Reply STOP to opt out.
+- **Sample message 2 (paste):**
+  > Thanks for calling Mile High HVAC — we're with a customer right now. Reply here and we'll get
+  > straight back to you. Msg & data rates may apply.
+- **Content attributes / flags:**
+  - Embedded link: **No** · Embedded phone number: **Yes** (the business number) ·
+    Age-gated content: **No** · Direct lending: **No** · Affiliate marketing: **No**.
+- **Opt-in keywords:** `START` — **Opt-in message:**
+  > You're connected to Mile High HVAC. Msg & data rates may apply. Reply HELP for help, STOP to opt out.
+- **Opt-out keyword:** `STOP` — **Opt-out message:**
+  > You've been unsubscribed and won't receive more messages. Reply START to opt back in.
+- **Help keyword:** `HELP` — **Help message:**
+  > Mile High HVAC: reply to chat with us. Msg & data rates may apply. Reply STOP to opt out.
+
+Submit → review (often same-day to ~3 business days). Campaign fee ≈ $1.50–$10/mo.
+> Tip: keep the live text-back wording (in tenants.json) consistent with your registered sample
+> messages — carriers can filter content that drifts far from what you registered.
+
 ## Step 3 — Messaging Profile + attach number
 - 10DLC → **Messaging Profiles → Create** (or use existing).
 - Attach your **US Telnyx number** to the profile.
