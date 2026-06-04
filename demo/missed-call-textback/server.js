@@ -108,6 +108,7 @@ function normaliseTenant(t) {
     businessName: t.businessName || 'our team',
     session: t.session || t.name,
     message: t.message || DEFAULT_MESSAGE,
+    channel: t.channel === 'sms' ? 'sms' : 'whatsapp', // 'whatsapp' (UK/EU) or 'sms' (US)
     smsFallback: t.smsFallback === true,
     smsFrom: t.smsFrom || '',
   };
@@ -212,6 +213,18 @@ async function textBackMissedCall(callerNumber, tenant) {
   lastTexted.set(chatId, now);
 
   const text = renderMessage(tenant);
+
+  // US tenants: SMS is the primary channel (Americans don't use WhatsApp).
+  if (tenant.channel === 'sms') {
+    try {
+      await sendSms(tenant.smsFrom, callerNumber, text);
+      log(`✅ SMS text-back sent to ${callerNumber} [${tenant.businessName}]`);
+    } catch (smsErr) {
+      log('❌ SMS send failed:', smsErr.message);
+    }
+    return;
+  }
+
   try {
     await sendWhatsApp(tenant.session, chatId, text);
     log(`✅ WhatsApp text-back sent to ${chatId} [${tenant.businessName}]`);
