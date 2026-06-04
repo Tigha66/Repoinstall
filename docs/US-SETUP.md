@@ -11,6 +11,18 @@ Telnyx**. The service now supports this per-tenant (`"channel": "sms"`).
 | Extra setup | scan QR | **10DLC A2P registration** (see below) ⚠️ |
 | Pricing | £49 / £99 / £249 | **$99 / $199 / $399** |
 
+## 🚧 REALITY CHECK (confirmed by Telnyx support, Issue #296002)
+10DLC is **US-only** and the **Brand phone field requires a US `+1` number** — a UK number is
+rejected ("phone must be in +e164 format" persists because it wants +1, not because of formatting).
+Implications for a UK-based founder:
+- **UK recipients → NO 10DLC needed** (we use WhatsApp anyway).
+- **US recipients → 10DLC required**, and it expects US identity/US phone.
+- **Open question (ask Telnyx):** can the **US Telnyx number +15717884804** be used as the brand
+  OTP phone (read OTP from inbound message logs)? If not, you likely need a **US wireless mobile**
+  or a **US LLC/EIN**.
+- **Recommendation:** prioritise UK (live, no 10DLC) for revenue now; pursue US once you can use a
+  US phone for the brand or form a US LLC. Don't let US block UK.
+
 ## ⚠️ The one US-specific hurdle: 10DLC registration
 US carriers **block business (A2P) SMS** from numbers that aren't registered under **10DLC**. Before
 SMS will reliably deliver, you must (in the Telnyx portal → Messaging):
