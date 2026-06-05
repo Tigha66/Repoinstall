@@ -127,6 +127,15 @@ function renderMessage(tenant) {
     .replace(/\{booking\}/g, tenant.bookingUrl || '');
 }
 
+// Localized demo text-back (used by /simulate?lang=fr|ar) — for showing prospects the flow.
+function demoMsg(lang, tenant) {
+  const biz = tenant.businessName;
+  const book = `https://api.76-13-252-4.sslip.io/book?lang=${lang}`;
+  if (lang === 'fr') return `Bonjour 👋 Désolé d'avoir manqué votre appel chez ${biz}. Réservez ici : ${book} — ou répondez simplement à ce message et nous reviendrons vers vous. ✨`;
+  if (lang === 'ar') return `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك مع ${biz}. يمكنك الحجز هنا: ${book} — أو راسلنا هنا وسنعاود التواصل معك فوراً. ✨`;
+  return null;
+}
+
 // ---------------------------------------------------------------------------
 // In-memory state
 // ---------------------------------------------------------------------------
@@ -205,7 +214,7 @@ async function sendSms(from, to, text) {
 // ---------------------------------------------------------------------------
 // The core action: text a missed caller back
 // ---------------------------------------------------------------------------
-async function textBackMissedCall(callerNumber, tenant) {
+async function textBackMissedCall(callerNumber, tenant, overrideText) {
   const chatId = toChatId(callerNumber);
   if (!chatId) return log('skip: bad caller number', callerNumber);
 
@@ -215,7 +224,7 @@ async function textBackMissedCall(callerNumber, tenant) {
   }
   lastTexted.set(chatId, now);
 
-  const text = renderMessage(tenant);
+  const text = overrideText || renderMessage(tenant);
 
   // US tenants: SMS is the primary channel (Americans don't use WhatsApp).
   if (tenant.channel === 'sms') {
@@ -426,9 +435,11 @@ tick();
     }
     if (!from) return send(res, 400, { error: 'provide ?from=+44...' });
     const tenant = tenantFor(to);
-    log('SIMULATE missed call from', from, 'to', to, `[${tenant.businessName}]`);
-    textBackMissedCall(from, tenant);
-    return send(res, 200, { ok: true, simulatedFrom: from, tenant: tenant.businessName });
+    const lang = String(url.searchParams.get('lang') || '').toLowerCase();
+    const override = (lang === 'fr' || lang === 'ar') ? demoMsg(lang, tenant) : null;
+    log('SIMULATE missed call from', from, 'to', to, `[${tenant.businessName}]`, lang ? `lang=${lang}` : '');
+    textBackMissedCall(from, tenant, override);
+    return send(res, 200, { ok: true, simulatedFrom: from, tenant: tenant.businessName, lang: lang || 'en' });
   }
 
   // --- Booking demo: GET /book (form) + POST /book (sends WhatsApp/SMS confirmation) ---
