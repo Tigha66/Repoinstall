@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Book</title>
+<style>
+body{font-family:system-ui,'Segoe UI',Tahoma,Arial,sans-serif;background:#f7f9fa;margin:0;padding:24px;color:#0b141a}
+.card{max-width:440px;margin:0 auto;background:#fff;border:1px solid #e9edef;border-radius:16px;padding:24px}
+h1{font-size:22px;margin:0 0 4px}.muted{color:#667781;font-size:14px;margin-bottom:18px}
+label{display:block;font-size:13px;font-weight:600;margin:12px 0 4px}
+input{width:100%;padding:11px 12px;border:1px solid #cfd9de;border-radius:10px;font-size:15px;box-sizing:border-box}
+button{width:100%;margin-top:18px;background:#25d366;color:#fff;border:0;border-radius:999px;padding:14px;font-size:16px;font-weight:700;cursor:pointer}
+.ok{display:none;text-align:center;color:#1da851;font-weight:700;margin-top:14px}
+</style></head>
+<body><div class="card">
+<h1 id="h1"></h1><div class="muted" id="sub"></div>
+<form id="f">
+<label id="lname"></label><input name="name" required>
+<label id="lmobile"></label><input name="mobile" required>
+<label id="lservice"></label><input name="service" id="iservice">
+<label id="ldt"></label><input name="datetime" type="datetime-local">
+<button type="submit" id="btn"></button>
+<div class="ok" id="ok"></div>
+</form></div>
+<script>
+const API="https://api.76-13-252-4.sslip.io/book";
+const T={
+ en:{title:"Book with our team",sub:"Pick a time — we'll text you a confirmation on WhatsApp.",name:"Your name",mobile:"Your mobile (with country code, e.g. +44…)",service:"Service",sph:"e.g. haircut / quote / appointment",dt:"Preferred date & time",btn:"Request booking",ok:"✅ Sent! Check your WhatsApp for confirmation.",done:"Done",err:"Please enter a valid mobile with country code (e.g. +44…)"},
+ fr:{title:"Réserver avec notre équipe",sub:"Choisissez un horaire — confirmation par WhatsApp.",name:"Votre nom",mobile:"Votre mobile (avec indicatif, ex. +33…)",service:"Service",sph:"ex. coupe / devis / rendez-vous",dt:"Date et heure souhaitées",btn:"Demander un rendez-vous",ok:"✅ Envoyé ! Vérifiez WhatsApp pour la confirmation.",done:"Terminé",err:"Veuillez saisir un mobile valide avec indicatif (ex. +33…)"},
+ ar:{title:"احجز مع فريقنا",sub:"اختر الوقت المناسب — وسنرسل لك تأكيداً عبر واتساب.",name:"اسمك",mobile:"رقم هاتفك (مع رمز الدولة، مثال +212…)",service:"الخدمة",sph:"مثال: قص شعر / عرض سعر / موعد",dt:"التاريخ والوقت المفضّل",btn:"طلب الحجز",ok:"✅ تم الإرسال! تحقّق من واتساب للتأكيد.",done:"تم",err:"يرجى إدخال رقم هاتف صحيح مع رمز الدولة (مثال +212…)"}
+};
+const p=new URLSearchParams(location.search);let lang=(p.get('lang')||'en').toLowerCase();if(!T[lang])lang='en';
+const t=T[lang];document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+h1.textContent=t.title;sub.textContent=t.sub;lname.textContent=t.name;lmobile.textContent=t.mobile;
+lservice.textContent=t.service;iservice.placeholder=t.sph;ldt.textContent=t.dt;btn.textContent=t.btn;ok.textContent=t.ok;
+document.getElementById('f').addEventListener('submit',async e=>{e.preventDefault();
+ const d=Object.fromEntries(new FormData(e.target));
+ try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+ if(r.ok){ok.style.display='block';btn.textContent=t.done;}else{alert(t.err);}}catch(_){alert(t.err);}});
+</script></body></html>

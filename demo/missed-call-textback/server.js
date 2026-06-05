@@ -129,7 +129,7 @@ function renderMessage(tenant) {
 
 // Localized demo text-back (used by /simulate?lang=fr|ar&niche=restaurant) — fully in-language.
 function demoMsg(lang, niche) {
-  const book = `https://api.76-13-252-4.sslip.io/book?lang=${lang}`;
+  const book = `https://get.callpilotvoice.co.uk/book.html?lang=${lang}`;
   const restaurant = niche === 'restaurant';
   if (lang === 'fr') {
     return restaurant
@@ -317,7 +317,10 @@ function readBody(req) {
 
 function send(res, code, obj) {
   const body = typeof obj === 'string' ? obj : JSON.stringify(obj);
-  res.writeHead(code, { 'Content-Type': typeof obj === 'string' ? 'text/plain' : 'application/json' });
+  res.writeHead(code, {
+    'Content-Type': typeof obj === 'string' ? 'text/plain' : 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  });
   res.end(body);
 }
 
@@ -348,6 +351,16 @@ async function renderQrPage(res) {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${CONFIG.port}`);
   const pathname = url.pathname.replace(/\/$/, '') || '/';
+
+  // CORS preflight (so the booking page on get.callpilotvoice.co.uk can POST here)
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    });
+    return res.end();
+  }
 
   if (req.method === 'GET' && (pathname === '/' || pathname === '/health')) {
     return send(res, 200, {
