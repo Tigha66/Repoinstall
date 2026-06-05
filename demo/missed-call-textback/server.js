@@ -111,6 +111,7 @@ function normaliseTenant(t) {
     channel: t.channel === 'sms' ? 'sms' : 'whatsapp', // 'whatsapp' (UK/EU) or 'sms' (US)
     smsFallback: t.smsFallback === true,
     smsFrom: t.smsFrom || '',
+    bookingUrl: t.bookingUrl || '', // optional Cal.com/Calendly link, used via {booking} in message
   };
 }
 
@@ -121,7 +122,9 @@ function tenantFor(toNumber) {
 }
 
 function renderMessage(tenant) {
-  return tenant.message.replace(/\{business\}/g, tenant.businessName);
+  return tenant.message
+    .replace(/\{business\}/g, tenant.businessName)
+    .replace(/\{booking\}/g, tenant.bookingUrl || '');
 }
 
 // ---------------------------------------------------------------------------
