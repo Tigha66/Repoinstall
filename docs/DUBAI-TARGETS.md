@@ -40,7 +40,7 @@ Google Maps / Instagram / Fresha: "beauty salon JVC", "barber Business Bay", "de
 ## Dubai outreach message (English — DM/WhatsApp)
 > Hi 👋 quick one for {business} — when you're with a client and can't pick up, that caller usually
 > just books the next salon. I set up a tool that instantly WhatsApps every missed caller back so you
-> keep them (they can even book). 30-sec demo: https://get.callpilotvoice.co.uk — free for 7 days, I
+> keep them (they can even book). 30-sec demo: https://get.callpilotvoice.co.uk/ae.html — free for 7 days, I
 > set it all up. Worth a look? — Abdelhak
 
 ## Competition in Dubai
