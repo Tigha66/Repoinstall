@@ -28,6 +28,22 @@ Demo link inside: https://get.callpilotvoice.co.uk/ae.html ($99/$199/$399).
 - Pioneer Gulf — https://wa.me/971556260687?text=Hi%20%F0%9F%91%8B%20I%27m%20not%20booking%20%E2%80%94%20I%27m%20Abdelhak.%20Quick%20one%20for%20your%20business%3A%20when%20you%27re%20busy%2C%20with%20a%20customer%2C%20or%20closed%20and%20can%27t%20pick%20up%2C%20that%20caller%20usually%20just%20goes%20to%20the%20next%20place.%20I%20set%20up%20a%20tool%20that%20instantly%20WhatsApps%20every%20missed%20caller%20back%20so%20you%20keep%20them%20%E2%80%94%20even%20after%20hours.%2030-sec%20demo%3A%20https%3A//get.callpilotvoice.co.uk/ae.html%20%E2%80%94%20free%207%20days%2C%20I%20set%20it%20all%20up.%20Worth%20a%20look%3F
 - Sasha Beauty Salon — https://wa.me/971505019963?text=Hi%20%F0%9F%91%8B%20I%27m%20not%20booking%20%E2%80%94%20I%27m%20Abdelhak.%20Quick%20one%20for%20your%20business%3A%20when%20you%27re%20busy%2C%20with%20a%20customer%2C%20or%20closed%20and%20can%27t%20pick%20up%2C%20that%20caller%20usually%20just%20goes%20to%20the%20next%20place.%20I%20set%20up%20a%20tool%20that%20instantly%20WhatsApps%20every%20missed%20caller%20back%20so%20you%20keep%20them%20%E2%80%94%20even%20after%20hours.%2030-sec%20demo%3A%20https%3A//get.callpilotvoice.co.uk/ae.html%20%E2%80%94%20free%207%20days%2C%20I%20set%20it%20all%20up.%20Worth%20a%20look%3F
 
+## 🚗 Luxury car rental / detailing
+- Octane.Rent — https://wa.me/971527269337
+- NCK Car Rental — https://wa.me/971525660040
+- BE VIP Rent A Car — https://wa.me/971568222244
+- A1 Luxury Car — https://wa.me/971502707650
+
+## 🏠 Real estate brokers
+- IMEX Real Estate — https://wa.me/971505006869
+- Exclusive Links — https://wa.me/message/TXWGHPQZC6SMJ1
+- Levante Real Estate — call only +971 4 585 1737 (landline, no WhatsApp)
+
+## 🍽️ Restaurants / cloud kitchens
+- Marina Kitchen Restaurant — https://wa.me/971554097226
+- Kitchen Works — https://wa.me/971543053550
+- The Fit Food Kitchen — call only +971 4 553 1031 (landline, no WhatsApp)
+
 ## Build a link for any other lead
 https://wa.me/<number, country code, no + or spaces>?text=<your message URL-encoded>
 e.g. number +971 50 123 4567 → https://wa.me/971501234567
