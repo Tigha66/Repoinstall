@@ -131,19 +131,20 @@ function renderMessage(tenant) {
 function demoMsg(lang, niche) {
   const book = `https://get.callpilotvoice.co.uk/book.html?lang=${lang}`;
   const restaurant = niche === 'restaurant';
+  // Reply-to-book is PRIMARY (works on every device, no browser); link is the secondary option.
   if (lang === 'fr') {
     return restaurant
-      ? `Bonjour 👋 Désolé d'avoir manqué votre appel chez notre restaurant ! Réservez une table ou commandez ici : ${book} — ou répondez (date, heure, nombre de personnes, ou votre commande) et on s'occupe de tout. ✨`
-      : `Bonjour 👋 Désolé d'avoir manqué votre appel chez notre équipe. Réservez ici : ${book} — ou répondez simplement à ce message et nous reviendrons vers vous. ✨`;
+      ? `Bonjour 👋 Désolé d'avoir manqué votre appel chez notre restaurant ! Répondez à ce message avec la date, l'heure et le nombre de personnes (ou votre commande) et on s'occupe de tout. 📅 Réserver en ligne : ${book}`
+      : `Bonjour 👋 Désolé d'avoir manqué votre appel chez notre équipe. Répondez ici avec le créneau qui vous convient et on vous réserve. 📅 Réserver en ligne : ${book}`;
   }
   if (lang === 'ar') {
     return restaurant
-      ? `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في مطعمنا! احجز طاولة أو اطلب من هنا: ${book} — أو راسلنا (التاريخ، الوقت، عدد الأشخاص، أو طلبك) وسنتكفّل بالباقي. ✨`
-      : `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك مع فريقنا. يمكنك الحجز هنا: ${book} — أو راسلنا هنا وسنعاود التواصل معك فوراً. ✨`;
+      ? `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في مطعمنا! راسلنا هنا بالتاريخ والوقت وعدد الأشخاص (أو طلبك) وسنتكفّل بالباقي. 📅 للحجز عبر الإنترنت: ${book}`
+      : `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك مع فريقنا. راسلنا هنا بالوقت المناسب لك وسنحجز لك. 📅 للحجز عبر الإنترنت: ${book}`;
   }
   return restaurant
-    ? `Hi 👋 Sorry we missed your call to our restaurant! Reserve a table or order here: ${book} — or just reply (date, time, party size, or your order) and we'll sort it. ✨`
-    : `Hi 👋 Sorry we missed your call to our team. Book here: ${book} — or just reply and we'll help. ✨`;
+    ? `Hi 👋 Sorry we missed your call to our restaurant! Reply here with the date, time & party size (or your order) and we'll sort it. 📅 Or book online: ${book}`
+    : `Hi 👋 Sorry we missed your call to our team. Reply here with a time that suits and we'll book you in. 📅 Or book online: ${book}`;
 }
 
 // ---------------------------------------------------------------------------
