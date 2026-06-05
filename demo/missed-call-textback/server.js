@@ -127,13 +127,23 @@ function renderMessage(tenant) {
     .replace(/\{booking\}/g, tenant.bookingUrl || '');
 }
 
-// Localized demo text-back (used by /simulate?lang=fr|ar) — for showing prospects the flow.
-function demoMsg(lang, tenant) {
-  const biz = tenant.businessName;
+// Localized demo text-back (used by /simulate?lang=fr|ar&niche=restaurant) — fully in-language.
+function demoMsg(lang, niche) {
   const book = `https://api.76-13-252-4.sslip.io/book?lang=${lang}`;
-  if (lang === 'fr') return `Bonjour 👋 Désolé d'avoir manqué votre appel chez ${biz}. Réservez ici : ${book} — ou répondez simplement à ce message et nous reviendrons vers vous. ✨`;
-  if (lang === 'ar') return `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك مع ${biz}. يمكنك الحجز هنا: ${book} — أو راسلنا هنا وسنعاود التواصل معك فوراً. ✨`;
-  return null;
+  const restaurant = niche === 'restaurant';
+  if (lang === 'fr') {
+    return restaurant
+      ? `Bonjour 👋 Désolé d'avoir manqué votre appel chez notre restaurant ! Réservez une table ou commandez ici : ${book} — ou répondez (date, heure, nombre de personnes, ou votre commande) et on s'occupe de tout. ✨`
+      : `Bonjour 👋 Désolé d'avoir manqué votre appel chez notre équipe. Réservez ici : ${book} — ou répondez simplement à ce message et nous reviendrons vers vous. ✨`;
+  }
+  if (lang === 'ar') {
+    return restaurant
+      ? `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في مطعمنا! احجز طاولة أو اطلب من هنا: ${book} — أو راسلنا (التاريخ، الوقت، عدد الأشخاص، أو طلبك) وسنتكفّل بالباقي. ✨`
+      : `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك مع فريقنا. يمكنك الحجز هنا: ${book} — أو راسلنا هنا وسنعاود التواصل معك فوراً. ✨`;
+  }
+  return restaurant
+    ? `Hi 👋 Sorry we missed your call to our restaurant! Reserve a table or order here: ${book} — or just reply (date, time, party size, or your order) and we'll sort it. ✨`
+    : `Hi 👋 Sorry we missed your call to our team. Book here: ${book} — or just reply and we'll help. ✨`;
 }
 
 // ---------------------------------------------------------------------------
@@ -435,11 +445,13 @@ tick();
     }
     if (!from) return send(res, 400, { error: 'provide ?from=+44...' });
     const tenant = tenantFor(to);
-    const lang = String(url.searchParams.get('lang') || '').toLowerCase();
-    const override = (lang === 'fr' || lang === 'ar') ? demoMsg(lang, tenant) : null;
-    log('SIMULATE missed call from', from, 'to', to, `[${tenant.businessName}]`, lang ? `lang=${lang}` : '');
+    const langRaw = String(url.searchParams.get('lang') || '').toLowerCase();
+    const lang = ['fr', 'ar', 'en'].includes(langRaw) ? langRaw : 'en';
+    const niche = String(url.searchParams.get('niche') || '').toLowerCase();
+    const override = (langRaw === 'fr' || langRaw === 'ar' || niche === 'restaurant') ? demoMsg(lang, niche) : null;
+    log('SIMULATE missed call from', from, 'to', to, `[${tenant.businessName}]`, `lang=${lang}`, niche ? `niche=${niche}` : '');
     textBackMissedCall(from, tenant, override);
-    return send(res, 200, { ok: true, simulatedFrom: from, tenant: tenant.businessName, lang: lang || 'en' });
+    return send(res, 200, { ok: true, simulatedFrom: from, lang, niche: niche || 'generic' });
   }
 
   // --- Booking demo: GET /book (form) + POST /book (sends WhatsApp/SMS confirmation) ---
