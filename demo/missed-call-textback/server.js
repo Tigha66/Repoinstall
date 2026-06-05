@@ -435,31 +435,38 @@ tick();
   if (req.method === 'GET' && pathname === '/book') {
     const t = TENANTS.fallback;
     const biz = (url.searchParams.get('b') || t.businessName).replace(/[<>]/g, '');
-    const html = `<!doctype html><html><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Book — ${biz}</title>
-<style>body{font-family:system-ui,sans-serif;background:#f7f9fa;margin:0;padding:24px;color:#0b141a}
+    const lang = ({ fr: 'fr', ar: 'ar' })[String(url.searchParams.get('lang') || '').toLowerCase()] || 'en';
+    const T = {
+      en: { title: 'Book with', sub: "Pick a time — we'll text you a confirmation on WhatsApp.", name: 'Your name', mobile: 'Your mobile (with country code, e.g. +44…)', service: 'Service', sph: 'e.g. haircut / quote / appointment', dt: 'Preferred date & time', btn: 'Request booking', ok: '✅ Sent! Check your WhatsApp for confirmation.', done: 'Done', err: 'Please enter a valid mobile with country code (e.g. +44…)' },
+      fr: { title: 'Réserver avec', sub: 'Choisissez un horaire — nous vous enverrons une confirmation par WhatsApp.', name: 'Votre nom', mobile: 'Votre mobile (avec indicatif, ex. +33…)', service: 'Service', sph: 'ex. coupe / devis / rendez-vous', dt: 'Date et heure souhaitées', btn: 'Demander un rendez-vous', ok: '✅ Envoyé ! Vérifiez WhatsApp pour la confirmation.', done: 'Terminé', err: 'Veuillez saisir un mobile valide avec indicatif (ex. +33…)' },
+      ar: { title: 'احجز مع', sub: 'اختر الوقت المناسب — وسنرسل لك تأكيداً عبر واتساب.', name: 'اسمك', mobile: 'رقم هاتفك (مع رمز الدولة، مثال +212…)', service: 'الخدمة', sph: 'مثال: قص شعر / عرض سعر / موعد', dt: 'التاريخ والوقت المفضّل', btn: 'طلب الحجز', ok: '✅ تم الإرسال! تحقّق من واتساب للتأكيد.', done: 'تم', err: 'يرجى إدخال رقم هاتف صحيح مع رمز الدولة (مثال +212…)' },
+    }[lang];
+    const dir = lang === 'ar' ? 'rtl' : 'ltr';
+    const html = `<!doctype html><html lang="${lang}" dir="${dir}"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>${T.title} ${biz}</title>
+<style>body{font-family:system-ui,'Segoe UI',Tahoma,sans-serif;background:#f7f9fa;margin:0;padding:24px;color:#0b141a}
 .card{max-width:440px;margin:0 auto;background:#fff;border:1px solid #e9edef;border-radius:16px;padding:24px}
 h1{font-size:22px;margin:0 0 4px}.muted{color:#667781;font-size:14px;margin-bottom:18px}
 label{display:block;font-size:13px;font-weight:600;margin:12px 0 4px}
-input,select{width:100%;padding:11px 12px;border:1px solid #cfd9de;border-radius:10px;font-size:15px;box-sizing:border-box}
+input{width:100%;padding:11px 12px;border:1px solid #cfd9de;border-radius:10px;font-size:15px;box-sizing:border-box}
 button{width:100%;margin-top:18px;background:#25d366;color:#fff;border:0;border-radius:999px;padding:14px;font-size:16px;font-weight:700;cursor:pointer}
 .ok{display:none;text-align:center;color:#1da851;font-weight:700;margin-top:14px}</style></head>
 <body><div class="card">
-<h1>Book with ${biz}</h1><div class="muted">Pick a time — we'll text you a confirmation on WhatsApp.</div>
+<h1>${T.title} ${biz}</h1><div class="muted">${T.sub}</div>
 <form id="f">
-<label>Your name</label><input name="name" required>
-<label>Your mobile (with country code, e.g. +447…)</label><input name="mobile" required>
-<label>Service</label><input name="service" placeholder="e.g. haircut / quote / appointment">
-<label>Preferred date & time</label><input name="datetime" type="datetime-local">
-<button type="submit">Request booking</button>
-<div class="ok" id="ok">✅ Sent! Check your WhatsApp for confirmation.</div>
+<label>${T.name}</label><input name="name" required>
+<label>${T.mobile}</label><input name="mobile" required>
+<label>${T.service}</label><input name="service" placeholder="${T.sph}">
+<label>${T.dt}</label><input name="datetime" type="datetime-local">
+<button type="submit">${T.btn}</button>
+<div class="ok" id="ok">${T.ok}</div>
 </form></div>
 <script>
 document.getElementById('f').addEventListener('submit',async e=>{e.preventDefault();
 const d=Object.fromEntries(new FormData(e.target));
 const r=await fetch('/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
-if(r.ok){document.getElementById('ok').style.display='block';e.target.querySelector('button').textContent='Done';}
-else{alert('Please enter a valid mobile with country code (e.g. +447...)');}});
+if(r.ok){document.getElementById('ok').style.display='block';e.target.querySelector('button').textContent=${JSON.stringify(T.done)};}
+else{alert(${JSON.stringify(T.err)});}});
 </script></body></html>`;
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
     return res.end(html);
