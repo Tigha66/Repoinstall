@@ -16,9 +16,22 @@ Reach via **WhatsApp / Instagram DM** (Dubai SMBs respond fast on WhatsApp). Out
 
 *(Skip "The Salon Dubai" — 13 branches/call-centre = too big. Target single/independent salons.)*
 
-## Find clinics + more (10 min)
-Google Maps / Instagram: "dental clinic Dubai Marina", "aesthetic clinic Jumeirah", "beauty salon JVC",
-"derma clinic Dubai", or Fresha (Dubai Marina / JLT). Pick owner-run, with a mobile/WhatsApp + active IG.
+## Dental / aesthetic clinics (high-value)
+| # | Clinic | Area | Contact / find it |
+|---|---|---|---|
+| 7 | **Polar Bear General Dental Clinic** | Jumeirah / Business Bay | 📞 **04-834-7223** · pbdc.ae |
+| 8 | **VIP Clinic Dubai** | Business Bay | vipclinicdubai.com |
+| 9 | **Solis Dental Clinic** | JVC | solisdentalclinic.com |
+| 10 | **Magnum Dental Clinic** | JVC (Arcadia Tower) | magnumclinic.ae |
+| 11 | **Dr Joy Dental Clinic** | JVC (Circle Mall) | drjoydentalclinic.com |
+| 12 | **Vibes Aesthetic Clinic** | Jumeirah | vibes-clinic.com |
+| 13 | **New York Dental Clinic** | Jumeirah | nydcdubai.com |
+| 14 | **Aries Clinic** (aesthetic+dental) | Dubai | ariesclinic.com |
+| 15 | **Health Call Medical & Aesthetic Dental** | JLT | healthcalldubai.ae |
+
+## Find even more (10 min)
+Google Maps / Instagram / Fresha: "beauty salon JVC", "barber Business Bay", "derma clinic Jumeirah",
+"dental clinic Dubai Marina". Pick owner-run, with a mobile/WhatsApp + active Instagram.
 
 ## Dubai pricing (premium market)
 - **$99 / $199 / $399 / mo** (≈ AED 365 / 735 / 1465). Dubai pays readily; don't underprice.
