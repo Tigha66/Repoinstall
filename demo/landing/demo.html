@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RingBack — Live Demo Launcher</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#0b141a;color:#0b141a;min-height:100vh;padding:18px}
+.card{max-width:440px;margin:0 auto;background:#fff;border-radius:18px;padding:22px}
+.logo{font-weight:800;font-size:20px;display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.logo .d{width:12px;height:12px;border-radius:50%;background:#25d366}
+.muted{color:#667781;font-size:13px;margin-bottom:16px}
+label{display:block;font-size:13px;font-weight:700;margin:14px 0 5px}
+select,input{width:100%;padding:13px 14px;border:1px solid #cfd9de;border-radius:12px;font-size:16px;background:#fff;-webkit-appearance:none}
+.row{display:flex;gap:10px}.row>div{flex:1}
+button{width:100%;margin-top:18px;background:#25d366;color:#fff;border:0;border-radius:999px;padding:16px;font-size:17px;font-weight:800;cursor:pointer}
+button:active{background:#1da851}
+.preview{margin-top:16px;background:#e5ffe9;border:1px solid #b7ebc1;border-radius:12px;padding:12px;font-size:14px;line-height:1.5;color:#0b141a;white-space:pre-wrap}
+.preview .lbl{font-size:11px;font-weight:700;color:#1da851;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+.status{margin-top:14px;text-align:center;font-weight:700;font-size:15px;min-height:22px}
+.ok{color:#1da851}.err{color:#c0392b}
+.tip{font-size:12px;color:#667781;margin-top:10px;line-height:1.45}
+[dir=rtl] .preview{direction:rtl;text-align:right}
+</style></head>
+<body>
+<div class="card">
+  <div class="logo"><span class="d"></span>RingBack — Demo</div>
+  <div class="muted">Pick the business type, enter their mobile, send the live demo to their phone.</div>
+
+  <label>Business type</label>
+  <select id="niche">
+    <option value="barber">💈 Barbershop</option>
+    <option value="salon">💇 Salon / Beauty / Nails / Spa</option>
+    <option value="clinic">🦷 Clinic (Dental / Aesthetic / Medical)</option>
+    <option value="restaurant">🍽️ Restaurant / Café / Takeaway</option>
+    <option value="garage">🔧 Garage / AC / Repair / MOT</option>
+    <option value="cleaning">🧹 Cleaning company</option>
+    <option value="realestate">🏠 Real estate agent</option>
+    <option value="general">📅 Other / General</option>
+  </select>
+
+  <div class="row">
+    <div>
+      <label>Language</label>
+      <select id="lang">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="ar">العربية</option>
+      </select>
+    </div>
+    <div>
+      <label>Their mobile</label>
+      <input id="num" inputmode="tel" placeholder="44 7700 900123">
+    </div>
+  </div>
+
+  <button id="send">📲 Send live demo</button>
+  <div class="status" id="status"></div>
+
+  <div class="preview"><div class="lbl">They will receive:</div><div id="pv"></div></div>
+  <div class="tip">Tip: include country code (UK: starts 44). A leading 0 is auto-converted to 44.
+  The demo is sent from your service WhatsApp number. Keep to ~10–15 demos/day.</div>
+</div>
+
+<script>
+var BOOK = function(l){return "https://get.callpilotvoice.co.uk/book.html?lang="+l;};
+var M = {
+ en:{
+  restaurant:l=>`Hi 👋 Sorry we missed your call to our restaurant! Reply here with the date, time & party size (or your order) and we'll sort it. 📅 Or book online: ${l}`,
+  salon:l=>`Hi 👋 Sorry we missed your call to our salon! Reply here with the service you'd like and a time that suits, and we'll book you in. 💇 Or book online: ${l}`,
+  barber:l=>`Hi 👋 Sorry we missed your call to our barbershop! Reply here with a time that suits and we'll get you booked in. 💈 Or book online: ${l}`,
+  clinic:l=>`Hi 👋 Sorry we missed your call to our clinic! Reply here with what you need and a time that suits, and we'll arrange your appointment. 🦷 Or book online: ${l}`,
+  garage:l=>`Hi 👋 Sorry we missed your call! Reply here with what you need (and your car/issue) and we'll get you booked in fast. 🔧 Or book online: ${l}`,
+  cleaning:l=>`Hi 👋 Sorry we missed your call! Reply here with what you need cleaned and a time that suits, and we'll sort a quote. 🧹 Or book online: ${l}`,
+  realestate:l=>`Hi 👋 Sorry we missed your call! Reply here with the property you're interested in and we'll get right back to you. 🏠 Or book a viewing: ${l}`,
+  general:l=>`Hi 👋 Sorry we missed your call to our team. Reply here with a time that suits and we'll book you in. 📅 Or book online: ${l}`},
+ fr:{
+  restaurant:l=>`Bonjour 👋 Désolé d'avoir manqué votre appel chez notre restaurant ! Répondez avec la date, l'heure et le nombre de personnes (ou votre commande) et on s'occupe de tout. 📅 Réserver en ligne : ${l}`,
+  salon:l=>`Bonjour 👋 Désolé d'avoir manqué votre appel à notre salon ! Répondez avec la prestation souhaitée et un créneau, et on vous réserve. 💇 Réserver en ligne : ${l}`,
+  barber:l=>`Bonjour 👋 Désolé d'avoir manqué votre appel à notre barbier ! Répondez avec un créneau qui vous convient et on vous réserve. 💈 Réserver en ligne : ${l}`,
+  clinic:l=>`Bonjour 👋 Désolé d'avoir manqué votre appel à notre cabinet ! Répondez avec votre besoin et un créneau, et on fixe votre rendez-vous. 🦷 Réserver en ligne : ${l}`,
+  garage:l=>`Bonjour 👋 Désolé d'avoir manqué votre appel ! Répondez avec votre besoin (et votre véhicule) et on vous prend en charge rapidement. 🔧 Réserver en ligne : ${l}`,
+  cleaning:l=>`Bonjour 👋 Désolé d'avoir manqué votre appel ! Répondez avec ce qu'il faut nettoyer et un créneau, et on vous fait un devis. 🧹 Réserver en ligne : ${l}`,
+  realestate:l=>`Bonjour 👋 Désolé d'avoir manqué votre appel ! Répondez avec le bien qui vous intéresse et on vous recontacte vite. 🏠 Réserver une visite : ${l}`,
+  general:l=>`Bonjour 👋 Désolé d'avoir manqué votre appel chez notre équipe. Répondez avec le créneau qui vous convient et on vous réserve. 📅 Réserver en ligne : ${l}`},
+ ar:{
+  restaurant:l=>`مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في مطعمنا! راسلنا بالتاريخ والوقت وعدد الأشخاص (أو طلبك) وسنتكفّل بالباقي. 📅 للحجز عبر الإنترنت: ${l}`,
+  salon:l=>`مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في صالوننا! راسلنا بالخدمة التي تريدها والوقت المناسب وسنحجز لك. 💇 للحجز عبر الإنترنت: ${l}`,
+  barber:l=>`مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في محل الحلاقة! راسلنا بالوقت المناسب لك وسنحجز لك موعداً. 💈 للحجز عبر الإنترنت: ${l}`,
+  clinic:l=>`مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في عيادتنا! راسلنا بما تحتاجه والوقت المناسب وسنحدّد لك موعداً. 🦷 للحجز عبر الإنترنت: ${l}`,
+  garage:l=>`مرحباً 👋 نعتذر عن عدم الرد على مكالمتك! راسلنا بما تحتاجه (ونوع سيارتك/المشكلة) وسنخدمك بسرعة. 🔧 للحجز عبر الإنترنت: ${l}`,
+  cleaning:l=>`مرحباً 👋 نعتذر عن عدم الرد على مكالمتك! راسلنا بما تريد تنظيفه والوقت المناسب وسنعدّ لك عرض سعر. 🧹 للحجز عبر الإنترنت: ${l}`,
+  realestate:l=>`مرحباً 👋 نعتذر عن عدم الرد على مكالمتك! راسلنا بالعقار الذي يهمّك وسنعاود التواصل معك سريعاً. 🏠 لحجز معاينة: ${l}`,
+  general:l=>`مرحباً 👋 نعتذر عن عدم الرد على مكالمتك مع فريقنا. راسلنا بالوقت المناسب لك وسنحجز لك. 📅 للحجز عبر الإنترنت: ${l}`}
+};
+var $=function(id){return document.getElementById(id);};
+function norm(raw){var d=(raw||'').replace(/[^\d]/g,'');if(d.indexOf('00')===0)d=d.slice(2);if(d.indexOf('0')===0)d='44'+d.slice(1);return d;}
+function preview(){var lang=$('lang').value,niche=$('niche').value;$('pv').textContent=M[lang][niche](BOOK(lang));
+  $('pv').parentNode.setAttribute('dir',lang==='ar'?'rtl':'ltr');}
+$('niche').onchange=preview;$('lang').onchange=preview;preview();
+$('send').onclick=function(){
+  var num=norm($('num').value);var st=$('status');
+  if(num.length<10){st.className='status err';st.textContent='⚠️ Enter a valid mobile with country code.';return;}
+  st.className='status';st.textContent='Sending…';
+  var u="/simulate?from="+num+"&to=442038389029&niche="+$('niche').value+"&lang="+$('lang').value+"&cb="+(""+Math.floor(performance.now())+num.slice(-4));
+  fetch(u).then(r=>r.json()).then(j=>{
+    if(j&&j.ok){st.className='status ok';st.textContent='✅ Sent! Check their phone now.';}
+    else{st.className='status err';st.textContent='❌ Something went wrong — try again.';}
+  }).catch(_=>{st.className='status err';st.textContent='❌ Network error — check signal & retry.';});
+};
+</script>
+</body></html>
