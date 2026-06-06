@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RingBack — Your 24/7 WhatsApp receptionist for missed calls</title>
-<meta name="description" content="RingBack is your 24/7 WhatsApp receptionist. When a customer calls and you can't pick up, they instantly get a WhatsApp — so you never lose them to a competitor. From £49/mo, 7-day free trial.">
+<meta name="description" content="RingBack is your 24/7 WhatsApp receptionist. When a customer calls and you can't pick up, they instantly get a WhatsApp — so you never lose them to a competitor. From £39/mo, 7-day free trial.">
 <style>
   :root{
     --green:#25d366; --green-d:#1da851; --ink:#0b141a; --ink2:#111b21;
@@ -70,9 +70,10 @@
   .stats .n{font-size:38px;font-weight:800;color:var(--green)}
 
   /* pricing */
-  .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
-  @media(max-width:840px){.price-grid{grid-template-columns:1fr}}
-  .plan{background:#fff;border:1px solid var(--line);border-radius:18px;padding:30px;display:flex;flex-direction:column}
+  .price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+  @media(max-width:980px){.price-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.price-grid{grid-template-columns:1fr}}
+  .plan{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column}
   .plan.pop{border:2px solid var(--green);box-shadow:0 16px 40px rgba(37,211,102,.18);position:relative}
   .plan.pop .tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:999px}
   .plan h3{font-size:20px}
@@ -119,7 +120,7 @@
   <div>
     <span class="pill">📲 7-day free trial · no card needed</span>
     <h1>Your 24/7 WhatsApp receptionist for missed calls.</h1>
-    <p class="sub">When someone calls your business and you can't pick up, <b>RingBack</b> instantly answers them on WhatsApp — so every caller starts a conversation with you, not your competitor. Works <b>after hours, on your day off, and when you're with a customer</b>. <b>From £49/mo — a fraction of a £1,200 receptionist.</b></p>
+    <p class="sub">When someone calls your business and you can't pick up, <b>RingBack</b> instantly answers them on WhatsApp — so every caller starts a conversation with you, not your competitor. Works <b>after hours, on your day off, and when you're with a customer</b>. <b>From £39/mo — a fraction of a £1,200 receptionist.</b></p>
     <div class="cta-row">
       <a class="btn" href="#trial">Start my free 7-day trial</a>
       <a class="btn ghost" href="#how">See how it works</a>
@@ -185,11 +186,25 @@
       <span class="muted">·</span>
       <span class="muted" style="text-decoration:line-through">Answering service £200–£300/mo</span>
       <span class="muted">·</span>
-      <span style="color:var(--green-d);font-weight:800;font-size:17px">RingBack from £49/mo ✅</span>
+      <span style="color:var(--green-d);font-weight:800;font-size:17px">RingBack from £39/mo ✅</span>
     </div>
   </div>
 
   <div class="price-grid">
+    <div class="plan">
+      <h3>Lite</h3>
+      <div class="amt">£39<span>/mo</span></div>
+      <div class="muted">Catch missed calls</div>
+      <ul>
+        <li>Missed-call text-back (WhatsApp or SMS)</li>
+        <li>Your branded message</li>
+        <li>1 business number</li>
+        <li>Up to 60 replies / month</li>
+        <li class="no">Online booking link</li>
+        <li class="no">AI booking assistant</li>
+      </ul>
+      <a class="btn ghost" href="#trial">Start free trial</a>
+    </div>
     <div class="plan">
       <h3>Starter</h3>
       <div class="amt">£49<span>/mo</span></div>
@@ -198,6 +213,7 @@
         <li>Missed-call WhatsApp text-back</li>
         <li>Your branded message</li>
         <li>1 business number</li>
+        <li><b>Unlimited replies</b> + SMS fallback</li>
         <li class="no">Online booking link</li>
         <li class="no">AI booking assistant</li>
       </ul>
