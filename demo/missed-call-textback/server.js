@@ -127,24 +127,59 @@ function renderMessage(tenant) {
     .replace(/\{booking\}/g, tenant.bookingUrl || '');
 }
 
-// Localized demo text-back (used by /simulate?lang=fr|ar&niche=restaurant) — fully in-language.
+// Supported demo niches + aliases (so /simulate?niche=nails maps to salon, etc.)
+const NICHE_ALIASES = {
+  restaurant: 'restaurant', cafe: 'restaurant', 'café': 'restaurant', takeaway: 'restaurant', food: 'restaurant', cloudkitchen: 'restaurant',
+  salon: 'salon', hair: 'salon', beauty: 'salon', nails: 'salon', nail: 'salon', spa: 'salon', lashes: 'salon', lash: 'salon',
+  barber: 'barber', barbershop: 'barber',
+  clinic: 'clinic', dental: 'clinic', dentist: 'clinic', aesthetic: 'clinic', medical: 'clinic', derma: 'clinic',
+  garage: 'garage', auto: 'garage', mechanic: 'garage', ac: 'garage', hvac: 'garage', repair: 'garage', maintenance: 'garage', mot: 'garage',
+  cleaning: 'cleaning', cleaner: 'cleaning', cleaners: 'cleaning',
+  realestate: 'realestate', property: 'realestate', realtor: 'realestate', estate: 'realestate', broker: 'realestate',
+  general: 'general',
+};
+function normaliseNiche(niche) {
+  return NICHE_ALIASES[String(niche || '').toLowerCase()] || 'general';
+}
+
+// Localized, niche-specific demo text-back (used by /simulate?lang=&niche=) — fully in-language.
+// Reply-to-book is PRIMARY (works on every device, no browser); link is the secondary option.
 function demoMsg(lang, niche) {
   const book = `https://get.callpilotvoice.co.uk/book.html?lang=${lang}`;
-  const restaurant = niche === 'restaurant';
-  // Reply-to-book is PRIMARY (works on every device, no browser); link is the secondary option.
-  if (lang === 'fr') {
-    return restaurant
-      ? `Bonjour 👋 Désolé d'avoir manqué votre appel chez notre restaurant ! Répondez à ce message avec la date, l'heure et le nombre de personnes (ou votre commande) et on s'occupe de tout. 📅 Réserver en ligne : ${book}`
-      : `Bonjour 👋 Désolé d'avoir manqué votre appel chez notre équipe. Répondez ici avec le créneau qui vous convient et on vous réserve. 📅 Réserver en ligne : ${book}`;
-  }
-  if (lang === 'ar') {
-    return restaurant
-      ? `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في مطعمنا! راسلنا هنا بالتاريخ والوقت وعدد الأشخاص (أو طلبك) وسنتكفّل بالباقي. 📅 للحجز عبر الإنترنت: ${book}`
-      : `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك مع فريقنا. راسلنا هنا بالوقت المناسب لك وسنحجز لك. 📅 للحجز عبر الإنترنت: ${book}`;
-  }
-  return restaurant
-    ? `Hi 👋 Sorry we missed your call to our restaurant! Reply here with the date, time & party size (or your order) and we'll sort it. 📅 Or book online: ${book}`
-    : `Hi 👋 Sorry we missed your call to our team. Reply here with a time that suits and we'll book you in. 📅 Or book online: ${book}`;
+  const n = normaliseNiche(niche);
+  const M = {
+    en: {
+      restaurant: `Hi 👋 Sorry we missed your call to our restaurant! Reply here with the date, time & party size (or your order) and we'll sort it. 📅 Or book online: ${book}`,
+      salon: `Hi 👋 Sorry we missed your call to our salon! Reply here with the service you'd like and a time that suits, and we'll book you in. 💇 Or book online: ${book}`,
+      barber: `Hi 👋 Sorry we missed your call to our barbershop! Reply here with a time that suits and we'll get you booked in. 💈 Or book online: ${book}`,
+      clinic: `Hi 👋 Sorry we missed your call to our clinic! Reply here with what you need and a time that suits, and we'll arrange your appointment. 🦷 Or book online: ${book}`,
+      garage: `Hi 👋 Sorry we missed your call! Reply here with what you need (and your car/issue) and we'll get you booked in fast. 🔧 Or book online: ${book}`,
+      cleaning: `Hi 👋 Sorry we missed your call! Reply here with what you need cleaned and a time that suits, and we'll sort a quote. 🧹 Or book online: ${book}`,
+      realestate: `Hi 👋 Sorry we missed your call! Reply here with the property you're interested in and we'll get right back to you. 🏠 Or book a viewing: ${book}`,
+      general: `Hi 👋 Sorry we missed your call to our team. Reply here with a time that suits and we'll book you in. 📅 Or book online: ${book}`,
+    },
+    fr: {
+      restaurant: `Bonjour 👋 Désolé d'avoir manqué votre appel chez notre restaurant ! Répondez avec la date, l'heure et le nombre de personnes (ou votre commande) et on s'occupe de tout. 📅 Réserver en ligne : ${book}`,
+      salon: `Bonjour 👋 Désolé d'avoir manqué votre appel à notre salon ! Répondez avec la prestation souhaitée et un créneau, et on vous réserve. 💇 Réserver en ligne : ${book}`,
+      barber: `Bonjour 👋 Désolé d'avoir manqué votre appel à notre barbier ! Répondez avec un créneau qui vous convient et on vous réserve. 💈 Réserver en ligne : ${book}`,
+      clinic: `Bonjour 👋 Désolé d'avoir manqué votre appel à notre cabinet ! Répondez avec votre besoin et un créneau, et on fixe votre rendez-vous. 🦷 Réserver en ligne : ${book}`,
+      garage: `Bonjour 👋 Désolé d'avoir manqué votre appel ! Répondez avec votre besoin (et votre véhicule) et on vous prend en charge rapidement. 🔧 Réserver en ligne : ${book}`,
+      cleaning: `Bonjour 👋 Désolé d'avoir manqué votre appel ! Répondez avec ce qu'il faut nettoyer et un créneau, et on vous fait un devis. 🧹 Réserver en ligne : ${book}`,
+      realestate: `Bonjour 👋 Désolé d'avoir manqué votre appel ! Répondez avec le bien qui vous intéresse et on vous recontacte vite. 🏠 Réserver une visite : ${book}`,
+      general: `Bonjour 👋 Désolé d'avoir manqué votre appel chez notre équipe. Répondez avec le créneau qui vous convient et on vous réserve. 📅 Réserver en ligne : ${book}`,
+    },
+    ar: {
+      restaurant: `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في مطعمنا! راسلنا بالتاريخ والوقت وعدد الأشخاص (أو طلبك) وسنتكفّل بالباقي. 📅 للحجز عبر الإنترنت: ${book}`,
+      salon: `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في صالوننا! راسلنا بالخدمة التي تريدها والوقت المناسب وسنحجز لك. 💇 للحجز عبر الإنترنت: ${book}`,
+      barber: `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في محل الحلاقة! راسلنا بالوقت المناسب لك وسنحجز لك موعداً. 💈 للحجز عبر الإنترنت: ${book}`,
+      clinic: `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك في عيادتنا! راسلنا بما تحتاجه والوقت المناسب وسنحدّد لك موعداً. 🦷 للحجز عبر الإنترنت: ${book}`,
+      garage: `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك! راسلنا بما تحتاجه (ونوع سيارتك/المشكلة) وسنخدمك بسرعة. 🔧 للحجز عبر الإنترنت: ${book}`,
+      cleaning: `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك! راسلنا بما تريد تنظيفه والوقت المناسب وسنعدّ لك عرض سعر. 🧹 للحجز عبر الإنترنت: ${book}`,
+      realestate: `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك! راسلنا بالعقار الذي يهمّك وسنعاود التواصل معك سريعاً. 🏠 لحجز معاينة: ${book}`,
+      general: `مرحباً 👋 نعتذر عن عدم الرد على مكالمتك مع فريقنا. راسلنا بالوقت المناسب لك وسنحجز لك. 📅 للحجز عبر الإنترنت: ${book}`,
+    },
+  };
+  return (M[lang] || M.en)[n];
 }
 
 // ---------------------------------------------------------------------------
@@ -462,7 +497,7 @@ tick();
     const langRaw = String(url.searchParams.get('lang') || '').toLowerCase();
     const lang = ['fr', 'ar', 'en'].includes(langRaw) ? langRaw : 'en';
     const niche = String(url.searchParams.get('niche') || '').toLowerCase();
-    const override = (langRaw === 'fr' || langRaw === 'ar' || niche === 'restaurant') ? demoMsg(lang, niche) : null;
+    const override = (langRaw === 'fr' || langRaw === 'ar' || niche) ? demoMsg(lang, niche) : null;
     log('SIMULATE missed call from', from, 'to', to, `[${tenant.businessName}]`, `lang=${lang}`, niche ? `niche=${niche}` : '');
     textBackMissedCall(from, tenant, override);
     return send(res, 200, { ok: true, simulatedFrom: from, lang, niche: niche || 'generic' });
