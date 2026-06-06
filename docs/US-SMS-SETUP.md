@@ -11,8 +11,9 @@ To send automated SMS in the US you must pass **A2P verification**. Easiest path
 ## Step 2 — Submit Toll-Free Verification (Telnyx → Messaging → Toll-Free Verification)
 Paste these answers:
 
-**Business name:** RingBack (Abdelhak Tirha)
+**Business name:** CallPilot Voice  (must MATCH the website domain — Telnyx checks this. "RingBack" is the product name only.)
 **Business website:** https://get.callpilotvoice.co.uk
+**Trading/product name:** RingBack (by CallPilot Voice)
 **Business address:** (your UK address)
 **Contact email:** hello@callpilotvoice.co.uk
 **Business type / vertical:** Software / Communications (SaaS for small businesses)
