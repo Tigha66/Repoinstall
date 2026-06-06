@@ -11,6 +11,8 @@ Send the matching link in your WhatsApp / DM / call follow-up.
 | 🇨🇦 Canada | https://get.callpilotvoice.co.uk/ca.html | English (+ FR) | C$69 / C$149 / C$299 — **SMS or WhatsApp** |
 | 🇲🇦 Casablanca / Maroc | https://get.callpilotvoice.co.uk/ma.html | French (+ عربي) | 290 / 590 / 990 DH |
 | 🌍 Arabic (Maghreb) | https://get.callpilotvoice.co.uk/ar.html | Arabic (RTL) | 290 / 590 / 990 DH |
+| 🇪🇸 Spain | https://get.callpilotvoice.co.uk/es.html | Spanish | 49€ / 99€ / 199€ |
+| 🇮🇹 Italy | https://get.callpilotvoice.co.uk/it.html | Italian | 49€ / 99€ / 199€ |
 
 ## New angle baked into every page: "after-hours / overflow"
 Every page now says it works **after hours, on your day off, and when you're with a client** —
