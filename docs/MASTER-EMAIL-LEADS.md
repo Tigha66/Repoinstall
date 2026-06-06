@@ -7,6 +7,10 @@ Send the matching country landing link (see table at bottom).
 ---
 
 ## 🌍 GENERAL professional email (works for ANY business, any country)
+⚠️ ALWAYS use the **local link** (`{LINK}`) so each market sees the right price/currency.
+**Gulf (UAE/Qatar/Kuwait/Saudi) → use https://get.callpilotvoice.co.uk/ae.html** ($99/$199/$399).
+Never send the bare `get.callpilotvoice.co.uk` (UK £) to a Gulf lead.
+
 **Subject:** Quick idea for {Business} — never miss a customer's call
 
 > Hi {Business} team,
@@ -17,18 +21,39 @@ Send the matching country landing link (see table at bottom).
 > RingBack instantly sends every missed caller a WhatsApp (or SMS) from your business, so you keep
 > them — and they can even book a time. It works after hours and on your day off too.
 >
-> 30-second demo: https://get.callpilotvoice.co.uk
+> 30-second demo: {LINK}
 >
 > It's free for 7 days and we set everything up for you — nothing to install. Worth a quick look?
 >
 > Best regards,
 > Abdelhak — RingBack
-> hello@callpilotvoice.co.uk · https://get.callpilotvoice.co.uk
+> hello@callpilotvoice.co.uk · {LINK}
 >
 > (If you'd prefer not to hear from us, just reply "no thanks" and I won't follow up.)
 
-> 🔁 Swap the demo link to the local page when you can: /ae.html (Gulf $), /fr.html (FR), /es.html
-> (ES), /it.html (IT), /ar.html (Arabic), /ma.html (Morocco). FR/AR email versions in OUTREACH-FR-AR.md.
+> Replace {LINK} per market: Gulf → /ae.html · UK → / · France → /fr.html · Spain → /es.html ·
+> Italy → /it.html · Arabic → /ar.html · Morocco → /ma.html. FR/AR email versions in OUTREACH-FR-AR.md.
+
+---
+
+## 🌴 GULF version (ready to paste — uses the $ page)
+**Subject:** Quick idea for {Business} — never miss a customer's call
+
+> Hi {Business} team,
+>
+> I'm Abdelhak, founder of RingBack. When a customer calls and you can't pick up — busy with a
+> client, or after hours — they usually just call the next salon/clinic. RingBack instantly sends
+> every missed caller a WhatsApp from your business, so you keep them — and they can even book.
+>
+> 30-second demo: https://get.callpilotvoice.co.uk/ae.html
+>
+> Free for 7 days and we set it all up for you. Worth a quick look?
+>
+> Best regards,
+> Abdelhak — RingBack
+> hello@callpilotvoice.co.uk · https://get.callpilotvoice.co.uk/ae.html
+>
+> (Prefer not to hear from us? Just reply "no thanks".)
 
 ---
 
