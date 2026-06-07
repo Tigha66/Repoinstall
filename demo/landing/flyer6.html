@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RingBack — 6 mini one-pagers per page</title>
+<style>
+@page{size:A4 portrait;margin:6mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#0b141a;background:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+.cell{height:90mm;border:1px dashed #bbb;border-radius:9px;padding:5mm;display:flex;flex-direction:column;page-break-inside:avoid;overflow:hidden}
+.brand{font-weight:800;font-size:15px;display:flex;align-items:center;gap:6px}
+.brand .d{width:11px;height:11px;border-radius:50%;background:#25d366}
+.h{font-weight:800;font-size:17px;line-height:1.12;margin:4px 0 3px}
+.p{font-size:10px;color:#445;line-height:1.35}
+.steps{display:flex;gap:3mm;margin:4px 0}
+.st{flex:1;background:#f3f7f8;border-radius:6px;padding:4px;font-size:8.5px;text-align:center;line-height:1.25}
+.st b{display:block;color:#1da851;font-size:9px}
+ul{list-style:none;margin:2px 0}
+li{font-size:10px;padding:1.5px 0}li::before{content:"✓ ";color:#25d366;font-weight:800}
+.bottom{margin-top:auto;display:flex;gap:4mm;align-items:center}
+.bottom img{width:28mm;height:28mm}
+.bx{flex:1}
+.trial{display:inline-block;background:#e7f9ee;color:#1da851;font-weight:800;font-size:10px;padding:3px 8px;border-radius:999px}
+.c{font-size:8.5px;color:#667781;margin-top:4px;line-height:1.35}.c b{color:#0b141a}
+.scan{font-size:8px;color:#667781;text-align:center;font-weight:700;margin-top:1mm}
+@media screen{body{background:#eee;padding:14px}.grid{max-width:210mm;margin:0 auto;background:#fff;padding:6mm}}
+@media print{.note{display:none}}
+</style></head>
+<body>
+<p class="note" style="max-width:210mm;margin:0 auto 10px;font-size:13px;color:#444">Press <b>Ctrl/Cmd+P → Print / Save as PDF</b>. <b>6 full mini one-pagers per A4</b> — cut along the dashed boxes and hand out.</p>
+<div class="grid" id="grid"></div>
+<script>
+var QR='https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fget.callpilotvoice.co.uk%2Fonepager.html';
+var cell = `<div class="cell">
+  <div class="brand"><span class="d"></span>RingBack</div>
+  <div class="h">Never miss a customer's call.</div>
+  <div class="p">When a customer calls and you can't pick up — busy, with a client, or after hours — they usually call the next place. RingBack instantly texts them back on WhatsApp so you keep them.</div>
+  <div class="steps">
+    <div class="st"><b>1</b>They call,<br>you miss it</div>
+    <div class="st"><b>2</b>We text<br>back instantly</div>
+    <div class="st"><b>3</b>They reply,<br>you book</div>
+  </div>
+  <ul>
+    <li>Works after hours & on your day off</li>
+    <li>Sends your booking link · no app needed</li>
+    <li>We set it all up for you</li>
+  </ul>
+  <div class="bottom">
+    <div><img src="${QR}"><div class="scan">📲 Scan: demo</div></div>
+    <div class="bx">
+      <span class="trial">🎁 Free 7-day trial</span>
+      <div class="c"><b>Abdelhak · CallPilot Voice</b><br>hello@callpilotvoice.co.uk<br>get.callpilotvoice.co.uk</div>
+    </div>
+  </div>
+</div>`;
+document.getElementById('grid').innerHTML = cell.repeat(6);
+</script>
+</body></html>
