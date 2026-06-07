@@ -556,9 +556,10 @@ else{alert(${JSON.stringify(T.err)});}});
     const mobile = body.mobile || body.phone || '';
     const service = String(body.service || '').slice(0, 80);
     const datetime = String(body.datetime || '').slice(0, 80);
+    const biz = String(body.business || '').slice(0, 60) || t.businessName;
     const chatId = toChatId(mobile);
     if (!chatId) return send(res, 400, { error: 'valid mobile required' });
-    const text = `Hi ${name}! ✅ Thanks for your booking request${service ? ` for ${service}` : ''}${datetime ? ` on ${datetime}` : ''} with ${t.businessName}. We'll confirm shortly — reply here if anything changes.`;
+    const text = `Hi ${name}! ✅ Thanks for your booking request${service ? ` for ${service}` : ''}${datetime ? ` on ${datetime}` : ''} with ${biz}. We'll confirm shortly — reply here if anything changes.`;
     try {
       if (t.channel === 'sms') await sendSms(t.smsFrom, mobile, text);
       else await sendWhatsApp(t.session, chatId, text);

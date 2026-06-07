@@ -44,21 +44,33 @@ async function sendConfirmation(b) {
   try {
     const r = await fetch(CONFIRM_URL, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: b.name, mobile: b.phone, service: b.service, datetime: b.datetime }),
+      body: JSON.stringify({ name: b.name, mobile: b.phone, service: b.service, datetime: b.datetime, business: b.business }),
     });
     return r.ok;
   } catch (_) { return false; }
 }
 
-const sessions = new Map(); // sessionId -> { state, data, history }
+const sessions = new Map(); // sessionId -> { state, data, history, cfg }
 
 // ---------------------------------------------------------------------------
-// Scripted conversation brain (the reliable, free default)
+// Business types (scrollable picker) — each has its own name, services, wording
 // ---------------------------------------------------------------------------
-const SERVICES = ['check-up', 'cleaning', 'whitening', 'consultation', 'emergency', 'appointment'];
+const BUSINESSES = {
+  dental:     { name: 'Bright Smile Dental',   thing: 'appointment', services: ['check-up','cleaning','whitening','consultation','emergency'] },
+  barber:     { name: 'Sharp Cuts Barbershop', thing: 'appointment', services: ['haircut','beard trim','hot towel shave','skin fade'] },
+  salon:      { name: 'Glow Beauty Salon',     thing: 'appointment', services: ['haircut','colour','manicure','pedicure','facial','lashes'] },
+  restaurant: { name: 'Bella Vista Restaurant',thing: 'reservation',  services: ['table reservation','takeaway order','private event'] },
+  hvac:       { name: 'Cool Air HVAC',          thing: 'job',          services: ['AC repair','installation','maintenance','emergency callout'] },
+  auto:       { name: 'ProFix Auto Repair',     thing: 'booking',      services: ['MOT','full service','repair','diagnostic'] },
+  medspa:     { name: 'Radiance Med Spa',       thing: 'appointment',  services: ['botox','filler','facial','laser','consultation'] },
+  law:        { name: 'Sterling Law',           thing: 'consultation', services: ['consultation','case review','appointment'] },
+  realestate: { name: 'Prime Properties',       thing: 'viewing',      services: ['viewing','valuation','consultation'] },
+  general:    { name: 'Your Business',          thing: 'appointment',  services: ['appointment','consultation','quote'] },
+};
+function cfgFor(key) { return BUSINESSES[key] || BUSINESSES[(process.env.BUSINESS_TYPE || 'dental')] || BUSINESSES.dental; }
 
-function newSession() {
-  return { state: 'intent', data: {}, history: [] };
+function newSession(cfg) {
+  return { state: 'intent', data: {}, history: [], cfg: cfg || cfgFor() };
 }
 
 function detect(text, words) {
@@ -69,34 +81,37 @@ function detect(text, words) {
 function scriptedReply(s, msg) {
   const t = (msg || '').trim();
   const d = s.data;
+  const SVC = s.cfg.services;
+  const BIZ = s.cfg.name;
+  const THING = s.cfg.thing;
 
   // global intents
   if (detect(t, ['hour', 'open', 'close', 'time you', 'when are you'])) {
     return { reply: `We're open ${HOURS}. Would you like to book a time?`, next: 'intent' };
   }
   if (detect(t, ['where', 'address', 'location', 'parking'])) {
-    return { reply: `We're in the centre of town with parking nearby. Want me to book you an appointment?`, next: 'intent' };
+    return { reply: `We're in the centre of town with parking nearby. Want me to book you in?`, next: 'intent' };
   }
   if (detect(t, ['price', 'cost', 'how much', 'fee'])) {
-    return { reply: `Prices depend on the treatment — the dentist will confirm at your visit. Shall I book you a consultation?`, next: 'intent' };
+    return { reply: `Prices depend on what you need — the team will confirm exact pricing. Shall I book you in?`, next: 'intent' };
   }
 
   switch (s.state) {
     case 'intent': {
-      if (detect(t, ['book', 'appointment', 'schedule', 'see', 'come in', 'yes', ...SERVICES])) {
-        const svc = SERVICES.find((x) => t.toLowerCase().includes(x));
+      if (detect(t, ['book', 'appointment', 'schedule', 'see', 'come in', 'yes', 'reserve', 'order', ...SVC])) {
+        const svc = SVC.find((x) => t.toLowerCase().includes(x));
         if (svc) { d.service = svc; return { reply: `Great — a ${svc}. Can I take your name, please?`, next: 'name' }; }
-        return { reply: `Of course! What would you like to book — a check-up, cleaning, whitening, or a consultation?`, next: 'service' };
+        return { reply: `Of course! What would you like — e.g. ${SVC.slice(0, 3).join(', ')}?`, next: 'service' };
       }
       if (detect(t, ['cancel', 'reschedule', 'change'])) {
         return { reply: `No problem — I can have the team call you back to reschedule. What's your name and number?`, next: 'name' };
       }
-      return { reply: `I can help you book an appointment or answer a quick question. Would you like to book a visit?`, next: 'intent' };
+      return { reply: `I can book you ${/^[aeiou]/i.test(THING) ? 'an' : 'a'} ${THING} or answer a quick question. Would you like to book?`, next: 'intent' };
     }
     case 'service': {
-      const svc = SERVICES.find((x) => t.toLowerCase().includes(x)) || t || 'appointment';
+      const svc = SVC.find((x) => t.toLowerCase().includes(x)) || t || THING;
       d.service = svc;
-      return { reply: `Perfect — a ${svc}. And your name?`, next: 'name' };
+      return { reply: `Perfect — ${svc}. And your name?`, next: 'name' };
     }
     case 'name': {
       d.name = t.replace(/^(it'?s|i'?m|my name is)\s+/i, '').trim() || 'there';
@@ -108,21 +123,21 @@ function scriptedReply(s, msg) {
     }
     case 'phone': {
       d.phone = t;
-      s.booking = { business: BUSINESS, service: d.service || 'appointment', name: d.name, datetime: d.datetime, phone: d.phone };
+      s.booking = { business: BIZ, service: d.service || THING, name: d.name, datetime: d.datetime, phone: d.phone };
       return {
-        reply: `All set, ${d.name}! ✅ I've booked your ${d.service || 'appointment'} for ${d.datetime}. You'll get a confirmation text at ${d.phone}. Is there anything else I can help with?`,
+        reply: `All set, ${d.name}! ✅ I've booked your ${d.service || THING} for ${d.datetime}. You'll get a confirmation on WhatsApp at ${d.phone}. Anything else I can help with?`,
         next: 'done', booking: s.booking,
       };
     }
     case 'done': {
       if (detect(t, ['no', 'that', 'thanks', 'bye', 'all good'])) {
-        return { reply: `Wonderful — thanks for calling ${BUSINESS}. Have a great day! 👋`, next: 'ended' };
+        return { reply: `Wonderful — thanks for calling ${BIZ}. Have a great day! 👋`, next: 'ended' };
       }
       if (detect(t, ['book', 'another', 'also', 'yes'])) { s.data = {}; return { reply: `Sure — what would you like to book?`, next: 'service' }; }
       return { reply: `Happy to help with anything else, or shall I let you go?`, next: 'done' };
     }
     default:
-      return { reply: `Thanks for calling ${BUSINESS}!`, next: 'ended' };
+      return { reply: `Thanks for calling ${BIZ}!`, next: 'ended' };
   }
 }
 
@@ -163,8 +178,13 @@ const server = http.createServer(async (req, res) => {
     const body = JSON.parse((await readBody(req)) || '{}');
     const id = body.sessionId || 'anon';
     let s = sessions.get(id);
-    const greeting = `Thanks for calling ${BUSINESS}! I'm ${AGENT}, your virtual receptionist. How can I help — book an appointment, or a quick question?`;
-    if (!s) { s = newSession(); sessions.set(id, s); if (!body.message) return send(res, 200, { reply: greeting, state: s.state }); }
+    // start a fresh session if none, or if the caller switched business type
+    if (!s || (body.biz && (!s.cfg || s.cfg.name !== cfgFor(body.biz).name))) {
+      s = newSession(cfgFor(body.biz)); sessions.set(id, s);
+    }
+    const art = /^[aeiou]/i.test(s.cfg.thing) ? 'an' : 'a';
+    const greeting = `Thanks for calling ${s.cfg.name}! I'm ${AGENT}, your virtual receptionist. How can I help — book ${art} ${s.cfg.thing}, or a quick question?`;
+    if (!body.message) return send(res, 200, { reply: greeting, state: s.state, business: s.cfg.name });
 
     const msg = (body.message || '').toString().slice(0, 500);
     s.history.push({ role: 'user', content: msg });
@@ -214,7 +234,21 @@ const PAGE = `<!doctype html><html lang="en"><head><meta charset="utf-8">
 .note{font-size:11px;color:#8696a0;text-align:center;padding:6px}
 </style></head><body>
 <div class="phone">
-  <div class="top"><div class="av">📞</div><div><b id="biz">AI Receptionist</b><div class="s" id="brain">● answering…</div></div></div>
+  <div class="top"><div class="av">📞</div><div><b id="bizname">AI Receptionist</b><div class="s" id="brain">● answering…</div></div></div>
+  <div style="padding:10px 12px;background:#fff;border-bottom:1px solid #e9edef">
+    <select id="biz" style="width:100%;padding:10px 12px;border:1px solid #cfd9de;border-radius:10px;font-size:14px;background:#fff">
+      <option value="dental">🦷 Dental clinic</option>
+      <option value="barber">💈 Barbershop</option>
+      <option value="salon">💇 Hair / Beauty salon</option>
+      <option value="restaurant">🍽️ Restaurant / Café</option>
+      <option value="hvac">❄️ HVAC / Trades</option>
+      <option value="auto">🚗 Auto repair</option>
+      <option value="medspa">💆 Med spa</option>
+      <option value="law">⚖️ Law firm</option>
+      <option value="realestate">🏠 Real estate</option>
+      <option value="general">📅 Other business</option>
+    </select>
+  </div>
   <div class="chat" id="chat"></div>
   <div class="in"><input id="msg" placeholder="Type as if you're the caller…" autocomplete="off"><button id="send">➤</button></div>
   <div class="note">Prototype — a demo of how an AI receptionist answers & books. Separate from RingBack.</div>
@@ -227,12 +261,14 @@ function book(b){const d=document.createElement('div');d.className='book';d.inne
  'Business: '+b.business+'<br>Service: '+b.service+'<br>Name: '+(b.name||'-')+'<br>When: '+(b.datetime||'-')+'<br>Phone: '+(b.phone||'-');chat.appendChild(d);chat.scrollTop=chat.scrollHeight;}
 let lastBooking=null;
 async function call(message){
- const r=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sid,message:message})});
+ const biz=document.getElementById('biz').value;
+ const r=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sid,message:message,biz:biz})});
  const j=await r.json();add(j.reply,'ai');
+ if(j.business)document.getElementById('bizname').textContent=j.business;
  if(j.booking&&JSON.stringify(j.booking)!==JSON.stringify(lastBooking)){lastBooking=j.booking;book(j.booking);}
 }
-document.getElementById('biz').textContent=document.title.split(' — ')[0];
-fetch('/health').then(r=>r.json()).then(h=>{document.getElementById('biz').textContent=h.business;document.getElementById('brain').textContent='● '+(h.brain==='openai'?'AI (OpenAI)':'AI (demo)')+' · answering';});
+fetch('/health').then(r=>r.json()).then(h=>{document.getElementById('brain').textContent='● '+(h.brain==='openai'?'AI (OpenAI)':'AI (demo)')+' · answering';});
+document.getElementById('biz').onchange=function(){chat.innerHTML='';lastBooking=null;call('');};
 function go(){const m=document.getElementById('msg');const v=m.value.trim();if(!v)return;add(v,'me');m.value='';call(v);}
 document.getElementById('send').onclick=go;
 document.getElementById('msg').addEventListener('keydown',e=>{if(e.key==='Enter')go();});
