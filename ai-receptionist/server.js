@@ -35,6 +35,20 @@ const BUSINESS = process.env.BUSINESS_NAME || 'Bright Smile Dental';
 const AGENT = process.env.AGENT_NAME || 'Aria';
 const HOURS = process.env.HOURS || 'Mon–Sat, 9am–6pm';
 const HAS_OPENAI = !!process.env.OPENAI_API_KEY;
+// When a booking is captured, send a REAL confirmation via the RingBack service (WhatsApp/SMS).
+const CONFIRM_URL = process.env.CONFIRM_URL || 'https://get.callpilotvoice.co.uk/api/book';
+const SEND_CONFIRM = process.env.SEND_CONFIRM !== 'false';
+
+async function sendConfirmation(b) {
+  if (!SEND_CONFIRM || !b || !b.phone) return false;
+  try {
+    const r = await fetch(CONFIRM_URL, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: b.name, mobile: b.phone, service: b.service, datetime: b.datetime }),
+    });
+    return r.ok;
+  } catch (_) { return false; }
+}
 
 const sessions = new Map(); // sessionId -> { state, data, history }
 
@@ -164,7 +178,9 @@ const server = http.createServer(async (req, res) => {
     }
     s.state = out.next || s.state;
     s.history.push({ role: 'assistant', content: out.reply });
-    return send(res, 200, { reply: out.reply, state: s.state, booking: out.booking || s.booking || null });
+    let confirmSent = false;
+    if (out.booking && !s.confirmSent) { confirmSent = await sendConfirmation(out.booking); s.confirmSent = true; }
+    return send(res, 200, { reply: out.reply, state: s.state, booking: out.booking || s.booking || null, confirmSent });
   }
   send(res, 404, { error: 'not found' });
 });
