@@ -38,16 +38,16 @@ const log = (...a) => console.log(new Date().toISOString(), ...a);
 
 // Business types — one deployment serves any business (pick via ?biz=KEY, or the on-page dropdown).
 const BUSINESSES = {
-  dental:     { name: 'Bright Smile Dental',    thing: 'appointment', services: 'check-ups, cleaning, whitening, consultations' },
-  barber:     { name: 'Sharp Cuts Barbershop',  thing: 'appointment', services: 'haircuts, beard trims, shaves, skin fades' },
-  salon:      { name: 'Glow Beauty Salon',      thing: 'appointment', services: 'haircuts, colour, manicures, facials, lashes' },
-  restaurant: { name: 'Bella Vista Restaurant', thing: 'reservation',  services: 'table reservations, takeaway orders, private events' },
-  hvac:       { name: 'Cool Air HVAC',          thing: 'job',          services: 'AC repair, installation, maintenance, emergency callouts' },
-  auto:       { name: 'ProFix Auto Repair',     thing: 'booking',      services: 'MOT, servicing, repairs, diagnostics' },
-  medspa:     { name: 'Radiance Med Spa',       thing: 'appointment',  services: 'botox, fillers, facials, laser, consultations' },
-  law:        { name: 'Sterling Law',           thing: 'consultation', services: 'consultations, case reviews' },
-  realestate: { name: 'Prime Properties',       thing: 'viewing',      services: 'viewings, valuations, consultations' },
-  general:    { name: 'our business',           thing: 'appointment',  services: 'appointments, consultations, quotes' },
+  dental:     { name: 'our dental clinic', thing: 'appointment', services: 'check-ups, cleaning, whitening, consultations' },
+  barber:     { name: 'our barbershop',    thing: 'appointment', services: 'haircuts, beard trims, shaves, skin fades' },
+  salon:      { name: 'our salon',         thing: 'appointment', services: 'haircuts, colour, manicures, facials, lashes' },
+  restaurant: { name: 'our restaurant',    thing: 'reservation',  services: 'table reservations, takeaway orders, private events' },
+  hvac:       { name: 'our company',       thing: 'job',          services: 'AC repair, installation, maintenance, emergency callouts' },
+  auto:       { name: 'our garage',        thing: 'booking',      services: 'MOT, servicing, repairs, diagnostics' },
+  medspa:     { name: 'our med spa',       thing: 'appointment',  services: 'botox, fillers, facials, laser, consultations' },
+  law:        { name: 'our firm',          thing: 'consultation', services: 'consultations, case reviews' },
+  realestate: { name: 'our agency',        thing: 'viewing',      services: 'viewings, valuations, consultations' },
+  general:    { name: 'our business',      thing: 'appointment',  services: 'appointments, consultations, quotes' },
 };
 function bizCfg(key) { return BUSINESSES[key] || BUSINESSES[process.env.BUSINESS_TYPE || 'dental'] || BUSINESSES.dental; }
 function instructionsFor(c) {
