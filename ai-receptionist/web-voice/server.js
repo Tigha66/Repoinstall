@@ -27,7 +27,7 @@ const path = require('path');
 const CFG = {
   port: process.env.PORT || 5060,
   openaiKey: process.env.OPENAI_API_KEY,
-  model: process.env.OPENAI_REALTIME_MODEL || 'gpt-4o-realtime-preview-2024-12-17',
+  model: process.env.OPENAI_REALTIME_MODEL || 'gpt-realtime',
   voice: process.env.VOICE || 'alloy',
   business: process.env.BUSINESS_NAME || 'Bright Smile Dental',
   agent: process.env.AGENT_NAME || 'Aria',
@@ -65,14 +65,19 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'GET' && u.pathname === '/session') {
     if (!CFG.openaiKey) { res.writeHead(500); return res.end(JSON.stringify({ error: 'OPENAI_API_KEY not set' })); }
     try {
-      const r = await fetch('https://api.openai.com/v1/realtime/sessions', {
+      // Current GA endpoint to mint an ephemeral client secret for browser WebRTC
+      const r = await fetch('https://api.openai.com/v1/realtime/client_secrets', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${CFG.openaiKey}`, 'Content-Type': 'application/json', 'OpenAI-Beta': 'realtime=v1' },
-        body: JSON.stringify({ model: CFG.model, voice: CFG.voice, instructions: INSTRUCTIONS, tools: TOOLS, tool_choice: 'auto' }),
+        headers: { Authorization: `Bearer ${CFG.openaiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session: {
+          type: 'realtime', model: CFG.model, instructions: INSTRUCTIONS,
+          tools: TOOLS, tool_choice: 'auto', audio: { output: { voice: CFG.voice } },
+        } }),
       });
       const j = await r.json();
-      res.writeHead(r.ok ? 200 : 500, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ ...j, model: CFG.model, business: CFG.business }));
+      const value = j.value || j.client_secret?.value || null;
+      res.writeHead(r.ok && value ? 200 : 500, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ value, model: CFG.model, business: CFG.business, error: j.error?.message }));
     } catch (e) { res.writeHead(500); return res.end(JSON.stringify({ error: e.message })); }
   }
 
@@ -130,18 +135,18 @@ async function start(){
   try{
     setStatus('Connecting…');
     const tok=await fetch('/session').then(r=>r.json());
-    if(tok.error){setStatus('Setup needed: '+tok.error);return;}
+    if(!tok.value){setStatus('Setup needed: '+(tok.error||'no session token (add OpenAI credit?)'));return;}
     if(tok.business)$('biz').textContent=tok.business;
-    const EPH=tok.client_secret.value, MODEL=tok.model;
+    const EPH=tok.value, MODEL=tok.model;
     pc=new RTCPeerConnection();
     pc.ontrack=e=>{$('aud').srcObject=e.streams[0];};
     stream=await navigator.mediaDevices.getUserMedia({audio:true});
     pc.addTrack(stream.getTracks()[0],stream);
     dc=pc.createDataChannel('oai-events');
-    dc.onopen=()=>{dc.send(JSON.stringify({type:'response.create',response:{instructions:'Greet the caller warmly.'}}));};
+    dc.onopen=()=>{dc.send(JSON.stringify({type:'response.create'}));};
     dc.onmessage=onEvent;
     const offer=await pc.createOffer();await pc.setLocalDescription(offer);
-    const r=await fetch('https://api.openai.com/v1/realtime?model='+MODEL,{method:'POST',body:offer.sdp,
+    const r=await fetch('https://api.openai.com/v1/realtime/calls?model='+MODEL,{method:'POST',body:offer.sdp,
       headers:{Authorization:'Bearer '+EPH,'Content-Type':'application/sdp'}});
     await pc.setRemoteDescription({type:'answer',sdp:await r.text()});
     $('start').style.display='none';$('stop').style.display='block';$('av').classList.add('live');
