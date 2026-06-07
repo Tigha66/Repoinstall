@@ -134,7 +134,7 @@ function setStatus(t){$('status').textContent=t;}
 async function start(){
   try{
     setStatus('Connecting…');
-    const tok=await fetch('/session').then(r=>r.json());
+    const tok=await fetch('session').then(r=>r.json());
     if(!tok.value){setStatus('Setup needed: '+(tok.error||'no session token (add OpenAI credit?)'));return;}
     if(tok.business)$('biz').textContent=tok.business;
     const EPH=tok.value, MODEL=tok.model;
@@ -157,7 +157,7 @@ function onEvent(e){
   let m;try{m=JSON.parse(e.data);}catch(_){return;}
   if(m.type==='response.function_call_arguments.done'&&m.name==='book_appointment'){
     let a={};try{a=JSON.parse(m.arguments||'{}');}catch(_){}
-    fetch('/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(a)});
+    fetch('book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(a)});
     dc.send(JSON.stringify({type:'conversation.item.create',item:{type:'function_call_output',call_id:m.call_id,output:JSON.stringify({booked:true})}}));
     dc.send(JSON.stringify({type:'response.create'}));
     setStatus('✅ Booking captured — confirmation sent');
