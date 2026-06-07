@@ -571,6 +571,23 @@ else{alert(${JSON.stringify(T.err)});}});
     }
   }
 
+  // Owner alert: POST /notify { to, text } -> sends a WhatsApp/SMS to the business owner (AI receptionist lead alerts)
+  if (req.method === 'POST' && pathname === '/notify') {
+    const raw = await readBody(req);
+    let body = {}; try { body = JSON.parse(raw || '{}'); } catch (_) {}
+    const t = TENANTS.fallback;
+    const to = body.to || '';
+    const text = String(body.text || '').slice(0, 1000);
+    const chatId = toChatId(to);
+    if (!chatId || !text) return send(res, 400, { error: 'to + text required' });
+    try {
+      if (t.channel === 'sms') await sendSms(t.smsFrom, to, text);
+      else await sendWhatsApp(t.session, chatId, text);
+      log(`✅ owner notify sent to ${chatId}`);
+      return send(res, 200, { ok: true });
+    } catch (e) { log('❌ notify failed:', e.message); return send(res, 500, { error: e.message }); }
+  }
+
   // Telnyx webhook
   if (req.method === 'POST' && (pathname === '/telnyx' || pathname === `/telnyx/${CONFIG.webhookToken}`)) {
     if (CONFIG.webhookToken && pathname !== `/telnyx/${CONFIG.webhookToken}`) {

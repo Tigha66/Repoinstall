@@ -33,29 +33,33 @@ const CFG = {
   agent: process.env.AGENT_NAME || 'Aria',
   hours: process.env.HOURS || 'Mon–Sat, 9am–6pm',
   confirmUrl: process.env.CONFIRM_URL || 'https://get.callpilotvoice.co.uk/api/book',
+  notifyUrl: process.env.NOTIFY_URL || 'http://127.0.0.1:2789/notify',
 };
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
 // Business types — one deployment serves any business (pick via ?biz=KEY, or the on-page dropdown).
 const BUSINESSES = {
-  dental:     { name: 'our dental clinic', thing: 'appointment', services: 'check-ups, cleaning, whitening, consultations' },
-  barber:     { name: 'our barbershop',    thing: 'appointment', services: 'haircuts, beard trims, shaves, skin fades' },
-  salon:      { name: 'our salon',         thing: 'appointment', services: 'haircuts, colour, manicures, facials, lashes' },
-  restaurant: { name: 'our restaurant',    thing: 'reservation',  services: 'table reservations, takeaway orders, private events' },
-  hvac:       { name: 'our company',       thing: 'job',          services: 'AC repair, installation, maintenance, emergency callouts' },
-  auto:       { name: 'our garage',        thing: 'booking',      services: 'MOT, servicing, repairs, diagnostics' },
-  medspa:     { name: 'our med spa',       thing: 'appointment',  services: 'botox, fillers, facials, laser, consultations' },
-  law:        { name: 'our firm',          thing: 'consultation', services: 'consultations, case reviews' },
-  realestate: { name: 'our agency',        thing: 'viewing',      services: 'viewings, valuations, consultations' },
-  general:    { name: 'our business',      thing: 'appointment',  services: 'appointments, consultations, quotes' },
+  dental:     { name: 'our dental clinic', thing: 'appointment', services: 'check-ups, cleaning, whitening, consultations', info: 'We accept new patients, both private and insured. First consultation is quick to book. Free parking nearby.' },
+  barber:     { name: 'our barbershop',    thing: 'appointment', services: 'haircuts, beard trims, shaves, skin fades', info: 'Walk-ins welcome when free, but booking guarantees a slot. Card and cash accepted.' },
+  salon:      { name: 'our salon',         thing: 'appointment', services: 'haircuts, colour, manicures, facials, lashes', info: 'We offer a free consultation for colour. Patch test needed 48h before colour services.' },
+  restaurant: { name: 'our restaurant',    thing: 'reservation',  services: 'table reservations, takeaway orders, private events', info: 'We seat groups up to 20. Takeaway and delivery available. Vegetarian and halal options on the menu.' },
+  hvac:       { name: 'our company',       thing: 'job',          services: 'AC repair, installation, maintenance, emergency callouts', info: 'We offer 24/7 emergency callouts and free quotes for installations. We cover the whole local area.' },
+  auto:       { name: 'our garage',        thing: 'booking',      services: 'MOT, servicing, repairs, diagnostics', info: 'Free quotes, courtesy car available on request, most repairs done same day.' },
+  medspa:     { name: 'our med spa',       thing: 'appointment',  services: 'botox, fillers, facials, laser, consultations', info: 'Consultations are required before injectables. We are fully licensed and insured.' },
+  law:        { name: 'our firm',          thing: 'consultation', services: 'consultations, case reviews', info: 'First consultation is confidential. We handle a range of matters and can call you back with a specialist.' },
+  realestate: { name: 'our agency',        thing: 'viewing',      services: 'viewings, valuations, consultations', info: 'Free valuations available. We arrange viewings 7 days a week.' },
+  general:    { name: 'our business',      thing: 'appointment',  services: 'appointments, consultations, quotes', info: 'Happy to help with bookings and questions.' },
 };
 function bizCfg(key) { return BUSINESSES[key] || BUSINESSES[process.env.BUSINESS_TYPE || 'dental'] || BUSINESSES.dental; }
 function instructionsFor(c) {
   const what = c.thing === 'reservation' ? 'a reservation' : c.thing === 'job' ? 'a job booking' : 'an ' + c.thing;
   return `You are ${CFG.agent}, a warm, professional voice receptionist for ${c.name} (open ${CFG.hours}). ` +
-    `We offer: ${c.services}. Greet the caller briefly, then help. To book ${what}, collect one at a time: ` +
-    `service, full name, preferred day/time, and mobile number. When you have all four, call book_appointment, then ` +
-    `confirm in one short sentence that a confirmation will be texted. Answer simple questions briefly. Keep it short and natural.`;
+    `We offer: ${c.services}. Useful info to answer questions: ${c.info || ''} ` +
+    `Greet the caller briefly, then help. To book ${what}, collect one at a time: service, full name, preferred ` +
+    `day/time, and mobile number; when you have all four, call book_appointment and confirm a text will be sent. ` +
+    `If the caller does NOT want to book but is interested, politely collect their name, number and reason and call ` +
+    `capture_lead so the team can follow up. Answer questions using the info above; if you don't know, say the team ` +
+    `will follow up. Keep replies short and natural, like a real receptionist.`;
 }
 
 const TOOLS = [{
@@ -65,6 +69,12 @@ const TOOLS = [{
     name: { type: 'string' }, service: { type: 'string' },
     datetime: { type: 'string' }, phone: { type: 'string' } },
     required: ['name', 'service', 'datetime', 'phone'] },
+}, {
+  type: 'function', name: 'capture_lead',
+  description: 'Capture an interested caller who is not booking now, so the team can follow up.',
+  parameters: { type: 'object', properties: {
+    name: { type: 'string' }, phone: { type: 'string' }, reason: { type: 'string' } },
+    required: ['name', 'phone'] },
 }];
 
 function readBody(req) { return new Promise((r) => { let b = ''; req.on('data', (c) => (b += c)); req.on('end', () => r(b)); }); }
@@ -107,6 +117,16 @@ const server = http.createServer(async (req, res) => {
       const r = await fetch(CFG.confirmUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: body.name, mobile: body.phone, service: body.service, datetime: body.datetime, business: body.business || CFG.business }) });
       log('booking confirm', body.phone, r.ok ? 'ok' : 'fail');
+      res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ ok: r.ok }));
+    } catch (e) { res.writeHead(500); return res.end(JSON.stringify({ error: e.message })); }
+  }
+
+  // Owner alert proxy (browser -> RingBack /notify -> WhatsApp/SMS to the business owner)
+  if (req.method === 'POST' && u.pathname === '/notify') {
+    const body = JSON.parse((await readBody(req)) || '{}');
+    try {
+      const r = await fetch(CFG.notifyUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to: body.to, text: body.text }) });
       res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ ok: r.ok }));
     } catch (e) { res.writeHead(500); return res.end(JSON.stringify({ error: e.message })); }
   }
@@ -164,9 +184,12 @@ let pc,dc,stream,BIZNAME='';
 const $=id=>document.getElementById(id);
 function setStatus(t){$('status').textContent=t;}
 const params=new URLSearchParams(location.search);
-// ?biz=barber preselects; ?name=Mario%27s%20Barbers sets a custom name; ?lock=1 hides the picker (client links)
+// ?biz=barber preselects; ?name=Mario%27s%20Barbers custom name; ?lock=1 hides picker; ?owner=44... gets lead alerts
+const OWNER=params.get('owner')||'';
 if(params.get('biz'))$('bizsel').value=params.get('biz');
 if(params.get('lock')==='1')$('bizsel').style.display='none';
+function toolDone(id){dc.send(JSON.stringify({type:'conversation.item.create',item:{type:'function_call_output',call_id:id,output:JSON.stringify({ok:true})}}));dc.send(JSON.stringify({type:'response.create'}));}
+function notifyOwner(text){if(!OWNER)return;fetch('notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:OWNER,text:'['+(BIZNAME||'AI receptionist')+'] '+text})});}
 function sessionUrl(){
   let q='session?biz='+encodeURIComponent($('bizsel').value);
   if(params.get('name'))q+='&name='+encodeURIComponent(params.get('name'));
@@ -196,13 +219,18 @@ async function start(){
 }
 function onEvent(e){
   let m;try{m=JSON.parse(e.data);}catch(_){return;}
-  if(m.type==='response.function_call_arguments.done'&&m.name==='book_appointment'){
-    let a={};try{a=JSON.parse(m.arguments||'{}');}catch(_){}
+  if(m.type!=='response.function_call_arguments.done')return;
+  let a={};try{a=JSON.parse(m.arguments||'{}');}catch(_){}
+  if(m.name==='book_appointment'){
     a.business=BIZNAME;
     fetch('book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(a)});
-    dc.send(JSON.stringify({type:'conversation.item.create',item:{type:'function_call_output',call_id:m.call_id,output:JSON.stringify({booked:true})}}));
-    dc.send(JSON.stringify({type:'response.create'}));
+    notifyOwner('📅 New booking — '+(a.name||'')+' · '+(a.service||'')+' · '+(a.datetime||'')+' · '+(a.phone||''));
+    toolDone(m.call_id);
     setStatus('✅ Booking captured — confirmation sent');
+  }else if(m.name==='capture_lead'){
+    notifyOwner('📞 New lead — '+(a.name||'')+' · '+(a.phone||'')+(a.reason?(' · '+a.reason):''));
+    toolDone(m.call_id);
+    setStatus('✅ Lead captured');
   }
 }
 $('bizsel').onchange=function(){ if($('stop').style.display==='block'){stop();} $('biz').textContent='Talk to our receptionist'; };
