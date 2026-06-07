@@ -1,0 +1,9 @@
+{
+  "name": "ai-receptionist-voice",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Live voice AI receptionist: Telnyx Call Control + media streaming <-> OpenAI Realtime",
+  "main": "voice-server.js",
+  "scripts": { "start": "node voice-server.js" },
+  "dependencies": { "ws": "^8.18.0" }
+}
