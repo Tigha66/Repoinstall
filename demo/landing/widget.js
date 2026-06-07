@@ -14,11 +14,18 @@
   var label = (s && s.getAttribute('data-label')) || 'Talk to our AI receptionist';
   var side  = ((s && s.getAttribute('data-side')) || 'right').toLowerCase() === 'left' ? 'left' : 'right';
 
+  // Knowledge base: by default the agent reads THIS page's website and answers about it.
+  // Set data-kb="off" to disable, or data-kb="https://..." to point at a specific page.
+  var kb = s ? s.getAttribute('data-kb') : null;
+  if (kb === null) kb = (location.protocol === 'https:') ? location.href : '';
+  var useKb = kb && kb !== 'off';
+
   var q = [];
-  if (biz)   q.push('biz=' + encodeURIComponent(biz));
   if (name)  q.push('name=' + encodeURIComponent(name));
   if (owner) q.push('owner=' + encodeURIComponent(owner));
-  if (biz)   q.push('lock=1'); // lock the picker only when a specific business is set
+  if (useKb) q.push('kb=' + encodeURIComponent(kb));
+  else if (biz) q.push('biz=' + encodeURIComponent(biz));
+  if (useKb || biz) q.push('lock=1'); // hide the picker for a specific site/business
   var SRC = 'https://get.callpilotvoice.co.uk/talk/' + (q.length ? ('?' + q.join('&')) : '');
 
   var ID = 'cp-voice-widget';

@@ -51,6 +51,27 @@ const BUSINESSES = {
   general:    { name: 'our business',      thing: 'appointment',  services: 'appointments, consultations, quotes', info: 'Happy to help with bookings and questions.' },
 };
 function bizCfg(key) { return BUSINESSES[key] || BUSINESSES[process.env.BUSINESS_TYPE || 'dental'] || BUSINESSES.dental; }
+
+// Read a website and extract its visible text → the agent answers about THAT business.
+async function fetchKnowledge(url) {
+  try {
+    const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (CallPilotBot)' } });
+    if (!r.ok) return null;
+    let html = await r.text();
+    html = html.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<!--[\s\S]*?-->/g, ' ');
+    const title = (html.match(/<title>([^<]*)<\/title>/i) || [])[1] || '';
+    const text = html.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ').trim();
+    return { title: title.trim(), text: text.slice(0, 6000) };
+  } catch (_) { return null; }
+}
+function kbInstructions(business, text) {
+  return `You are ${CFG.agent}, a warm, professional voice assistant for ${business}. ` +
+    `Answer the caller's questions using ONLY the business information below. If something isn't covered, ` +
+    `say you'll have the team follow up — don't make things up. If the caller is interested, wants a quote, ` +
+    `or wants to book, collect their name, phone number and what they need, then call capture_lead. ` +
+    `Greet briefly and keep replies short and natural, like a real receptionist.\n\n` +
+    `BUSINESS INFORMATION:\n${text || '(no extra info available)'}`;
+}
 function instructionsFor(c) {
   const what = c.thing === 'reservation' ? 'a reservation' : c.thing === 'job' ? 'a job booking' : 'an ' + c.thing;
   return `You are ${CFG.agent}, a warm, professional voice receptionist for ${c.name} (open ${CFG.hours}). ` +
@@ -91,22 +112,33 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'GET' && u.pathname === '/session') {
     if (!CFG.openaiKey) { res.writeHead(500); return res.end(JSON.stringify({ error: 'OPENAI_API_KEY not set' })); }
     try {
-      // pick the business (?biz=KEY) and optional custom name (?name=...)
-      const base = bizCfg(u.searchParams.get('biz'));
-      const c = { ...base, name: (u.searchParams.get('name') || base.name) };
+      // Mode A: knowledge base — ?kb=<website URL> → scrape it, answer about that business.
+      // Mode B: preset — ?biz=KEY (+ ?name=) → a tuned persona.
+      const kb = u.searchParams.get('kb');
+      let instructions, business;
+      if (kb) {
+        const k = await fetchKnowledge(kb);
+        business = u.searchParams.get('name') || (k && k.title) || 'this business';
+        instructions = kbInstructions(business, k && k.text);
+      } else {
+        const base = bizCfg(u.searchParams.get('biz'));
+        const c = { ...base, name: (u.searchParams.get('name') || base.name) };
+        business = c.name;
+        instructions = instructionsFor(c);
+      }
       // Current GA endpoint to mint an ephemeral client secret for browser WebRTC
       const r = await fetch('https://api.openai.com/v1/realtime/client_secrets', {
         method: 'POST',
         headers: { Authorization: `Bearer ${CFG.openaiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ session: {
-          type: 'realtime', model: CFG.model, instructions: instructionsFor(c),
+          type: 'realtime', model: CFG.model, instructions,
           tools: TOOLS, tool_choice: 'auto', audio: { output: { voice: CFG.voice } },
         } }),
       });
       const j = await r.json();
       const value = j.value || j.client_secret?.value || null;
       res.writeHead(r.ok && value ? 200 : 500, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ value, model: CFG.model, business: c.name, error: j.error?.message }));
+      return res.end(JSON.stringify({ value, model: CFG.model, business, error: j.error?.message }));
     } catch (e) { res.writeHead(500); return res.end(JSON.stringify({ error: e.message })); }
   }
 
@@ -193,6 +225,7 @@ function notifyOwner(text){if(!OWNER)return;fetch('notify',{method:'POST',header
 function sessionUrl(){
   let q='session?biz='+encodeURIComponent($('bizsel').value);
   if(params.get('name'))q+='&name='+encodeURIComponent(params.get('name'));
+  if(params.get('kb'))q+='&kb='+encodeURIComponent(params.get('kb'));
   return q;
 }
 async function start(){
