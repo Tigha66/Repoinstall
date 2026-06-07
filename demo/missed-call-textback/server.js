@@ -106,6 +106,7 @@ function normaliseTenant(t) {
   return {
     name: t.name || t.session || 'tenant',
     businessName: t.businessName || 'our team',
+    enabled: t.enabled !== false, // on by default; set "enabled": false to switch a customer OFF (e.g. trial ended / not paid)
     session: t.session || t.name,
     message: t.message || DEFAULT_MESSAGE,
     channel: t.channel === 'sms' ? 'sms' : 'whatsapp', // 'whatsapp' (UK/EU) or 'sms' (US)
@@ -263,6 +264,10 @@ async function sendSms(from, to, text) {
 async function textBackMissedCall(callerNumber, tenant, overrideText) {
   const chatId = toChatId(callerNumber);
   if (!chatId) return log('skip: bad caller number', callerNumber);
+
+  if (tenant && tenant.enabled === false) {
+    return log(`skip: tenant DISABLED [${tenant.businessName}] (enabled:false — trial ended / unpaid)`);
+  }
 
   const now = Date.now();
   if (now - (lastTexted.get(chatId) || 0) < CONFIG.cooldownMs) {
