@@ -36,11 +36,27 @@ const CFG = {
 };
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
-const INSTRUCTIONS =
-  `You are ${CFG.agent}, a warm, professional voice receptionist for ${CFG.business} (open ${CFG.hours}). ` +
-  `Greet the visitor briefly, then help. For an appointment, collect one at a time: service, full name, ` +
-  `preferred day/time, and mobile number. When you have all four, call book_appointment, then confirm in one ` +
-  `short sentence that a confirmation will be texted. Answer simple questions briefly. Keep it short and natural.`;
+// Business types — one deployment serves any business (pick via ?biz=KEY, or the on-page dropdown).
+const BUSINESSES = {
+  dental:     { name: 'Bright Smile Dental',    thing: 'appointment', services: 'check-ups, cleaning, whitening, consultations' },
+  barber:     { name: 'Sharp Cuts Barbershop',  thing: 'appointment', services: 'haircuts, beard trims, shaves, skin fades' },
+  salon:      { name: 'Glow Beauty Salon',      thing: 'appointment', services: 'haircuts, colour, manicures, facials, lashes' },
+  restaurant: { name: 'Bella Vista Restaurant', thing: 'reservation',  services: 'table reservations, takeaway orders, private events' },
+  hvac:       { name: 'Cool Air HVAC',          thing: 'job',          services: 'AC repair, installation, maintenance, emergency callouts' },
+  auto:       { name: 'ProFix Auto Repair',     thing: 'booking',      services: 'MOT, servicing, repairs, diagnostics' },
+  medspa:     { name: 'Radiance Med Spa',       thing: 'appointment',  services: 'botox, fillers, facials, laser, consultations' },
+  law:        { name: 'Sterling Law',           thing: 'consultation', services: 'consultations, case reviews' },
+  realestate: { name: 'Prime Properties',       thing: 'viewing',      services: 'viewings, valuations, consultations' },
+  general:    { name: 'our business',           thing: 'appointment',  services: 'appointments, consultations, quotes' },
+};
+function bizCfg(key) { return BUSINESSES[key] || BUSINESSES[process.env.BUSINESS_TYPE || 'dental'] || BUSINESSES.dental; }
+function instructionsFor(c) {
+  const what = c.thing === 'reservation' ? 'a reservation' : c.thing === 'job' ? 'a job booking' : 'an ' + c.thing;
+  return `You are ${CFG.agent}, a warm, professional voice receptionist for ${c.name} (open ${CFG.hours}). ` +
+    `We offer: ${c.services}. Greet the caller briefly, then help. To book ${what}, collect one at a time: ` +
+    `service, full name, preferred day/time, and mobile number. When you have all four, call book_appointment, then ` +
+    `confirm in one short sentence that a confirmation will be texted. Answer simple questions briefly. Keep it short and natural.`;
+}
 
 const TOOLS = [{
   type: 'function', name: 'book_appointment',
@@ -65,19 +81,22 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'GET' && u.pathname === '/session') {
     if (!CFG.openaiKey) { res.writeHead(500); return res.end(JSON.stringify({ error: 'OPENAI_API_KEY not set' })); }
     try {
+      // pick the business (?biz=KEY) and optional custom name (?name=...)
+      const base = bizCfg(u.searchParams.get('biz'));
+      const c = { ...base, name: (u.searchParams.get('name') || base.name) };
       // Current GA endpoint to mint an ephemeral client secret for browser WebRTC
       const r = await fetch('https://api.openai.com/v1/realtime/client_secrets', {
         method: 'POST',
         headers: { Authorization: `Bearer ${CFG.openaiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ session: {
-          type: 'realtime', model: CFG.model, instructions: INSTRUCTIONS,
+          type: 'realtime', model: CFG.model, instructions: instructionsFor(c),
           tools: TOOLS, tool_choice: 'auto', audio: { output: { voice: CFG.voice } },
         } }),
       });
       const j = await r.json();
       const value = j.value || j.client_secret?.value || null;
       res.writeHead(r.ok && value ? 200 : 500, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ value, model: CFG.model, business: CFG.business, error: j.error?.message }));
+      return res.end(JSON.stringify({ value, model: CFG.model, business: c.name, error: j.error?.message }));
     } catch (e) { res.writeHead(500); return res.end(JSON.stringify({ error: e.message })); }
   }
 
@@ -86,7 +105,7 @@ const server = http.createServer(async (req, res) => {
     const body = JSON.parse((await readBody(req)) || '{}');
     try {
       const r = await fetch(CFG.confirmUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: body.name, mobile: body.phone, service: body.service, datetime: body.datetime, business: CFG.business }) });
+        body: JSON.stringify({ name: body.name, mobile: body.phone, service: body.service, datetime: body.datetime, business: body.business || CFG.business }) });
       log('booking confirm', body.phone, r.ok ? 'ok' : 'fail');
       res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify({ ok: r.ok }));
     } catch (e) { res.writeHead(500); return res.end(JSON.stringify({ error: e.message })); }
@@ -111,7 +130,8 @@ const PAGE = `<!doctype html><html lang="en"><head><meta charset="utf-8">
 .av{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#25d366,#1da851);display:grid;place-items:center;font-size:42px;margin:0 auto 16px;transition:.2s}
 .av.live{animation:pulse 1.2s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.5)}70%{box-shadow:0 0 0 22px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
-h1{font-size:20px;margin-bottom:4px}.sub{color:#8aa;font-size:14px;margin-bottom:22px}
+h1{font-size:20px;margin-bottom:4px}.sub{color:#8aa;font-size:14px;margin-bottom:16px}
+select{width:100%;padding:11px 12px;border:1px solid #2a3a44;border-radius:12px;font-size:15px;background:#0b141a;color:#fff;margin-bottom:14px}
 button{width:100%;border:0;border-radius:999px;padding:16px;font-size:17px;font-weight:800;cursor:pointer}
 .start{background:#25d366;color:#fff}.stop{background:#e74c3c;color:#fff;display:none}
 .status{margin-top:16px;color:#8aa;font-size:13px;min-height:18px}
@@ -120,23 +140,44 @@ button{width:100%;border:0;border-radius:999px;padding:16px;font-size:17px;font-
 <div class="card">
   <div class="av" id="av">🎙️</div>
   <h1 id="biz">Talk to our receptionist</h1>
-  <div class="sub">Tap, allow your mic, and just speak — like a real phone call.</div>
+  <div class="sub">Pick a business, tap, allow your mic, and just speak.</div>
+  <select id="bizsel">
+    <option value="dental">🦷 Dental clinic</option>
+    <option value="barber">💈 Barbershop</option>
+    <option value="salon">💇 Hair / Beauty salon</option>
+    <option value="restaurant">🍽️ Restaurant / Café</option>
+    <option value="hvac">❄️ HVAC / Trades</option>
+    <option value="auto">🚗 Auto repair</option>
+    <option value="medspa">💆 Med spa</option>
+    <option value="law">⚖️ Law firm</option>
+    <option value="realestate">🏠 Real estate</option>
+    <option value="general">📅 Other business</option>
+  </select>
   <button class="start" id="start">📞 Start call</button>
   <button class="stop" id="stop">■ End call</button>
   <div class="status" id="status"></div>
-  <div class="hint">AI voice receptionist demo — answers, books appointments, and sends a WhatsApp confirmation.</div>
+  <div class="hint">AI voice receptionist — answers, books appointments, and sends a WhatsApp confirmation.</div>
   <audio id="aud" autoplay></audio>
 </div>
 <script>
-let pc,dc,stream;
+let pc,dc,stream,BIZNAME='';
 const $=id=>document.getElementById(id);
 function setStatus(t){$('status').textContent=t;}
+const params=new URLSearchParams(location.search);
+// ?biz=barber preselects; ?name=Mario%27s%20Barbers sets a custom name; ?lock=1 hides the picker (client links)
+if(params.get('biz'))$('bizsel').value=params.get('biz');
+if(params.get('lock')==='1')$('bizsel').style.display='none';
+function sessionUrl(){
+  let q='session?biz='+encodeURIComponent($('bizsel').value);
+  if(params.get('name'))q+='&name='+encodeURIComponent(params.get('name'));
+  return q;
+}
 async function start(){
   try{
     setStatus('Connecting…');
-    const tok=await fetch('session').then(r=>r.json());
+    const tok=await fetch(sessionUrl()).then(r=>r.json());
     if(!tok.value){setStatus('Setup needed: '+(tok.error||'no session token (add OpenAI credit?)'));return;}
-    if(tok.business)$('biz').textContent=tok.business;
+    BIZNAME=tok.business||''; if(BIZNAME)$('biz').textContent=BIZNAME;
     const EPH=tok.value, MODEL=tok.model;
     pc=new RTCPeerConnection();
     pc.ontrack=e=>{$('aud').srcObject=e.streams[0];};
@@ -157,12 +198,14 @@ function onEvent(e){
   let m;try{m=JSON.parse(e.data);}catch(_){return;}
   if(m.type==='response.function_call_arguments.done'&&m.name==='book_appointment'){
     let a={};try{a=JSON.parse(m.arguments||'{}');}catch(_){}
+    a.business=BIZNAME;
     fetch('book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(a)});
     dc.send(JSON.stringify({type:'conversation.item.create',item:{type:'function_call_output',call_id:m.call_id,output:JSON.stringify({booked:true})}}));
     dc.send(JSON.stringify({type:'response.create'}));
     setStatus('✅ Booking captured — confirmation sent');
   }
 }
+$('bizsel').onchange=function(){ if($('stop').style.display==='block'){stop();} $('biz').textContent='Talk to our receptionist'; };
 function stop(){try{pc&&pc.close();stream&&stream.getTracks().forEach(t=>t.stop());}catch(_){}
   $('stop').style.display='none';$('start').style.display='block';$('av').classList.remove('live');setStatus('Call ended.');}
 $('start').onclick=start;$('stop').onclick=stop;
