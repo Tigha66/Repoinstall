@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  CINEMATIC RESTAURANT TEMPLATE  ·  Fine-Dining (dark & elegant)
+  Single file. No build step. GSAP + ScrollTrigger via CDN (same as repo).
+  ----------------------------------------------------------------------------
+  HOW TO CUSTOMIZE PER CLIENT  (find/replace the {{...}} tokens below):
+    {{RESTAURANT_NAME}}   e.g.  Lumière
+    {{TAGLINE}}           e.g.  Modern French · Est. 2009
+    {{CITY}}              e.g.  London
+    {{BOOKING_URL}}       e.g.  https://www.opentable.com/r/your-restaurant
+    {{PHONE}}             e.g.  +44 20 7000 0000
+    {{ADDRESS}}           e.g.  12 Soho Square, London W1D 3QF
+    {{HOURS}}             e.g.  Tue–Sun · 6pm–11pm
+    {{YEARS}} {{GUESTS}} {{DISHES}}   stat-band numbers
+  Replace the 3 gallery <img> src values + hero background with the client's photos.
+  Brand colour: change --gold below.
+  ============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{RESTAURANT_NAME}} · {{CITY}}</title>
+<meta name="description" content="{{RESTAURANT_NAME}} — {{TAGLINE}}. Book a table in {{CITY}}.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{
+    --bg:#0b0b0d; --bg2:#111114; --ink:#f4efe7; --muted:#9a958c;
+    --gold:#c9a24b;            /* brand accent — change per client */
+    --line:rgba(201,162,75,.25);
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Inter',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  section{position:relative}
+
+  /* ---------- NAV ---------- */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+      padding:18px 28px;transition:background .4s,backdrop-filter .4s;mix-blend-mode:difference}
+  nav.solid{mix-blend-mode:normal;background:rgba(11,11,13,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{font-family:var(--serif);font-size:22px;letter-spacing:.04em}
+  .navlinks{display:flex;gap:28px;align-items:center;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  .navlinks a{color:var(--ink);text-decoration:none;opacity:.85;transition:opacity .2s}
+  .navlinks a:hover{opacity:1}
+  .book-sm{border:1px solid var(--gold);color:var(--gold)!important;padding:9px 16px;border-radius:2px;opacity:1!important}
+  @media(max-width:720px){.navlinks a:not(.book-sm){display:none}}
+
+  /* ---------- HERO + CURTAIN ---------- */
+  .hero{height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:
+      linear-gradient(rgba(8,8,10,.55),rgba(8,8,10,.78)),
+      url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop') center/cover;
+      transform:scale(1.08)}
+  .curtain{position:absolute;top:0;bottom:0;width:51%;background:linear-gradient(var(--bg2),var(--bg));z-index:5}
+  #cLeft{left:0} #cRight{right:0}
+  .hero-inner{position:relative;z-index:6;padding:0 20px}
+  .hero h1{font-size:clamp(48px,11vw,128px);letter-spacing:.02em}
+  .hero .tagline{margin-top:18px;font-size:clamp(14px,2.4vw,19px);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .hero .cta{display:inline-block;margin-top:36px;border:1px solid var(--gold);color:var(--gold);
+      padding:15px 34px;border-radius:2px;text-decoration:none;font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+      transition:background .3s,color .3s}
+  .hero .cta:hover{background:var(--gold);color:#0b0b0d}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:6;font-size:11px;letter-spacing:.3em;
+      text-transform:uppercase;color:var(--muted);animation:bob 2s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+  /* ---------- GENERIC SECTION ---------- */
+  .pad{padding:120px 0}
+  .reveal{opacity:0;transform:translateY(40px)}
+  .section-head{text-align:center;margin-bottom:64px}
+  .section-head h2{font-size:clamp(32px,6vw,60px)}
+
+  /* ---------- STAT BAND (odometer) ---------- */
+  .stats{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:center}
+  .stat .num{font-family:var(--serif);font-size:clamp(40px,8vw,76px);color:var(--gold);line-height:1}
+  .stat .lbl{margin-top:12px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+  @media(max-width:620px){.stat-grid{grid-template-columns:1fr;gap:48px}}
+
+  /* ---------- MENU ---------- */
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 64px}
+  @media(max-width:720px){.menu-grid{grid-template-columns:1fr}}
+  .menu-cat{font-family:var(--serif);font-size:22px;color:var(--gold);margin:34px 0 14px;grid-column:1/-1;
+      border-bottom:1px solid var(--line);padding-bottom:8px}
+  .dish{display:flex;justify-content:space-between;gap:18px;align-items:baseline;padding:10px 0}
+  .dish .d-name{font-size:17px}
+  .dish .d-desc{display:block;font-size:13px;color:var(--muted);margin-top:3px;max-width:38ch}
+  .dish .d-price{font-family:var(--serif);font-size:18px;color:var(--gold);white-space:nowrap}
+
+  /* ---------- GALLERY (coverflow-ish) ---------- */
+  .gallery{display:flex;gap:18px;overflow-x:auto;padding:10px 24px 30px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .gallery::-webkit-scrollbar{height:6px}
+  .gallery::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+  .gphoto{flex:0 0 70%;max-width:520px;aspect-ratio:4/3;border-radius:4px;overflow:hidden;scroll-snap-align:center;
+      position:relative;filter:grayscale(.15)}
+  .gphoto img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
+  .gphoto:hover img{transform:scale(1.06)}
+  @media(min-width:721px){.gphoto{flex-basis:40%}}
+
+  /* ---------- VISIT / FOOTER ---------- */
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+  @media(max-width:720px){.visit-grid{grid-template-columns:1fr}}
+  .visit h3{font-size:24px;margin-bottom:10px}
+  .visit p{color:var(--muted);line-height:1.9;font-size:15px}
+  .map{aspect-ratio:16/10;background:var(--bg2);border:1px solid var(--line);border-radius:4px;display:flex;
+      align-items:center;justify-content:center;color:var(--muted);font-size:13px;letter-spacing:.2em;text-transform:uppercase}
+  footer{border-top:1px solid var(--line);padding:40px 0;text-align:center;color:var(--muted);font-size:13px}
+
+  /* ---------- STICKY BOOK BAR ---------- */
+  .booknow{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);z-index:60;
+      background:var(--gold);color:#0b0b0d;padding:15px 30px;border-radius:40px;text-decoration:none;
+      font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;box-shadow:0 10px 30px rgba(0,0,0,.45);
+      transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+  .booknow.show{transform:translateX(-50%) translateY(0)}
+
+  /* ---------- ACCESSIBILITY: respect reduced motion ---------- */
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1!important;transform:none!important}
+    .curtain{display:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="brand">{{RESTAURANT_NAME}}</div>
+  <div class="navlinks">
+    <a href="#menu">Menu</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#visit">Visit</a>
+    <a class="book-sm" href="{{BOOKING_URL}}" target="_blank" rel="noopener">Reserve</a>
+  </div>
+</nav>
+
+<!-- HERO with curtain reveal -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="curtain" id="cLeft"></div>
+  <div class="curtain" id="cRight"></div>
+  <div class="hero-inner">
+    <h1>{{RESTAURANT_NAME}}</h1>
+    <div class="tagline">{{TAGLINE}}</div>
+    <a class="cta" href="{{BOOKING_URL}}" target="_blank" rel="noopener">Reserve a Table</a>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- STAT BAND (odometer counters) -->
+<section class="stats pad">
+  <div class="wrap stat-grid">
+    <div class="stat reveal"><div class="num" data-count="{{YEARS}}">0</div><div class="lbl">Years of Craft</div></div>
+    <div class="stat reveal"><div class="num" data-count="{{GUESTS}}" data-suffix="k">0</div><div class="lbl">Guests Served</div></div>
+    <div class="stat reveal"><div class="num" data-count="{{DISHES}}">0</div><div class="lbl">Seasonal Dishes</div></div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="pad" id="menu">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">À la carte</div>
+      <h2>The Menu</h2>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-cat reveal">Starters</div>
+      <div class="dish reveal"><span><span class="d-name">Hand-Dived Scallop</span><span class="d-desc">celeriac, brown butter, hazelnut</span></span><span class="d-price">18</span></div>
+      <div class="dish reveal"><span><span class="d-name">Heritage Beetroot</span><span class="d-desc">whipped goat curd, walnut, sorrel</span></span><span class="d-price">14</span></div>
+      <div class="dish reveal"><span><span class="d-name">Cured Sea Trout</span><span class="d-desc">cucumber, dill oil, buttermilk</span></span><span class="d-price">16</span></div>
+      <div class="dish reveal"><span><span class="d-name">Wild Mushroom Tart</span><span class="d-desc">aged parmesan, truffle, thyme</span></span><span class="d-price">15</span></div>
+
+      <div class="menu-cat reveal">Mains</div>
+      <div class="dish reveal"><span><span class="d-name">Aged Sirloin</span><span class="d-desc">bone marrow, watercress, triple-cooked chips</span></span><span class="d-price">34</span></div>
+      <div class="dish reveal"><span><span class="d-name">Cornish Halibut</span><span class="d-desc">brown shrimp, samphire, beurre blanc</span></span><span class="d-price">32</span></div>
+      <div class="dish reveal"><span><span class="d-name">Herdwick Lamb</span><span class="d-desc">aubergine, harissa, mint yoghurt</span></span><span class="d-price">30</span></div>
+      <div class="dish reveal"><span><span class="d-name">Roast Celeriac</span><span class="d-desc">black garlic, charred leek, hazelnut</span></span><span class="d-price">24</span></div>
+
+      <div class="menu-cat reveal">Desserts</div>
+      <div class="dish reveal"><span><span class="d-name">Valrhona Tart</span><span class="d-desc">salted caramel, crème fraîche</span></span><span class="d-price">12</span></div>
+      <div class="dish reveal"><span><span class="d-name">Poached Pear</span><span class="d-desc">almond, vanilla, brown sugar</span></span><span class="d-price">11</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="pad" id="gallery" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap section-head reveal">
+    <div class="eyebrow">A taste</div>
+    <h2>The Experience</h2>
+  </div>
+  <div class="gallery">
+    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=900&auto=format&fit=crop" alt="dish"></div>
+    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=900&auto=format&fit=crop" alt="plated course"></div>
+    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1592861956120-e524fc739696?q=80&w=900&auto=format&fit=crop" alt="dining room"></div>
+    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=900&auto=format&fit=crop" alt="dessert"></div>
+  </div>
+</section>
+
+<!-- VISIT -->
+<section class="pad" id="visit">
+  <div class="wrap visit-grid">
+    <div class="visit reveal">
+      <div class="eyebrow">Find us</div>
+      <h3>{{RESTAURANT_NAME}}</h3>
+      <p>
+        {{ADDRESS}}<br>
+        {{CITY}}<br><br>
+        <strong style="color:var(--ink)">Hours</strong><br>{{HOURS}}<br><br>
+        <strong style="color:var(--ink)">Reservations</strong><br>{{PHONE}}
+      </p>
+      <a class="cta" style="margin-top:24px;display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:14px 30px;border-radius:2px;text-decoration:none;font-size:13px;letter-spacing:.2em;text-transform:uppercase" href="{{BOOKING_URL}}" target="_blank" rel="noopener">Book on OpenTable</a>
+    </div>
+    <div class="map reveal">Map embed goes here</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">{{RESTAURANT_NAME}} · {{CITY}} · © 2026 · Crafted with care</div>
+</footer>
+
+<!-- STICKY BOOK BAR -->
+<a class="booknow" id="booknow" href="{{BOOKING_URL}}" target="_blank" rel="noopener">Book a Table</a>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(!reduce && window.gsap){
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Curtain reveal on hero
+    gsap.to('#cLeft', {xPercent:-100, ease:'power2.inOut',
+      scrollTrigger:{trigger:'.hero', start:'top top', end:'70% top', scrub:.6}});
+    gsap.to('#cRight',{xPercent:100, ease:'power2.inOut',
+      scrollTrigger:{trigger:'.hero', start:'top top', end:'70% top', scrub:.6}});
+    // Slow hero zoom
+    gsap.to('.hero-bg',{scale:1, ease:'none',
+      scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:true}});
+
+    // Reveal-on-scroll for any .reveal element
+    gsap.utils.toArray('.reveal').forEach(function(el){
+      gsap.to(el,{opacity:1, y:0, duration:.9, ease:'power3.out',
+        scrollTrigger:{trigger:el, start:'top 88%', once:true}});
+    });
+
+    // Odometer count-up
+    gsap.utils.toArray('.num').forEach(function(el){
+      var target = parseFloat(el.getAttribute('data-count')) || 0;
+      var suffix = el.getAttribute('data-suffix') || '';
+      var obj = {v:0};
+      ScrollTrigger.create({trigger:el, start:'top 90%', once:true, onEnter:function(){
+        gsap.to(obj,{v:target, duration:1.6, ease:'power2.out',
+          onUpdate:function(){ el.textContent = Math.round(obj.v) + suffix; }});
+      }});
+    });
+  }
+
+  // Nav background after scroll
+  var nav = document.getElementById('nav');
+  var book = document.getElementById('booknow');
+  function onScroll(){
+    var y = window.scrollY;
+    nav.classList.toggle('solid', y > 60);
+    book.classList.toggle('show', y > window.innerHeight*0.8);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
