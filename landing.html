@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cinematic Websites for Restaurants — by Abdelhak</title>
-<meta name="description" content="Fast, cinematic, 3D websites for restaurants and cafés. Built to win reservations. Free concept, live in about a week.">
+<title>Carte — Cinematic Websites for Restaurants</title>
+<meta name="description" content="Carte builds fast, cinematic, 3D websites for restaurants and cafés. Built to win reservations. Free concept, live in about a week.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%230b0c0f'/><circle cx='24' cy='24' r='17' fill='none' stroke='%23cda349' stroke-width='2.4'/><circle cx='24' cy='24' r='11' fill='none' stroke='%23cda349' stroke-width='1' opacity='.55'/><text x='24' y='30.5' font-family='Georgia,serif' font-size='18' fill='%23e6c97e' text-anchor='middle'>C</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -37,8 +38,10 @@
   nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;
     padding:16px 24px;transition:.4s;border-bottom:1px solid transparent}
   nav.solid{background:rgba(11,12,15,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  .brand{font-family:var(--serif);font-size:21px;letter-spacing:.02em;text-decoration:none}
-  .brand b{color:var(--gold)}
+  .brand{font-family:var(--serif);font-size:22px;letter-spacing:.04em;text-decoration:none;display:inline-flex;align-items:center;gap:9px}
+  .brand .logo{flex:none}
+  .brand .logo .c{font-family:var(--serif);font-size:20px;fill:var(--gold2)}
+  .brand span{line-height:1}
   .navlinks{display:flex;gap:26px;align-items:center;font-size:13px;letter-spacing:.06em}
   .navlinks a{text-decoration:none;opacity:.85;transition:.2s}.navlinks a:hover{opacity:1;color:var(--gold2)}
   .navcta{border:1px solid var(--gold);color:var(--gold)!important;padding:9px 16px;border-radius:4px;opacity:1!important}
@@ -139,7 +142,13 @@
 <body>
 
 <nav id="nav">
-  <a class="brand" href="#top">Cinematic<b>.</b>Studio</a>
+  <a class="brand" href="#top" aria-label="Carte — home">
+    <svg class="logo" width="32" height="32" viewBox="0 0 48 48" aria-hidden="true">
+      <circle cx="24" cy="24" r="20" fill="none" stroke="var(--gold)" stroke-width="2.2"/>
+      <circle cx="24" cy="24" r="13" fill="none" stroke="var(--gold)" stroke-width="1" opacity=".5"/>
+      <text class="c" x="24" y="31" text-anchor="middle">C</text>
+    </svg>
+    <span>Carte</span></a>
   <div class="navlinks">
     <a href="#features">Features</a>
     <a href="#work">Work</a>
@@ -365,7 +374,7 @@
 </section>
 
 <footer>
-  <div class="wrap">Cinematic Studio · Cinematic &amp; 3D websites for restaurants &amp; cafés · Abdelhak · <a href="mailto:hello@callpilotvoice.co.uk">hello@callpilotvoice.co.uk</a> · © 2026</div>
+  <div class="wrap"><strong style="font-family:var(--serif);color:var(--ink)">Carte</strong> — Cinematic &amp; 3D websites for restaurants &amp; cafés · Abdelhak · <a href="mailto:hello@callpilotvoice.co.uk">hello@callpilotvoice.co.uk</a> · © 2026</div>
 </footer>
 
 <script>
