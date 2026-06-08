@@ -154,4 +154,8 @@ footer{border-top:1px solid var(--line);padding:50px 0 40px;color:var(--muted);f
 .tilt h3{font-size:23px;color:var(--gold2)}.tilt p{color:var(--muted);font-size:13px;margin-top:5px}
 .tilt .shine{position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.16),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
 .tilt:hover .shine{opacity:1}
+.tilt{box-shadow:0 26px 50px rgba(0,0,0,.5);animation:float3d 6s ease-in-out infinite}
+@keyframes float3d{0%,100%{transform:rotateY(-11deg) rotateX(4deg)}50%{transform:rotateY(11deg) rotateX(-4deg)}}
+.tilt-row .tilt:nth-child(2){animation-delay:-2s}
+.tilt-row .tilt:nth-child(3){animation-delay:-4s}
 .badge3d{display:inline-block;margin-top:14px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);padding:6px 12px;border-radius:20px}
