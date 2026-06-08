@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outreach Tracker — Cinematic Restaurant Sites</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d0e10;--bg2:#16181b;--ink:#eef0f2;--muted:#9aa0a8;--gold:#c9a24b;--line:rgba(255,255,255,.09);
+    --send:#6b7280;--sent:#3b82f6;--replied:#d97706;--won:#16a34a;--lost:#dc2626}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1280px;margin:0 auto;padding:34px 20px 80px}
+  h1{font-family:'Playfair Display',serif;font-weight:600;font-size:30px}
+  .sub{color:var(--muted);margin-top:8px;font-size:14px}
+  .stats{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 22px}
+  .stat{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px 20px;min-width:120px}
+  .stat .n{font-size:28px;font-family:'Playfair Display',serif}
+  .stat .l{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  .stat.won .n{color:var(--won)} .stat.replied .n{color:var(--replied)} .stat.sent .n{color:var(--sent)}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .toolbar input{background:var(--bg2);border:1px solid var(--line);color:var(--ink);padding:9px 14px;border-radius:8px;font-size:14px;min-width:200px}
+  .btn{background:var(--bg2);border:1px solid var(--line);color:var(--ink);padding:9px 14px;border-radius:8px;font-size:12.5px;cursor:pointer;transition:.2s}
+  .btn:hover{border-color:var(--gold);color:var(--gold)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:10px 10px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg)}
+  td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:hover td{background:rgba(255,255,255,.02)}
+  .rest{font-weight:500;font-size:15px}
+  .meta{color:var(--muted);font-size:12px;margin-top:3px}
+  .links a{display:inline-block;color:var(--gold);text-decoration:none;font-size:12px;margin-right:10px;border-bottom:1px solid transparent}
+  .links a:hover{border-color:var(--gold)}
+  .contact{color:var(--muted);font-size:12.5px;word-break:break-word}
+  .contact a{color:var(--ink);text-decoration:none}.contact a:hover{color:var(--gold)}
+  .status-btn{border:none;border-radius:30px;padding:7px 14px;font-size:11.5px;font-weight:600;letter-spacing:.04em;cursor:pointer;color:#fff;white-space:nowrap;min-width:96px}
+  .s-send{background:var(--send)} .s-sent{background:var(--sent)} .s-replied{background:var(--replied)} .s-won{background:var(--won)} .s-lost{background:var(--lost)}
+  .date{display:block;font-size:11px;color:var(--muted);margin-top:5px;text-align:center}
+  textarea{width:100%;min-width:150px;background:var(--bg2);border:1px solid var(--line);color:var(--ink);border-radius:7px;padding:7px 9px;font-family:inherit;font-size:12.5px;resize:vertical;min-height:38px}
+  .tag{display:inline-block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);border-radius:20px;padding:2px 8px;margin-top:4px}
+  .note{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.7;border-top:1px solid var(--line);padding-top:18px}
+  @media(max-width:900px){ table,thead,tbody,th,td,tr{display:block} thead{display:none}
+    td{border:none;padding:6px 0} tr{border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px;display:block;background:var(--bg2)}
+    td::before{content:attr(data-l);display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Outreach Tracker</h1>
+  <div class="sub">Abdelhak · hello@callpilotvoice.co.uk — click a status to advance it (To&nbsp;send → Sent → Replied → Won). Everything saves in this browser.</div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar">
+    <input id="search" placeholder="Search restaurant / city…" oninput="render()">
+    <button class="btn" onclick="filterStatus('')">All</button>
+    <button class="btn" onclick="filterStatus('send')">To send</button>
+    <button class="btn" onclick="filterStatus('sent')">Sent</button>
+    <button class="btn" onclick="filterStatus('replied')">Replied</button>
+    <button class="btn" onclick="filterStatus('won')">Won</button>
+    <button class="btn" onclick="exportCSV()">⬇ Export CSV</button>
+    <button class="btn" onclick="resetAll()">Reset statuses</button>
+  </div>
+
+  <table>
+    <thead><tr><th>Restaurant</th><th>Demo / Full site</th><th>Contact</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <div class="note">
+    <strong>How to use:</strong> Work top to bottom. Open each <em>Demo</em> link to confirm it looks right, send the email + Instagram DM to the contact, then click the status to <strong>Sent</strong> (it stamps the date). When they reply, click to <strong>Replied</strong>; when they pay, <strong>Won</strong>. Aim for 3–5 sends a day. Data is stored locally in your browser only — use <em>Export CSV</em> to back it up.<br><br>
+    <strong>★ = highest-priority leads</strong> (genuinely weak current sites + budget). Dishoom is a portfolio showpiece, not a pitch.
+  </div>
+</div>
+
+<script>
+const LEADS = [
+ {r:"Mr Thomas's Chop House",c:"Manchester · British",pri:1,demo:"https://quaint-anvil-pwc9.here.now/",full:"",contact:"tomschophouse.com · @tomschophouse · 0161 832 2245"},
+ {r:"Sam's Chop House",c:"Manchester · British",pri:1,demo:"https://devoted-rosette-ft8c.here.now/",full:"",contact:"samschophouse.com (same owners as Mr Thomas's)"},
+ {r:"Quo Vadis",c:"Soho, London · British",pri:1,demo:"https://zingy-vigil-2bsv.here.now/",full:"",contact:"quovadissoho.co.uk · @quovadissoho · 020 7437 9585"},
+ {r:"Andrew Edmunds",c:"Soho, London · British",pri:1,demo:"https://dapper-tulip-fxed.here.now/",full:"",contact:"andrewedmunds.com · @andrewedmundssoho · 020 7437 5708"},
+ {r:"Wiltons",c:"St James's, London · British",pri:1,demo:"https://witty-rafter-fbsd.here.now/",full:"https://golden-breath-tkq3.here.now/",contact:"wiltons.co.uk · @wiltons1742 · 020 7629 9955"},
+ {r:"Fonda San Miguel",c:"Austin · Mexican",pri:2,demo:"https://deep-thistle-v7qt.here.now/",full:"https://velvet-willow-7y58.here.now/",contact:"press@fondasanmiguel.com · @fondasanmiguel"},
+ {r:"Olamaie",c:"Austin · Southern",pri:2,demo:"https://eager-quarry-t42x.here.now/",full:"https://gleaming-garden-95m3.here.now/",contact:"reservations@olamaieaustin.com · @olamaieaustin"},
+ {r:"Loveless Cafe",c:"Nashville · Southern",pri:2,demo:"https://boreal-olive-kywf.here.now/",full:"https://oaken-hollow-r22h.here.now/",contact:"info@lovelessevents.com · @lovelesscafe"},
+ {r:"Can Can Brasserie",c:"Richmond VA · French",pri:2,demo:"https://velvet-salmon-399w.here.now/",full:"https://calm-reef-b6s8.here.now/",contact:"cancanbrasserie.com · @cancanbrasserie"},
+ {r:"Dishoom (showpiece)",c:"London · Portfolio piece",pri:3,demo:"https://lemon-paddle-4ay2.here.now/",full:"",contact:"Portfolio only — do not pitch"},
+];
+const PORTFOLIO="https://sunny-prism-dhfm.here.now/";
+const ORDER=["send","sent","replied","won","lost"];
+const LABEL={send:"To send",sent:"Sent",replied:"Replied",won:"Won",lost:"Lost"};
+let FILTER="";
+
+function key(r){return "trk_"+r.replace(/[^a-z0-9]/gi,'_');}
+function getState(r){try{return JSON.parse(localStorage.getItem(key(r)))||{};}catch(e){return {};}}
+function setState(r,s){localStorage.setItem(key(r),JSON.stringify(s));}
+
+function cycle(r){
+  const s=getState(r); const i=ORDER.indexOf(s.status||"send");
+  s.status=ORDER[(i+1)%ORDER.length];
+  if(s.status==="sent") s.date=new Date().toISOString().slice(0,10);
+  setState(r,s); render();
+}
+function saveNote(r,v){const s=getState(r);s.note=v;setState(r,s);updateStats();}
+function filterStatus(f){FILTER=f;render();}
+function resetAll(){if(confirm("Clear all statuses and notes?")){LEADS.forEach(l=>localStorage.removeItem(key(l.r)));render();}}
+
+function updateStats(){
+  const counts={send:0,sent:0,replied:0,won:0,lost:0};
+  LEADS.forEach(l=>{const st=getState(l.r).status||"send";counts[st]++;});
+  document.getElementById('stats').innerHTML=
+    `<div class="stat"><div class="n">${LEADS.length}</div><div class="l">Total leads</div></div>`+
+    `<div class="stat"><div class="n">${counts.send}</div><div class="l">To send</div></div>`+
+    `<div class="stat sent"><div class="n">${counts.sent}</div><div class="l">Sent</div></div>`+
+    `<div class="stat replied"><div class="n">${counts.replied}</div><div class="l">Replied</div></div>`+
+    `<div class="stat won"><div class="n">${counts.won}</div><div class="l">Won</div></div>`;
+}
+
+function render(){
+  const q=(document.getElementById('search').value||"").toLowerCase();
+  const rows=document.getElementById('rows'); rows.innerHTML="";
+  LEADS.filter(l=>(l.r+l.c).toLowerCase().includes(q))
+       .filter(l=>!FILTER||(getState(l.r).status||"send")===FILTER)
+       .forEach(l=>{
+    const s=getState(l.r); const st=s.status||"send";
+    const tr=document.createElement('tr');
+    tr.innerHTML=
+      `<td data-l="Restaurant"><div class="rest">${l.pri===1?'★ ':''}${l.r}</div><div class="meta">${l.c}</div></td>`+
+      `<td data-l="Links"><div class="links"><a href="${l.demo}" target="_blank">Demo ↗</a>`+
+        (l.full?`<a href="${l.full}" target="_blank">Full site ↗</a>`:``)+`</div></td>`+
+      `<td data-l="Contact"><div class="contact">${l.contact}</div></td>`+
+      `<td data-l="Status"><button class="status-btn s-${st}" onclick="cycle('${l.r.replace(/'/g,"\\'")}')">${LABEL[st]}</button>`+
+        (s.date?`<span class="date">${s.date}</span>`:``)+`</td>`+
+      `<td data-l="Notes"><textarea placeholder="notes…" oninput="saveNote('${l.r.replace(/'/g,"\\'")}',this.value)">${(s.note||'').replace(/</g,'&lt;')}</textarea></td>`;
+    rows.appendChild(tr);
+  });
+  updateStats();
+}
+
+function exportCSV(){
+  let csv="Restaurant,Location,Status,Date,Demo,Full site,Contact,Notes\n";
+  LEADS.forEach(l=>{const s=getState(l.r);
+    csv+=[l.r,l.c,LABEL[s.status||"send"],s.date||"",l.demo,l.full,l.contact,(s.note||"").replace(/[\n,]/g," ")]
+      .map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(",")+"\n";});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download="outreach-tracker.csv"; a.click();
+}
+render();
+</script>
+</body>
+</html>
