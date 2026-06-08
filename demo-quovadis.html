@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quo Vadis · Soho · British Seasonal · Since 1926</title>
+<meta name="description" content="Quo Vadis — an iconic Soho restaurant and private members’ club since 1926.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{--bg:#0d1411;--bg2:#131c18;--ink:#f1ece0;--muted:#9caa9e;--gold:#c39a4e;--gold2:#e3c47c;--line:rgba(195,154,78,.30);
+    --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .pad{padding:120px 0}
+  .reveal{opacity:0;transform:translateY(40px)}
+  .center{text-align:center}.section-head{text-align:center;margin-bottom:60px}.section-head h2{font-size:clamp(32px,6vw,58px)}
+  .btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:15px 34px;border-radius:2px;text-decoration:none;
+    font-size:13px;letter-spacing:.2em;text-transform:uppercase;transition:background .3s,color .3s}
+  .btn:hover{background:var(--gold);color:#0d1411}
+  .btn-solid{background:var(--gold);color:#0d1411}.btn-solid:hover{background:var(--gold2)}
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;
+    transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+  nav.solid{background:rgba(14,18,16,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{font-family:var(--serif);font-size:22px}
+  .navlinks{display:flex;gap:24px;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase}
+  .navlinks a{color:var(--ink);text-decoration:none;opacity:.85}.navlinks a:hover{opacity:1;color:var(--gold2)}
+  .book-sm{border:1px solid var(--gold);color:var(--gold)!important;padding:9px 16px;border-radius:2px}
+  @media(max-width:720px){.navlinks a:not(.book-sm){display:none}}
+  .hero{height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:linear-gradient(rgba(8,10,8,.5),rgba(8,10,8,.82)),
+    url('https://images.unsplash.com/photo-1485921325833-c519f76c4927?q=80&w=1600&auto=format&fit=crop') center/cover;transform:scale(1.08)}
+  .curtain{position:absolute;top:0;bottom:0;width:51%;background:linear-gradient(var(--bg2),var(--bg));z-index:5}
+  #cLeft{left:0}#cRight{right:0}
+  .hero-inner{position:relative;z-index:6;padding:0 20px}
+  .hero h1{font-size:clamp(48px,11vw,128px)}
+  .tagline{margin-top:18px;font-size:clamp(14px,2.4vw,19px);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .hero-cta{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:6;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+  /* 3D tilt cards */
+  .tilt-wrap{perspective:1300px}
+  .tilt-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:820px){.tilt-row{grid-template-columns:1fr}}
+  .tilt{position:relative;transform-style:preserve-3d;transition:transform .25s ease-out;border-radius:10px;overflow:hidden;
+    border:1px solid var(--line);background:var(--bg2);will-change:transform}
+  .tilt img{width:100%;height:320px;object-fit:cover;display:block;filter:saturate(1.05) brightness(.92)}
+  .tilt .body{position:absolute;left:0;right:0;bottom:0;padding:24px;background:linear-gradient(transparent,rgba(6,8,6,.9));transform:translateZ(50px)}
+  .tilt h3{font-size:23px;color:var(--gold2)}.tilt p{color:var(--muted);font-size:13px;margin-top:5px}
+  .tilt .shine{position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.16),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
+  .tilt:hover .shine{opacity:1}
+.tilt{box-shadow:0 26px 50px rgba(0,0,0,.5);animation:float3d 6s ease-in-out infinite}
+@keyframes float3d{0%,100%{transform:rotateY(-11deg) rotateX(4deg)}50%{transform:rotateY(11deg) rotateX(-4deg)}}
+.tilt-row .tilt:nth-child(2){animation-delay:-2s}
+.tilt-row .tilt:nth-child(3){animation-delay:-4s}
+  .badge3d{display:inline-block;margin-top:14px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);padding:6px 12px;border-radius:20px}
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 60px;max-width:900px;margin:0 auto}
+  @media(max-width:720px){.menu-grid{grid-template-columns:1fr}}
+  .dish{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line)}
+  .dish .d-name{font-size:17px}.dish .d-desc{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+  .band{background:linear-gradient(120deg,#0a120e,#16241c);border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
+  footer{border-top:1px solid var(--line);padding:46px 0;text-align:center;color:var(--muted);font-size:13px}
+  .demo-note{margin-top:18px;font-size:11.5px;color:#6f6b61}
+  .booknow{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);z-index:60;background:var(--gold);color:#0d1411;
+    padding:15px 30px;border-radius:40px;text-decoration:none;font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+  .booknow.show{transform:translateX(-50%) translateY(0)}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}.curtain{display:none}}
+
+/* brand differentiation */
+
+</style>
+</head>
+<body>
+<nav id="nav">
+  <div class="brand">Quo Vadis</div>
+  <div class="navlinks">
+    <a href="#dishes">Dishes</a><a href="#menu">Menu</a>
+    <a class="book-sm" href="https://www.quovadissoho.co.uk/" target="_blank" rel="noopener">Reserve</a>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="curtain" id="cLeft"></div><div class="curtain" id="cRight"></div>
+  <div class="hero-inner">
+    <h1>Quo Vadis</h1>
+    <div class="tagline">Soho · British Seasonal · Since 1926</div>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="https://www.quovadissoho.co.uk/" target="_blank" rel="noopener">Reserve a Table</a>
+      <a class="btn" href="#dishes">Signature Dishes</a>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- 3D SIGNATURE DISHES -->
+<section class="pad" id="dishes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Interactive · 3D</div>
+      <h2>Signature Dishes</h2>
+      <span class="badge3d">Rotating in 3D · hover to control</span>
+    </div>
+    <div class="tilt-wrap">
+      <div class="tilt-row">
+        <div class="tilt"><span class="shine"></span>
+          <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?q=80&w=800&auto=format&fit=crop" alt="">
+          <div class="body"><h3>Smoked Eel Sandwich</h3><p>the Soho classic</p></div></div>
+        <div class="tilt"><span class="shine"></span>
+          <img src="https://images.unsplash.com/photo-1485921325833-c519f76c4927?q=80&w=800&auto=format&fit=crop" alt="">
+          <div class="body"><h3>Cornish Fish Pie</h3><p>seasonal, buttered greens</p></div></div>
+        <div class="tilt"><span class="shine"></span>
+          <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?q=80&w=800&auto=format&fit=crop" alt="">
+          <div class="body"><h3>Seasonal Tart</h3><p>made each morning</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU PREVIEW -->
+<section class="pad" id="menu" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">Lunch &amp; Dinner · Soho since 1926</div><h2>The Menu</h2></div>
+    <div class="menu-grid">
+      <div class="dish reveal"><span><span class="d-name">Native Oysters</span><span class="d-desc">shallot vinegar</span></span></div>
+      <div class="dish reveal"><span><span class="d-name">Smoked Eel Sandwich</span><span class="d-desc">horseradish, watercress</span></span></div>
+      <div class="dish reveal"><span><span class="d-name">Roast Partridge</span><span class="d-desc">bread sauce, game chips</span></span></div>
+      <div class="dish reveal"><span><span class="d-name">Cornish Fish Pie</span><span class="d-desc">seasonal, buttered greens</span></span></div>
+    </div>
+    <div class="center reveal" style="margin-top:40px"><a class="btn btn-solid" href="https://www.quovadissoho.co.uk/" target="_blank" rel="noopener">Reserve a Table</a></div>
+  </div>
+</section>
+
+<section class="band pad">
+  <div class="wrap reveal"><h2 style="font-size:clamp(30px,5vw,52px);margin-bottom:22px">Reserve your evening</h2>
+    <a class="btn btn-solid" href="https://www.quovadissoho.co.uk/" target="_blank" rel="noopener">Reserve a Table</a></div>
+</section>
+
+<footer>
+  <div class="wrap">Quo Vadis · 26-29 Dean Street, Soho, London W1D 3LL · 020 7437 9585
+    <div class="demo-note">Concept redesign demo · not affiliated with or endorsed by the restaurant.</div>
+  </div>
+</footer>
+
+<a class="booknow" id="booknow" href="https://www.quovadissoho.co.uk/" target="_blank" rel="noopener">Reserve a Table</a>
+<script>
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(!reduce&&window.gsap){
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to('#cLeft',{xPercent:-100,ease:'power2.inOut',scrollTrigger:{trigger:'.hero',start:'top top',end:'70% top',scrub:.6}});
+    gsap.to('#cRight',{xPercent:100,ease:'power2.inOut',scrollTrigger:{trigger:'.hero',start:'top top',end:'70% top',scrub:.6}});
+    gsap.to('.hero-bg',{scale:1,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+    gsap.utils.toArray('.reveal').forEach(function(el){gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%',once:true}});});
+  }
+  // 3D cursor tilt
+  if(!reduce){
+    document.querySelectorAll('.tilt').forEach(function(c){
+      var max=11;
+      c.addEventListener('mousemove',function(e){
+        var r=c.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+        c.style.transform='rotateY('+((px-.5)*max*2)+'deg) rotateX('+((.5-py)*max*2)+'deg) translateZ(6px)';
+        c.style.setProperty('--mx',(px*100)+'%');c.style.setProperty('--my',(py*100)+'%');
+      });
+      c.addEventListener('mouseleave',function(){c.style.transform='';});
+    });
+  }
+  var nav=document.getElementById('nav'),book=document.getElementById('booknow');
+  function s(){var y=window.scrollY;nav.classList.toggle('solid',y>60);book.classList.toggle('show',y>window.innerHeight*0.7);}
+  window.addEventListener('scroll',s,{passive:true});s();
+})();
+</script>
+</body>
+</html>
