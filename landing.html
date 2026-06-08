@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cinematic Websites for Restaurants — by Abdelhak</title>
+<meta name="description" content="Fast, cinematic, 3D websites for restaurants and cafés. Built to win reservations. Free concept, live in about a week.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{--bg:#0b0c0f;--bg2:#13151a;--ink:#f2f0ec;--muted:#9a9ba3;--gold:#cda349;--gold2:#e6c97e;--line:rgba(205,163,73,.22);
+    --serif:'Playfair Display',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:600;line-height:1.08}
+  a{color:inherit}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 22px}
+  .eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .reveal{opacity:0;transform:translateY(36px)}
+  .btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:15px 32px;border-radius:4px;text-decoration:none;
+    font-size:13px;letter-spacing:.14em;text-transform:uppercase;transition:.3s;font-weight:500}
+  .btn:hover{background:var(--gold);color:#0b0c0f}
+  .btn-solid{background:var(--gold);color:#0b0c0f}.btn-solid:hover{background:var(--gold2)}
+  section{position:relative}
+  .sect{padding:100px 0}
+  .center{text-align:center}
+  .lead{color:var(--muted);font-size:clamp(15px,2vw,18px);line-height:1.75;max-width:62ch}
+  .section-head{text-align:center;max-width:680px;margin:0 auto 56px}
+  .section-head h2{font-size:clamp(30px,5vw,52px)}
+  .section-head p{color:var(--muted);margin-top:18px;line-height:1.7}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;
+    padding:16px 24px;transition:.4s;border-bottom:1px solid transparent}
+  nav.solid{background:rgba(11,12,15,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{font-family:var(--serif);font-size:21px;letter-spacing:.02em;text-decoration:none}
+  .brand b{color:var(--gold)}
+  .navlinks{display:flex;gap:26px;align-items:center;font-size:13px;letter-spacing:.06em}
+  .navlinks a{text-decoration:none;opacity:.85;transition:.2s}.navlinks a:hover{opacity:1;color:var(--gold2)}
+  .navcta{border:1px solid var(--gold);color:var(--gold)!important;padding:9px 16px;border-radius:4px;opacity:1!important}
+  @media(max-width:780px){.navlinks a:not(.navcta){display:none}}
+
+  /* HERO */
+  .hero{min-height:100svh;display:flex;align-items:center;text-align:center;overflow:hidden;
+    background:radial-gradient(1000px 600px at 50% -5%,rgba(205,163,73,.16),transparent 60%)}
+  .hero .wrap{padding-top:110px;padding-bottom:60px}
+  .hero h1{font-size:clamp(40px,7.5vw,92px);letter-spacing:-.01em}
+  .hero h1 em{font-style:italic;color:var(--gold)}
+  .hero p{margin:26px auto 0}
+  .hero-cta{margin-top:40px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .trust{margin-top:44px;display:flex;gap:34px;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:13px;letter-spacing:.08em}
+  .trust b{color:var(--ink);font-family:var(--serif);font-size:22px;display:block}
+
+  /* problem strip */
+  .strip{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+  @media(max-width:780px){.strip-grid{grid-template-columns:1fr;gap:24px}}
+  .strip h3{color:var(--gold2);font-size:21px;margin-bottom:8px}
+  .strip p{color:var(--muted);font-size:14.5px;line-height:1.7}
+
+  /* FEATURES */
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media(max-width:880px){.feat-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.feat-grid{grid-template-columns:1fr}}
+  .feat{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:28px;transition:.3s}
+  .feat:hover{transform:translateY(-5px);border-color:var(--gold)}
+  .feat .ic{font-size:24px;margin-bottom:14px}
+  .feat h4{font-size:20px;margin-bottom:8px}
+  .feat p{color:var(--muted);font-size:14px;line-height:1.7}
+
+  /* 3D live demo */
+  .tilt-wrap{perspective:1300px}
+  .tilt-row{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:980px;margin:0 auto}
+  @media(max-width:820px){.tilt-row{grid-template-columns:1fr}}
+  .tilt{position:relative;transform-style:preserve-3d;border-radius:12px;overflow:hidden;border:1px solid var(--line);
+    background:var(--bg2);box-shadow:0 26px 50px rgba(0,0,0,.5);animation:float3d 6s ease-in-out infinite;transition:transform .25s ease-out}
+  .tilt:nth-child(2){animation-delay:-2s}.tilt:nth-child(3){animation-delay:-4s}
+  @keyframes float3d{0%,100%{transform:rotateY(-11deg) rotateX(4deg)}50%{transform:rotateY(11deg) rotateX(-4deg)}}
+  .tilt img{width:100%;height:280px;object-fit:cover;display:block;filter:saturate(1.05) brightness(.9)}
+  .tilt .b{position:absolute;left:0;right:0;bottom:0;padding:22px;background:linear-gradient(transparent,rgba(5,6,8,.9));transform:translateZ(45px)}
+  .tilt .b h4{color:var(--gold2);font-size:21px}.tilt .b p{color:var(--muted);font-size:13px;margin-top:4px}
+  .tilt .shine{position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.16),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
+  .tilt:hover .shine{opacity:1}
+
+  /* compare */
+  .cmp{width:100%;border-collapse:collapse;max-width:840px;margin:0 auto;font-size:15px}
+  .cmp th,.cmp td{padding:15px 16px;border-bottom:1px solid var(--line);text-align:left}
+  .cmp th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .cmp .old{color:var(--muted)} .cmp .new{color:var(--gold2)}
+  .cmp tr td:first-child{font-weight:500}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  @media(max-width:880px){.steps{grid-template-columns:1fr 1fr}}
+  @media(max-width:480px){.steps{grid-template-columns:1fr}}
+  .step{border:1px solid var(--line);border-radius:12px;padding:26px;background:var(--bg2)}
+  .step .n{font-family:var(--serif);font-size:34px;color:var(--gold)}
+  .step h4{font-size:19px;margin:8px 0}
+  .step p{color:var(--muted);font-size:14px;line-height:1.65}
+
+  /* pricing */
+  .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+  @media(max-width:880px){.price-grid{grid-template-columns:1fr;max-width:440px;margin:0 auto}}
+  .plan{border:1px solid var(--line);border-radius:14px;padding:34px 30px;background:var(--bg2);display:flex;flex-direction:column}
+  .plan.feat-plan{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 30px 60px rgba(0,0,0,.4)}
+  .plan .badge{align-self:flex-start;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);border-radius:20px;padding:4px 11px;margin-bottom:16px}
+  .plan h3{font-size:24px}
+  .plan .for{color:var(--muted);font-size:13.5px;margin-top:4px}
+  .plan .amt{font-family:var(--serif);font-size:42px;color:var(--gold2);margin:18px 0 4px}
+  .plan .amt span{font-size:15px;color:var(--muted);font-family:var(--sans)}
+  .plan ul{list-style:none;margin:18px 0 26px}
+  .plan li{padding:8px 0 8px 26px;position:relative;color:var(--muted);font-size:14.5px;line-height:1.5}
+  .plan li::before{content:"✓";position:absolute;left:0;color:var(--gold)}
+  .plan .btn{margin-top:auto;text-align:center}
+  .care{max-width:760px;margin:36px auto 0;text-align:center;border:1px dashed var(--line);border-radius:12px;padding:24px}
+  .care b{color:var(--gold2)}
+
+  /* faq */
+  .faq{max-width:780px;margin:0 auto}
+  .q{border-bottom:1px solid var(--line);padding:22px 0}
+  .q h4{font-size:19px;margin-bottom:8px;color:var(--ink)}
+  .q p{color:var(--muted);font-size:15px;line-height:1.7}
+
+  /* cta band */
+  .band{background:linear-gradient(120deg,#14110a,#241a0c);border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
+  .band h2{font-size:clamp(30px,5vw,52px)}
+  .band p{color:var(--muted);margin:18px auto 0}
+
+  footer{padding:50px 0 40px;text-align:center;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+  footer a{color:var(--gold2);text-decoration:none}
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="brand" href="#top">Cinematic<b>.</b>Studio</a>
+  <div class="navlinks">
+    <a href="#features">Features</a>
+    <a href="#work">Work</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#how">How it works</a>
+    <a class="navcta" href="#contact">Free Concept</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow">Cinematic &middot; 3D &middot; Mobile-First</div>
+    <h1>Websites that make restaurants look <em>as good as they taste.</em></h1>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Fast, cinematic, interactive 3D websites for restaurants and cafés — built to turn visitors into reservations. I'll redesign your homepage as a <strong style="color:var(--ink)">free concept</strong> first. Like it? You're live in about a week.</p>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="#contact">Get My Free Concept</a>
+      <a class="btn" href="#work">See the Work</a>
+    </div>
+    <div class="trust">
+      <div><b>&lt; 1s</b> load time</div>
+      <div><b>100%</b> mobile-first</div>
+      <div><b>~1 week</b> to launch</div>
+      <div><b>16+</b> concepts built</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="sect strip">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The problem</div>
+      <h2>Great restaurants, forgettable websites</h2>
+      <p>Most independent restaurants have brilliant food and a website stuck in 2015 — slow, hard to use on a phone, with the menu hidden in a PDF. That costs you bookings every single day.</p>
+    </div>
+    <div class="strip-grid">
+      <div class="reveal"><h3>🐌 Slow</h3><p>Sites that take 5–14 seconds to load. Most diners give up before it even appears.</p></div>
+      <div class="reveal"><h3>📱 Not mobile</h3><p>~70% of restaurant traffic is on a phone — yet so many sites still aren't built for one.</p></div>
+      <div class="reveal"><h3>📄 PDF menus</h3><p>Asking a hungry guest to download a PDF is the fastest way to lose them.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="sect" id="features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">What you get</div>
+      <h2>Every site, beautifully equipped</h2>
+      <p>Cinematic design meets the things that actually win bookings — speed, mobile, and a clear path to reserve.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat reveal"><div class="ic">🎬</div><h4>Cinematic Hero</h4><p>A full-screen, curtain-reveal opening that makes the first three seconds unforgettable.</p></div>
+      <div class="feat reveal"><div class="ic">🧊</div><h4>Interactive 3D Dishes</h4><p>Signature dishes float and rotate in 3D — a wow moment that works on every device.</p></div>
+      <div class="feat reveal"><div class="ic">📱</div><h4>Mobile-First</h4><p>Designed for the phone first, where most of your guests actually are.</p></div>
+      <div class="feat reveal"><div class="ic">⚡</div><h4>Loads in Under a Second</h4><p>No bloat, no page-builder lag. Fast sites keep guests — and rank better on Google.</p></div>
+      <div class="feat reveal"><div class="ic">🍽️</div><h4>Real, Live Menu</h4><p>Your menu as an elegant, instant page — never a PDF download again.</p></div>
+      <div class="feat reveal"><div class="ic">📅</div><h4>Reservations Built In</h4><p>A sticky "Book a Table" button wired to your system — OpenTable, Resy, Tock or Toast.</p></div>
+      <div class="feat reveal"><div class="ic">🎨</div><h4>Custom Brand</h4><p>Your own colours, fonts and feel — never a generic template.</p></div>
+      <div class="feat reveal"><div class="ic">🔍</div><h4>SEO &amp; Speed</h4><p>Clean code, metadata and structure so guests find you and pages fly.</p></div>
+      <div class="feat reveal"><div class="ic">🛡️</div><h4>Care &amp; Updates</h4><p>Optional monthly plan: hosting, menu changes and tweaks — always kept perfect.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3D LIVE DEMO -->
+<section class="sect strip">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Live demo</div>
+      <h2>This is the 3D effect</h2>
+      <p>Hover the cards on desktop, or just watch them rotate on your phone. Every site I build includes this.</p>
+    </div>
+    <div class="tilt-wrap"><div class="tilt-row">
+      <div class="tilt"><span class="shine"></span><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop" alt=""><div class="b"><h4>Signature Plate</h4><p>presented in 3D</p></div></div>
+      <div class="tilt"><span class="shine"></span><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=800&auto=format&fit=crop" alt=""><div class="b"><h4>House Special</h4><p>floats &amp; reacts</p></div></div>
+      <div class="tilt"><span class="shine"></span><img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop" alt=""><div class="b"><h4>Dessert</h4><p>with light &amp; depth</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section class="sect">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Before &amp; after</div>
+      <h2>The upgrade, side by side</h2>
+    </div>
+    <table class="cmp reveal">
+      <tr><th>Feature</th><th>Typical current site</th><th>Your new site</th></tr>
+      <tr><td>Load speed</td><td class="old">5–14 seconds</td><td class="new">Under 1 second</td></tr>
+      <tr><td>Mobile</td><td class="old">Often not mobile-friendly</td><td class="new">Mobile-first</td></tr>
+      <tr><td>Menu</td><td class="old">PDF / image download</td><td class="new">Live, styled page</td></tr>
+      <tr><td>Design</td><td class="old">Generic template</td><td class="new">Custom, cinematic, 3D</td></tr>
+      <tr><td>Booking</td><td class="old">Buried or missing</td><td class="new">Sticky, one tap</td></tr>
+      <tr><td>Tech</td><td class="old">Flash-era / old jQuery</td><td class="new">Modern, clean, fast</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="sect strip" id="work">
+  <div class="wrap center">
+    <div class="section-head reveal" style="margin-bottom:34px">
+      <div class="eyebrow">The work</div>
+      <h2>16+ live concepts &amp; counting</h2>
+      <p>From a 280-year-old London institution to a Soho patisserie and a Nashville biscuit legend — every one custom, cinematic, and fast.</p>
+    </div>
+    <div class="reveal"><a class="btn btn-solid" href="https://sunny-prism-dhfm.here.now/" target="_blank" rel="noopener">View the Full Portfolio</a></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sect" id="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">How it works</div>
+      <h2>From idea to live in a week</h2>
+      <p>No risk, no big commitment. You see it before you decide anything.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">01</div><h4>Free Concept</h4><p>I rebuild your homepage as a free concept — your name, your brand. No charge, no obligation.</p></div>
+      <div class="step reveal"><div class="n">02</div><h4>You Approve</h4><p>Love it? We confirm the pages, your photos, and your booking system on a quick call.</p></div>
+      <div class="step reveal"><div class="n">03</div><h4>Go Live</h4><p>I build the full site and launch it on your domain — usually within a week.</p></div>
+      <div class="step reveal"><div class="n">04</div><h4>Kept Perfect</h4><p>Optional care plan keeps it hosted, updated and fast — you never touch a thing.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="sect strip" id="pricing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Pricing</div>
+      <h2>Simple, honest pricing</h2>
+      <p>One-time build, plus an optional monthly care plan. 50% deposit to start, 50% on launch — if you don't love it, you don't pay the balance.</p>
+    </div>
+    <div class="price-grid">
+      <div class="plan reveal">
+        <div class="badge">Cafés &amp; Bistros</div>
+        <h3>Launch</h3>
+        <div class="for">For cafés &amp; smaller venues</div>
+        <div class="amt">£1,500<span> from</span></div>
+        <ul>
+          <li>Cinematic 1–3 page site</li>
+          <li>Mobile-first &amp; fast</li>
+          <li>Live menu page</li>
+          <li>3D dish showcase</li>
+          <li>Booking / contact links</li>
+          <li>Domain &amp; launch setup</li>
+        </ul>
+        <a class="btn" href="#contact">Start Free</a>
+      </div>
+      <div class="plan feat-plan reveal">
+        <div class="badge">Most Popular</div>
+        <h3>Signature</h3>
+        <div class="for">For established restaurants</div>
+        <div class="amt">£2,500<span> from</span></div>
+        <ul>
+          <li>Full 6-page custom site</li>
+          <li>Menu · Events · Story · Gallery</li>
+          <li>Cinematic + 3D throughout</li>
+          <li>Reservations integrated</li>
+          <li>On-page SEO &amp; speed</li>
+          <li>2 rounds of revisions</li>
+        </ul>
+        <a class="btn btn-solid" href="#contact">Get My Free Concept</a>
+      </div>
+      <div class="plan reveal">
+        <div class="badge">Premium &amp; Multi-Site</div>
+        <h3>Flagship</h3>
+        <div class="for">Michelin / multi-location</div>
+        <div class="amt">£4,000<span>+</span></div>
+        <ul>
+          <li>Everything in Signature</li>
+          <li>Multiple locations / pages</li>
+          <li>Private dining &amp; events focus</li>
+          <li>Bespoke animation &amp; detail</li>
+          <li>Photography guidance</li>
+          <li>Priority delivery</li>
+        </ul>
+        <a class="btn" href="#contact">Enquire</a>
+      </div>
+    </div>
+    <div class="care reveal">
+      <strong style="color:var(--ink)">Care Plan — <b>£100–150 / month</b></strong>
+      <p style="color:var(--muted);margin-top:8px;font-size:14.5px">Hosting, menu &amp; seasonal updates, small tweaks, monitoring and backups. Cancel anytime. Keeps your site fast, current and worry-free.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sect" id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Questions</div>
+      <h2>Good to know</h2>
+    </div>
+    <div class="faq">
+      <div class="q reveal"><h4>Is the concept really free?</h4><p>Yes. I rebuild your homepage as a working concept before you pay anything. If you don't like it, you keep it and we part as friends.</p></div>
+      <div class="q reveal"><h4>How long does it take?</h4><p>Once you approve the concept and send your photos and details, the full site is usually live within about a week.</p></div>
+      <div class="q reveal"><h4>Will it keep my booking system?</h4><p>Absolutely. I integrate your existing system — OpenTable, Resy, Tock, SevenRooms or Toast — nothing changes for your guests except a faster, nicer experience.</p></div>
+      <div class="q reveal"><h4>Do I need to provide photos?</h4><p>Your own photos make it shine, and I'll guide you. If you need new ones, I can advise on a shoot. Concepts use stock to show the look.</p></div>
+      <div class="q reveal"><h4>Can I update it myself?</h4><p>The care plan covers updates so you never have to — just message me. Prefer to self-manage? That's fine too.</p></div>
+      <div class="q reveal"><h4>Do you work outside the UK?</h4><p>Yes — I build for restaurants and cafés anywhere. Everything is handled remotely.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="sect band" id="contact">
+  <div class="wrap reveal">
+    <div class="eyebrow" style="color:var(--gold)">Let's begin</div>
+    <h2>Get a free concept of your website</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Tell me your restaurant and I'll redesign your homepage — free, no obligation. You'll see exactly how good it could look, usually within a couple of days.</p>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="mailto:hello@callpilotvoice.co.uk?subject=Free%20website%20concept">Email Abdelhak</a>
+      <a class="btn" href="https://sunny-prism-dhfm.here.now/" target="_blank" rel="noopener">See the Portfolio</a>
+    </div>
+    <p style="margin-top:24px;color:var(--muted);font-size:14px">Abdelhak · <a href="mailto:hello@callpilotvoice.co.uk" style="color:var(--gold2);text-decoration:none">hello@callpilotvoice.co.uk</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Cinematic Studio · Cinematic &amp; 3D websites for restaurants &amp; cafés · Abdelhak · <a href="mailto:hello@callpilotvoice.co.uk">hello@callpilotvoice.co.uk</a> · © 2026</div>
+</footer>
+
+<script>
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(!reduce&&window.gsap){
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('.reveal').forEach(function(el){
+      gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%',once:true}});
+    });
+    document.querySelectorAll('.tilt').forEach(function(c){
+      var max=11;
+      c.addEventListener('mousemove',function(e){
+        var r=c.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+        c.style.transform='rotateY('+((px-.5)*max*2)+'deg) rotateX('+((.5-py)*max*2)+'deg) translateZ(6px)';
+        c.style.setProperty('--mx',(px*100)+'%');c.style.setProperty('--my',(py*100)+'%');
+      });
+      c.addEventListener('mouseleave',function(){c.style.transform='';});
+    });
+  }
+  var nav=document.getElementById('nav');
+  function s(){nav.classList.toggle('solid',window.scrollY>50);}
+  window.addEventListener('scroll',s,{passive:true});s();
+})();
+</script>
+</body>
+</html>
