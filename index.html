@@ -2,24 +2,191 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cinematic Restaurant Sites — Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cinematic Restaurant Websites — Portfolio</title>
+<meta name="description" content="Fast, cinematic websites for restaurants — designed to win reservations. Selected concept work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  body{margin:0;background:#0b0b0d;color:#f4efe7;font-family:Inter,system-ui,sans-serif;
-       display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center}
-  .box{max-width:560px;padding:40px}
-  h1{font-family:Georgia,serif;font-weight:500;font-size:40px;margin:0 0 8px}
-  p{color:#9a958c;line-height:1.7}
-  a{display:block;margin:14px 0;padding:16px;border:1px solid rgba(201,162,75,.4);
-    color:#c9a24b;text-decoration:none;border-radius:4px;letter-spacing:.1em;transition:.2s}
-  a:hover{background:#c9a24b;color:#0b0b0d}
+  :root{--bg:#0b0b0d;--bg2:#141416;--ink:#f4efe7;--muted:#9a958c;--gold:#c9a24b;--line:rgba(201,162,75,.25);
+    --serif:'Playfair Display',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.05}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+  /* HERO */
+  .top{min-height:62vh;display:flex;flex-direction:column;justify-content:center;text-align:center;padding:120px 24px 70px;position:relative;
+    background:radial-gradient(900px 500px at 50% -10%,rgba(201,162,75,.14),transparent 60%)}
+  .eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:22px}
+  .top h1{font-size:clamp(40px,7vw,86px);max-width:14ch;margin:0 auto}
+  .top p{margin:26px auto 0;max-width:60ch;color:var(--muted);font-size:clamp(15px,2vw,19px);line-height:1.7}
+  .top .cta{margin-top:38px}
+  .btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:14px 30px;border-radius:3px;text-decoration:none;
+    font-size:13px;letter-spacing:.16em;text-transform:uppercase;transition:background .3s,color .3s}
+  .btn:hover{background:var(--gold);color:#0b0b0d}
+  .btn-solid{background:var(--gold);color:#0b0b0d}
+  /* GRID */
+  .work{padding:30px 0 90px}
+  .section-label{text-align:center;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin:30px 0 40px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg2);transition:transform .35s,border-color .35s;display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-6px);border-color:var(--gold)}
+  .thumb{aspect-ratio:16/10;position:relative;overflow:hidden}
+  .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease;filter:brightness(.8) saturate(1.05)}
+  .card:hover .thumb img{transform:scale(1.06)}
+  .thumb .tag{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);
+    border:1px solid var(--line);color:var(--gold);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;padding:6px 12px;border-radius:30px}
+  .body{padding:24px 24px 26px}
+  .body h3{font-size:26px}
+  .body .meta{color:var(--muted);font-size:13.5px;letter-spacing:.04em;margin-top:6px}
+  .body .desc{color:var(--muted);font-size:14px;line-height:1.7;margin-top:14px}
+  .links{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap}
+  .links a{font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;padding:11px 18px;border-radius:3px;border:1px solid var(--line);color:var(--ink);transition:.25s}
+  .links a.primary{background:var(--gold);color:#0b0b0d;border-color:var(--gold)}
+  .links a:hover{border-color:var(--gold);color:var(--gold)}
+  .links a.primary:hover{background:#e0bd6a;color:#0b0b0d}
+  /* FEATURES */
+  .feat{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg2);padding:64px 0}
+  .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;text-align:center}
+  @media(max-width:760px){.feat-grid{grid-template-columns:1fr 1fr;gap:36px 20px}}
+  .feat h4{font-family:var(--serif);color:var(--gold);font-size:20px;margin-bottom:8px}
+  .feat p{color:var(--muted);font-size:13.5px;line-height:1.6}
+  /* CONTACT */
+  .contact{padding:90px 24px;text-align:center}
+  .contact h2{font-size:clamp(28px,4.5vw,46px)}
+  .contact p{color:var(--muted);margin-top:16px}
+  footer{border-top:1px solid var(--line);padding:34px 0;text-align:center;color:var(--muted);font-size:12.5px}
 </style>
 </head>
 <body>
-  <div class="box">
-    <h1>Cinematic Restaurant Sites</h1>
-    <p>Fast, elegant websites for restaurants. Built to drive reservations.</p>
-    <a href="/demo-lumiere.html">View live demo — Lumière</a>
+
+<section class="top">
+  <div class="wrap">
+    <div class="eyebrow">Cinematic Restaurant Websites</div>
+    <h1>Websites that make restaurants look as good as they taste.</h1>
+    <p>Fast, mobile-first, cinematic sites — built to turn visitors into reservations. Each concept below is a live, working demo. Tap any one and try it on your phone.</p>
+    <div class="cta"><a class="btn btn-solid" href="#work">View the Work</a></div>
   </div>
+</section>
+
+<section class="work" id="work">
+  <div class="wrap">
+    <div class="section-label">Selected Concepts</div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="thumb"><span class="tag">Mexican · Austin</span>
+          <img src="https://images.unsplash.com/photo-1432139509613-5c4255815697?q=80&w=1100&auto=format&fit=crop" alt="Fonda San Miguel"></div>
+        <div class="body">
+          <h3>Fonda San Miguel</h3>
+          <div class="meta">Interior Mexican cuisine · Austin, since 1975</div>
+          <div class="desc">A landmark redesign — warm terracotta palette, animated story counters, and a 3D dish showcase.</div>
+          <div class="links">
+            <a class="primary" href="https://deep-thistle-v7qt.here.now/" target="_blank" rel="noopener">View Demo</a>
+            <a href="https://velvet-willow-7y58.here.now/" target="_blank" rel="noopener">Full Site</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb"><span class="tag">Southern · Austin</span>
+          <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?q=80&w=1100&auto=format&fit=crop" alt="Olamaie"></div>
+        <div class="body">
+          <h3>Olamaie</h3>
+          <div class="meta">Refined Southern · Michelin-recognized</div>
+          <div class="desc">Elegant brass-and-cream design that turns a PDF menu into a real, mobile-friendly experience.</div>
+          <div class="links">
+            <a class="primary" href="https://eager-quarry-t42x.here.now/" target="_blank" rel="noopener">View Demo</a>
+            <a href="https://gleaming-garden-95m3.here.now/" target="_blank" rel="noopener">Full Site</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb"><span class="tag">British · London</span>
+          <img src="https://images.unsplash.com/photo-1485921325833-c519f76c4927?q=80&w=1100&auto=format&fit=crop" alt="Wiltons"></div>
+        <div class="body">
+          <h3>Wiltons</h3>
+          <div class="meta">Classic British dining · St James's, est. 1742</div>
+          <div class="desc">Heritage green-and-gold with an engraved Playfair display — built for a 280-year-old institution.</div>
+          <div class="links">
+            <a class="primary" href="https://witty-rafter-fbsd.here.now/" target="_blank" rel="noopener">View Demo</a>
+            <a href="https://golden-breath-tkq3.here.now/" target="_blank" rel="noopener">Full Site</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb"><span class="tag">Southern · Nashville</span>
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1100&auto=format&fit=crop" alt="Loveless Cafe"></div>
+        <div class="body">
+          <h3>Loveless Cafe</h3>
+          <div class="meta">Scratch biscuits & fried chicken · since 1951</div>
+          <div class="desc">Rustic Americana with a slab-serif voice — front-and-center events & catering booking.</div>
+          <div class="links">
+            <a class="primary" href="https://boreal-olive-kywf.here.now/" target="_blank" rel="noopener">View Demo</a>
+            <a href="https://oaken-hollow-r22h.here.now/" target="_blank" rel="noopener">Full Site</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb"><span class="tag">French · Richmond</span>
+          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=1100&auto=format&fit=crop" alt="Can Can Brasserie"></div>
+        <div class="body">
+          <h3>Can Can Brasserie</h3>
+          <div class="meta">Parisian brasserie · Carytown, Richmond</div>
+          <div class="desc">Art-deco Cinzel type and a left-aligned cinematic hero — a little piece of Paris, online.</div>
+          <div class="links">
+            <a class="primary" href="https://velvet-salmon-399w.here.now/" target="_blank" rel="noopener">View Demo</a>
+            <a href="https://calm-reef-b6s8.here.now/" target="_blank" rel="noopener">Full Site</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb"><span class="tag">Your Restaurant</span>
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1100&auto=format&fit=crop" alt="Your restaurant"></div>
+        <div class="body">
+          <h3>Your Restaurant Here</h3>
+          <div class="meta">A free concept, built with your name on it</div>
+          <div class="desc">I’ll rebuild your homepage as a free concept — no charge, no obligation. If you like it, we go live in about a week.</div>
+          <div class="links">
+            <a class="primary" href="#contact">Get a Free Concept</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="feat">
+  <div class="wrap feat-grid">
+    <div><h4>Mobile-first</h4><p>~70% of restaurant traffic is on a phone. Every site is built for it first.</p></div>
+    <div><h4>Cinematic</h4><p>Scroll animations, curtain reveals, and interactive 3D dish showcases.</p></div>
+    <div><h4>Reservations</h4><p>Wired to your existing system — OpenTable, Resy, Tock or Toast.</p></div>
+    <div><h4>Fast</h4><p>Loads in under a second. No bloat, no page-builder slowdown.</p></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--gold)">Let’s talk</div>
+    <h2>Want your restaurant to look like this?</h2>
+    <p>I build cinematic restaurant websites starting at a one-time fee, with optional monthly care plans.<br>Tell me your restaurant and I’ll send a free concept of your homepage.</p>
+    <div class="cta" style="margin-top:30px">
+      <a class="btn btn-solid" href="mailto:your@email.com">Email Me</a>
+    </div>
+    <p style="margin-top:22px;font-size:12.5px">[ Replace with your name · email · phone ]</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Cinematic Restaurant Websites · concept work shown · © 2026</div>
+</footer>
 </body>
 </html>
