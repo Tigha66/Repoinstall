@@ -120,7 +120,7 @@ nav.solid{background:rgba(22,13,10,.9);backdrop-filter:blur(10px);border-bottom:
 .map{aspect-ratio:16/11;border:1px solid var(--line);border-radius:6px;width:100%}
 
 /* BAND CTA */
-.band{background:linear-gradient(120deg,#1a1109,#2a1c10);border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
+.band{background:linear-gradient(120deg,#170f08,#241910);border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
 .band h2{font-size:clamp(30px,5vw,52px);margin-bottom:22px}
 
 /* FOOTER */
