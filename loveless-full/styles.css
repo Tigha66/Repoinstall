@@ -7,7 +7,7 @@
   --gold:#c8a86a;
   --gold2:#e3cd97;
   --line:rgba(200,168,106,.30);
-  --serif:'Cormorant Garamond',Georgia,serif;
+  --serif:'Bitter',Georgia,serif;
   --sans:'Inter',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -159,3 +159,6 @@ footer{border-top:1px solid var(--line);padding:50px 0 40px;color:var(--muted);f
 .tilt-row .tilt:nth-child(2){animation-delay:-2s}
 .tilt-row .tilt:nth-child(3){animation-delay:-4s}
 .badge3d{display:inline-block;margin-top:14px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);padding:6px 12px;border-radius:20px}
+
+/* brand differentiation */
+.hero h1{letter-spacing:0}.hero .tagline,.tagline{font-weight:500}

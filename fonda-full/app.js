@@ -66,6 +66,6 @@
       c.style.transform="rotateY("+((px-.5)*max*2)+"deg) rotateX("+((.5-py)*max*2)+"deg) translateZ(6px)";
       c.style.setProperty("--mx",(px*100)+"%");c.style.setProperty("--my",(py*100)+"%");
     });
-    c.addEventListener("mouseleave",function(){c.style.transform="rotateY(0) rotateX(0)";});
+    c.addEventListener("mouseleave",function(){c.style.transform="";});
   });
 })();

@@ -25,7 +25,7 @@
 <meta name="description" content="Fonda San Miguel — Interior Mexican Cuisine · Est. 1975. Book a table in Austin, Texas.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
@@ -33,7 +33,7 @@
     --bg:#160d0a; --bg2:#1f120d; --ink:#f7ece1; --muted:#b89a86;
     --gold:#e0683c;            /* Fonda terracotta/amber accent */
     --line:rgba(224,104,60,.28);
-    --serif:'Cormorant Garamond',Georgia,serif;
+    --serif:'Marcellus',Georgia,serif;
     --sans:'Inter',system-ui,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -59,7 +59,7 @@
   .hero{height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
   .hero-bg{position:absolute;inset:0;background:
       linear-gradient(rgba(8,8,10,.55),rgba(8,8,10,.78)),
-      url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1600&auto=format&fit=crop') center/cover;
+      url('https://images.unsplash.com/photo-1432139509613-5c4255815697?q=80&w=1600&auto=format&fit=crop') center/cover;
       transform:scale(1.08)}
   .curtain{position:absolute;top:0;bottom:0;width:51%;background:linear-gradient(var(--bg2),var(--bg));z-index:5}
   #cLeft{left:0} #cRight{right:0}
@@ -130,6 +130,9 @@
     .curtain{display:none}
     html{scroll-behavior:auto}
   }
+
+/* brand differentiation */
+.hero h1{letter-spacing:.01em}
 </style>
 </head>
 <body>
@@ -201,10 +204,10 @@
     <h2>The Experience</h2>
   </div>
   <div class="gallery">
-    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=900&auto=format&fit=crop" alt="tacos"></div>
-    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?q=80&w=900&auto=format&fit=crop" alt="mexican dish"></div>
-    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=900&auto=format&fit=crop" alt="plated"></div>
-    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?q=80&w=900&auto=format&fit=crop" alt="enchiladas"></div>
+    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1432139509613-5c4255815697?q=80&w=900&auto=format&fit=crop" alt="tacos"></div>
+    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1432139509613-5c4255815697?q=80&w=900&auto=format&fit=crop" alt="mexican dish"></div>
+    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1432139509613-5c4255815697?q=80&w=900&auto=format&fit=crop" alt="plated"></div>
+    <div class="gphoto reveal"><img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=900&auto=format&fit=crop" alt="enchiladas"></div>
   </div>
 </section>
 

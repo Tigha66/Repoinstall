@@ -7,12 +7,12 @@
 <meta name="description" content="Can Can Brasserie — a classic Parisian brasserie in Carytown, Richmond.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
   :root{--bg:#190e0c;--bg2:#231512;--ink:#f6ece2;--muted:#bda196;--gold:#d49a52;--gold2:#edc079;--line:rgba(212,154,82,.30);
-    --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+    --serif:'Cinzel',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -36,7 +36,7 @@
   @media(max-width:720px){.navlinks a:not(.book-sm){display:none}}
   .hero{height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
   .hero-bg{position:absolute;inset:0;background:linear-gradient(rgba(8,10,8,.5),rgba(8,10,8,.82)),
-    url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1600&auto=format&fit=crop') center/cover;transform:scale(1.08)}
+    url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=1600&auto=format&fit=crop') center/cover;transform:scale(1.08)}
   .curtain{position:absolute;top:0;bottom:0;width:51%;background:linear-gradient(var(--bg2),var(--bg));z-index:5}
   #cLeft{left:0}#cRight{right:0}
   .hero-inner{position:relative;z-index:6;padding:0 20px}
@@ -72,6 +72,9 @@
     box-shadow:0 10px 30px rgba(0,0,0,.5);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
   .booknow.show{transform:translateX(-50%) translateY(0)}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}.curtain{display:none}}
+
+/* brand differentiation */
+.hero{justify-content:flex-start}.hero-inner{text-align:left;margin-left:max(24px,7%)}.hero-cta{justify-content:flex-start}.hero h1{letter-spacing:.08em}.section-head h2{letter-spacing:.04em}
 </style>
 </head>
 <body>
@@ -108,13 +111,13 @@
     <div class="tilt-wrap">
       <div class="tilt-row">
         <div class="tilt"><span class="shine"></span>
-          <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop" alt="">
+          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800&auto=format&fit=crop" alt="">
           <div class="body"><h3>Oysters on Ice</h3><p>East &amp; West coast, mignonette</p></div></div>
         <div class="tilt"><span class="shine"></span>
-          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop" alt="">
+          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800&auto=format&fit=crop" alt="">
           <div class="body"><h3>Steak Frites</h3><p>hanger steak, béarnaise, frites</p></div></div>
         <div class="tilt"><span class="shine"></span>
-          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=800&auto=format&fit=crop" alt="">
+          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800&auto=format&fit=crop" alt="">
           <div class="body"><h3>Crème Brûlée</h3><p>vanilla bean, burnt sugar</p></div></div>
       </div>
     </div>
