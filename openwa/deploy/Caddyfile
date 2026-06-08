@@ -1,0 +1,14 @@
+# OpenWA reverse proxy — automatic HTTPS (Let's Encrypt) + WebSocket passthrough.
+#
+# OPENWA_DOMAIN is injected by docker-compose.prod.yml from your .env.production.
+# Caddy obtains and renews TLS certificates automatically; no manual certbot needed.
+# Socket.IO/WebSocket upgrades are proxied transparently.
+
+{$OPENWA_DOMAIN} {
+	encode zstd gzip
+
+	# Optional: uncomment to register an ACME contact email (recommended).
+	# tls {$ACME_EMAIL}
+
+	reverse_proxy api:2785
+}

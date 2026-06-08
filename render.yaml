@@ -1,0 +1,74 @@
+# =============================================================================
+# Render Blueprint — OpenWA BACKEND (Docker) — frontend stays on Vercel.
+# =============================================================================
+# This file must sit at the GIT REPO ROOT (it does). It builds the Docker image
+# from ./openwa and runs the persistent OpenWA API.
+#
+# READ BEFORE USING — caveats specific to whatsapp-web.js:
+#   * Use a PAID, always-on instance. Render's free web services SPIN DOWN when
+#     idle, which terminates the WhatsApp Web session (constant QR re-scans).
+#   * The persistent `disk` below is REQUIRED so WhatsApp auth + browser profile
+#     survive restarts and deploys. Without it you re-link the phone every deploy.
+#   * SINGLE INSTANCE only — a local disk cannot be shared across scaled replicas.
+#   * Chromium is memory-hungry; use >= 2 GB RAM (the 'standard' plan or higher).
+#   * Render serves HTTPS automatically at https://<service>.onrender.com
+#     (no reverse proxy needed).
+#   * NOT verified live here — confirm health + session persistence after deploy.
+# =============================================================================
+services:
+  - type: web
+    name: openwa-api
+    runtime: docker
+    dockerfilePath: ./openwa/Dockerfile
+    dockerContext: ./openwa
+    plan: standard
+    region: oregon
+    healthCheckPath: /api/health
+    autoDeploy: false
+    disk:
+      name: openwa-data
+      mountPath: /app/data
+      sizeGB: 5
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "2785"
+      - key: LOG_LEVEL
+        value: info
+      - key: ENABLE_SWAGGER
+        value: "false"
+      - key: DASHBOARD_ENABLED
+        value: "false"
+      - key: PROXY_ENABLED
+        value: "false"
+      - key: DATABASE_TYPE
+        value: sqlite
+      - key: DATABASE_NAME
+        value: /app/data/openwa.sqlite
+      - key: DATABASE_SYNCHRONIZE
+        value: "true"
+      - key: ENGINE_TYPE
+        value: whatsapp-web.js
+      - key: SESSION_DATA_PATH
+        value: /app/data/sessions
+      - key: PUPPETEER_HEADLESS
+        value: "true"
+      - key: PUPPETEER_EXECUTABLE_PATH
+        value: /usr/bin/chromium
+      - key: PUPPETEER_ARGS
+        value: --no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu
+      - key: STORAGE_TYPE
+        value: local
+      - key: STORAGE_LOCAL_PATH
+        value: /app/data/media
+      - key: PLUGINS_ENABLED
+        value: "true"
+      - key: PLUGINS_DIR
+        value: /app/data/plugins
+      # Set this in the Render dashboard to your Vercel dashboard URL (exact origin):
+      - key: CORS_ORIGINS
+        sync: false
+      # Not used by this version's auth (DB-seeded key) — leave unset/empty:
+      - key: API_MASTER_KEY
+        sync: false

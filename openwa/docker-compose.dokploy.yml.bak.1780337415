@@ -1,0 +1,61 @@
+# =============================================================================
+# OpenWA backend for a host that already runs Dokploy/Traefik.
+# Traefik (network: dokploy-network, certresolver: letsencrypt) does HTTPS;
+# this stack runs ONLY the API and is routed via Traefik labels — no Caddy,
+# no host 80/443 binding.
+#
+# Run from openwa/ :
+#   docker compose --env-file .env.production -f docker-compose.dokploy.yml up -d
+# =============================================================================
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: openwa-api:latest
+    container_name: openwa-api
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    shm_size: '1gb'
+    # Force working DNS inside the container (host stub 127.0.0.53 isn't reachable
+    # from containers on this box, which broke external name resolution).
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    expose:
+      - '2785'
+    ports:
+      - 'openwa-api:2785:2785'
+    volumes:
+      - openwa-data:/app/data
+    networks:
+      - dokploy-network
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=dokploy-network'
+      - 'traefik.http.routers.openwa.rule=Host(`${OPENWA_DOMAIN}`)'
+      - 'traefik.http.routers.openwa.entrypoints=https'
+      - 'traefik.http.routers.openwa.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.openwa.loadbalancer.server.url=http://127.0.0.1:2785'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "require('http').get('http://localhost:2785/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  openwa-data:
+    driver: local
+
+networks:
+  dokploy-network:
+    external: true

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RingBack — printable handout (2 per page)</title>
+<style>
+@page{size:A4 portrait;margin:8mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#0b141a;background:#fff}
+.sheet{display:flex;flex-direction:column;gap:0}
+.leaflet{height:138mm;border:1px dashed #bbb;border-radius:10px;padding:9mm 10mm;display:flex;gap:10mm;align-items:center;page-break-inside:avoid;margin-bottom:4mm}
+.left{flex:1.4}
+.brand{font-weight:800;font-size:21px;display:flex;align-items:center;gap:7px}
+.brand .d{width:13px;height:13px;border-radius:50%;background:#25d366}
+.h{font-size:23px;line-height:1.12;font-weight:800;margin:9px 0 6px}
+.sub{font-size:13px;color:#445;margin-bottom:9px}
+ul{list-style:none;margin:6px 0}
+li{font-size:13.5px;padding:3px 0}li::before{content:"✓ ";color:#25d366;font-weight:800}
+.trial{display:inline-block;background:#e7f9ee;color:#1da851;font-weight:800;font-size:13px;padding:5px 11px;border-radius:999px;margin-top:6px}
+.contact{font-size:12px;color:#667781;margin-top:9px;line-height:1.45}
+.contact b{color:#0b141a}
+.right{text-align:center;width:46mm}
+.right img{width:42mm;height:42mm}
+.right .s{font-size:12px;font-weight:700;margin-top:5px}
+.right .s2{font-size:10.5px;color:#667781}
+.cut{text-align:center;color:#bbb;font-size:10px;letter-spacing:2px;margin:1mm 0}
+@media screen{body{background:#eee;padding:16px}.sheet{max-width:210mm;margin:0 auto;background:#fff;padding:8mm}}
+@media print{.note{display:none}}
+</style></head>
+<body>
+<p class="note" style="max-width:210mm;margin:0 auto 10px;font-size:13px;color:#444">Press <b>Ctrl/Cmd+P → Print / Save as PDF</b>. Two handouts per A4 — cut along the middle dashed line. QR opens the demo + one-pager.</p>
+<div class="sheet">
+  <div class="leaflet">
+    <div class="left">
+      <div class="brand"><span class="d"></span>RingBack</div>
+      <div class="h">Never miss a customer's call.</div>
+      <div class="sub">When someone calls and you can't pick up — busy, with a client, or after hours — RingBack instantly texts them back on WhatsApp, so you keep them instead of losing them to the next place. They can even book.</div>
+      <ul>
+        <li>Automatic WhatsApp text-back for missed calls</li>
+        <li>Sends your booking link · works 24/7</li>
+        <li>No app, no new number — we set it all up</li>
+      </ul>
+      <span class="trial">🎁 Free 7-day trial — no card</span>
+      <div class="contact"><b>Abdelhak · CallPilot Voice</b><br>✉️ hello@callpilotvoice.co.uk · 🌐 get.callpilotvoice.co.uk</div>
+    </div>
+    <div class="right">
+      <img alt="Scan" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fget.callpilotvoice.co.uk%2Fonepager.html">
+      <div class="s">📲 Scan me</div>
+      <div class="s2">30-sec demo + free trial</div>
+    </div>
+  </div>
+
+  <div class="cut">✂ — — — — — — — — — — — — — — — — — — — — — —</div>
+
+  <div class="leaflet">
+    <div class="left">
+      <div class="brand"><span class="d"></span>RingBack</div>
+      <div class="h">Never miss a customer's call.</div>
+      <div class="sub">When someone calls and you can't pick up — busy, with a client, or after hours — RingBack instantly texts them back on WhatsApp, so you keep them instead of losing them to the next place. They can even book.</div>
+      <ul>
+        <li>Automatic WhatsApp text-back for missed calls</li>
+        <li>Sends your booking link · works 24/7</li>
+        <li>No app, no new number — we set it all up</li>
+      </ul>
+      <span class="trial">🎁 Free 7-day trial — no card</span>
+      <div class="contact"><b>Abdelhak · CallPilot Voice</b><br>✉️ hello@callpilotvoice.co.uk · 🌐 get.callpilotvoice.co.uk</div>
+    </div>
+    <div class="right">
+      <img alt="Scan" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fget.callpilotvoice.co.uk%2Fonepager.html">
+      <div class="s">📲 Scan me</div>
+      <div class="s2">30-sec demo + free trial</div>
+    </div>
+  </div>
+</div>
+</body></html>

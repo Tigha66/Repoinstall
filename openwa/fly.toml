@@ -1,0 +1,75 @@
+# =============================================================================
+# Fly.io — OpenWA BACKEND API only (frontend stays on Vercel)
+# =============================================================================
+# Run all `fly` commands from this directory (openwa/). See OPENWA_SETUP.md →
+# "Option C — Fly.io" for the full step-by-step (volume, secrets, deploy).
+#
+# Change `app` to your own unique name before launching.
+# Builds the multi-stage Dockerfile (Chromium baked in); the API listens on 2785.
+# =============================================================================
+
+app = "openwa-backend"          # <-- change to a unique app name
+primary_region = "iad"          # <-- pick a region near you / your users
+
+# Give whatsapp-web.js's Chromium time to shut down cleanly on deploys.
+kill_signal = "SIGTERM"
+kill_timeout = "30s"
+
+# Extra swap helps Chromium avoid OOM on small machines.
+swap_size_mb = 512
+
+[build]
+  dockerfile = "Dockerfile"
+
+# Non-secret runtime configuration. Deployment-specific / sensitive values
+# (e.g. CORS_ORIGINS) are set with `fly secrets set` — see the docs.
+[env]
+  NODE_ENV = "production"
+  PORT = "2785"
+  LOG_LEVEL = "info"
+  ENABLE_SWAGGER = "false"
+  DASHBOARD_ENABLED = "false"
+  PROXY_ENABLED = "false"
+  DATABASE_TYPE = "sqlite"
+  DATABASE_NAME = "/app/data/openwa.sqlite"
+  DATABASE_SYNCHRONIZE = "true"
+  ENGINE_TYPE = "whatsapp-web.js"
+  SESSION_DATA_PATH = "/app/data/sessions"
+  STORAGE_TYPE = "local"
+  STORAGE_LOCAL_PATH = "/app/data/media"
+  PLUGINS_ENABLED = "true"
+  PLUGINS_DIR = "/app/data/plugins"
+  PUPPETEER_HEADLESS = "true"
+  PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium"
+  PUPPETEER_ARGS = "--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu"
+
+# Persistent volume — ALL durable state lives under /app/data (DBs, WhatsApp
+# auth + browser cache, media, plugins, the seeded API key). REQUIRED.
+[[mounts]]
+  source = "openwa_data"
+  destination = "/app/data"
+
+# Public HTTPS service. Fly terminates TLS and forwards to the app on 2785.
+# WebSocket/Socket.IO upgrades are proxied automatically.
+[http_service]
+  internal_port = 2785
+  force_https = true
+  # Keep exactly one machine always running — do NOT auto-stop/suspend, or the
+  # live WhatsApp Web session is killed. (See caveats in OPENWA_SETUP.md.)
+  auto_stop_machines = false
+  auto_start_machines = false
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/api/health"
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "40s"
+
+# Machine size — Chromium is memory-hungry. 1 GB is a minimum; bump to 2 GB if
+# you run several sessions concurrently.
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "1gb"

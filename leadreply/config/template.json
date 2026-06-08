@@ -1,0 +1,60 @@
+{
+  "business_name": "YOUR BUSINESS NAME",
+  "business_type": "Cleaning company",
+  "location": "London, UK",
+  "website": "",
+  "whatsapp_number": "+447XXXXXXXXX",
+  "services": [],
+  "areas_covered": [],
+  "opening_hours": {
+    "monday": "8am-6pm",
+    "tuesday": "8am-6pm",
+    "wednesday": "8am-6pm",
+    "thursday": "8am-6pm",
+    "friday": "8am-6pm",
+    "saturday": "8am-6pm",
+    "sunday": "Closed"
+  },
+  "tone_of_voice": {
+    "style": "Friendly, short, professional, helpful",
+    "do_not_use": [],
+    "characteristics": [
+      "Keep messages short because this is WhatsApp",
+      "One question at a time",
+      "Friendly but not overly casual",
+      "Professional but not robotic",
+      "Use British English spelling"
+    ]
+  },
+  "handoff_rules": {
+    "triggers": [
+      "call me",
+      "can i speak to someone",
+      "human",
+      "manager",
+      "urgent",
+      "complaint",
+      "need to speak"
+    ],
+    "handoff_number": "+447XXXXXXXXX",
+    "handoff_method": "whatsapp"
+  },
+  "blocked_behaviour": [
+    "Do not invent prices",
+    "Do not guarantee availability",
+    "Do not send outbound promotions",
+    "Do not continue if owner takes over",
+    "Do not discuss unrelated topics"
+  ],
+  "pricing_rules": {
+    "enabled": false,
+    "policy": "Do not give exact prices."
+  },
+  "lead_delivery": {
+    "method": "email",
+    "email": "",
+    "google_sheet_id": "",
+    "fallback": "console_log"
+  },
+  "faq": {}
+}

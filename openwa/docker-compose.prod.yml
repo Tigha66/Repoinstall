@@ -1,0 +1,88 @@
+# =============================================================================
+# OpenWA — Production backend stack (API + automatic-HTTPS reverse proxy)
+# =============================================================================
+# Frontend (dashboard) is hosted separately on Vercel. This stack runs ONLY the
+# persistent backend: the NestJS API + whatsapp-web.js (headless Chromium).
+#
+# Usage:
+#   cp .env.production.example .env.production   # then edit it
+#   docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+#
+# All durable state (SQLite DBs, WhatsApp auth, browser profile/cache, media,
+# plugins, the seeded API key) lives under /app/data on the `openwa-data` volume.
+# =============================================================================
+
+services:
+  # ===== OpenWA backend API =====
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: openwa-api:latest
+    container_name: openwa-api
+    restart: unless-stopped          # comes back after crashes and host reboots
+    # Runtime config comes from your .env.production (see .env.production.example)
+    env_file:
+      - .env.production
+    # Container shared memory for Chromium (prevents renderer crashes)
+    shm_size: '1gb'
+    # The API is NOT published publicly — Caddy terminates TLS and proxies to it.
+    # To use your OWN external reverse proxy instead of the bundled Caddy, remove
+    # the `caddy` service below and publish to localhost:
+    #   ports:
+    #     - 'openwa-api:2785:2785'
+    expose:
+      - '2785'
+    volumes:
+      - openwa-data:/app/data
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "require('http').get('http://localhost:2785/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ===== Caddy reverse proxy (automatic Let's Encrypt HTTPS + WebSocket passthrough) =====
+  # Remove this service if you terminate TLS with your own Nginx/Traefik/cloud LB.
+  caddy:
+    image: caddy:2
+    container_name: openwa-caddy
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp' # HTTP/3
+    environment:
+      - OPENWA_DOMAIN=${OPENWA_DOMAIN:-api.example.com}
+      - ACME_EMAIL=${ACME_EMAIL:-}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data # persisted certificates
+      - caddy-config:/config
+
+volumes:
+  # Single durable volume holding ALL backend state under /app/data:
+  #   /app/data/main.sqlite      -> auth/API-key + audit DB
+  #   /app/data/openwa.sqlite    -> sessions / webhooks / messages DB
+  #   /app/data/sessions/        -> WhatsApp auth + Chromium browser profile & cache
+  #   /app/data/media/           -> uploads / media
+  #   /app/data/plugins/         -> plugins
+  #   /app/data/.api-key         -> raw seeded admin API key (read once, keep safe)
+  openwa-data:
+    driver: local
+  caddy-data:
+    driver: local
+  caddy-config:
+    driver: local
+
+networks:
+  default:
+    name: openwa-prod
