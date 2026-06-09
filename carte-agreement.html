@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carte — Agreement &amp; Invoice</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%230b0c0f'/><circle cx='24' cy='24' r='17' fill='none' stroke='%23cda349' stroke-width='2.4'/><circle cx='24' cy='24' r='11' fill='none' stroke='%23cda349' stroke-width='1' opacity='.55'/><text x='24' y='30.5' font-family='Georgia,serif' font-size='18' fill='%23e6c97e' text-anchor='middle'>C</text></svg>">
+<style>
+  :root{--ink:#1c1a17;--muted:#6b655c;--gold:#b07a3c;--line:#e4ddd2;--bg:#fbf9f5}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,Arial,sans-serif;color:var(--ink);background:#e9e6e0;line-height:1.55;font-size:13.5px}
+  .sheet{max-width:820px;margin:22px auto;background:var(--bg);padding:48px 56px;box-shadow:0 6px 30px rgba(0,0,0,.12)}
+  h1{font-family:Georgia,serif;font-size:27px;font-weight:600}
+  h2{font-family:Georgia,serif;font-size:16px;margin:22px 0 8px;color:var(--gold)}
+  h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:14px 0 4px}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--gold);padding-bottom:16px;margin-bottom:6px}
+  .top .meta{text-align:right;font-size:12px;color:var(--muted)}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo .mk{width:34px;height:34px;border-radius:9px;background:#0b0c0f;display:grid;place-items:center;color:#e6c97e;font-family:Georgia,serif;font-size:18px}
+  .lead{color:var(--muted);margin-top:10px}
+  table{width:100%;border-collapse:collapse;margin-top:6px}
+  th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+  td.r,th.r{text-align:right;white-space:nowrap}
+  td.price{text-align:right;white-space:nowrap;font-weight:600}
+  .total td{border-top:2px solid var(--gold);border-bottom:none;font-weight:700;font-size:14.5px}
+  .due{background:#f3ead9;border-left:3px solid var(--gold);padding:10px 14px;margin-top:14px;font-size:13px}
+  .due b{color:var(--gold)}
+  ol{margin:4px 0 0 18px}li{margin:5px 0}
+  .clause{font-size:12.5px;color:#2a2722}
+  .sign{display:flex;gap:34px;margin-top:26px}
+  .sign>div{flex:1;border-top:1px solid var(--ink);padding-top:6px;font-size:12px;color:var(--muted)}
+  .pill{display:inline-block;background:#f1e7d8;color:var(--gold);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600}
+  .foot{margin-top:22px;font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+  .print-tip{max-width:820px;margin:0 auto;padding:10px 56px;font-size:12px;color:#555}
+  .two{display:flex;gap:30px}.two>div{flex:1}
+  .page-break{page-break-before:always}
+  @media print{
+    body{background:#fff;font-size:11.5px}
+    .sheet{box-shadow:none;margin:0;max-width:none;padding:22px 26px}
+    .print-tip{display:none}@page{margin:13mm}
+  }
+</style>
+</head>
+<body>
+<div class="print-tip">💡 Save as PDF: <strong>Ctrl/Cmd + P</strong> → “Save as PDF”. Fill the <strong>[bracketed]</strong> fields first. Page 1 = Agreement, Page 2 = Invoice.</div>
+
+<!-- ========================= PAGE 1 — AGREEMENT ========================= -->
+<div class="sheet">
+  <div class="top">
+    <div class="logo"><div class="mk">C</div><div><h1>Website Agreement</h1><span class="pill">Carte × [CLIENT NAME]</span></div></div>
+    <div class="meta">Carte<br>hello@callpilotvoice.co.uk · wa.me/447901921642<br>[DATE]</div>
+  </div>
+
+  <p class="lead">This agreement is between <strong>Carte</strong> (“the Designer”) and <strong>[CLIENT NAME / RESTAURANT]</strong> (“the Client”) for the design and build of a website, as set out below.</p>
+
+  <h2>1. Scope of work</h2>
+  <div class="clause">
+    A custom, mobile-first website for <strong>[RESTAURANT]</strong>, including:
+    <ol>
+      <li>Up to <strong>[6]</strong> pages — Home, Menu, About, Events, Gallery, Visit/Contact.</li>
+      <li>Cinematic design with 3D dish showcase, in the Client's brand colours.</li>
+      <li>Bilingual <strong>[Arabic &amp; English]</strong> layout (optional / as agreed).</li>
+      <li>Reservation &amp; contact links wired to the Client's existing system.</li>
+      <li>Basic on-page SEO, fast load, and launch on the Client's domain.</li>
+      <li><strong>[2]</strong> rounds of revisions included.</li>
+    </ol>
+  </div>
+
+  <h2>2. Fees &amp; payment</h2>
+  <div class="two">
+    <div class="clause">
+      <h3>One-time build</h3>
+      <strong>[AED 18,000]</strong> total<br>
+      • <strong>50% deposit</strong> — [AED 9,000] — due to begin<br>
+      • <strong>50% balance</strong> — [AED 9,000] — due on completion, before launch
+    </div>
+    <div class="clause">
+      <h3>Care plan (optional)</h3>
+      <strong>[AED 1,000] / month</strong><br>
+      Hosting, menu &amp; seasonal updates, monitoring, backups, small tweaks. Monthly, cancel anytime with 30 days' notice.
+    </div>
+  </div>
+
+  <h2>3. Ownership &amp; handover</h2>
+  <ol class="clause">
+    <li><strong>Until the final balance is paid in full, the website, its files, and all source code remain the property of Carte.</strong> The preview shown to the Client is hosted on Carte's link and may be withdrawn if the agreement is not completed.</li>
+    <li><strong>On receipt of the final payment</strong>, full ownership of the finished website transfers to the Client, the site is launched on the Client's domain, and the files are handed over.</li>
+    <li>The deposit is non-refundable once work has begun. If the Client cancels before completion, no balance is owed and nothing is handed over.</li>
+    <li>The Client confirms they own or are licensed to use all logos, text and images they supply. Carte's design and code remain Carte's intellectual property until handover.</li>
+  </ol>
+
+  <h2>4. Timeline &amp; revisions</h2>
+  <div class="clause">Build begins on receipt of the deposit and brand assets. Estimated delivery: <strong>[1–2 weeks]</strong>. Includes <strong>[2]</strong> rounds of revisions; further rounds are billed at <strong>[AED 500]</strong> each. Launch occurs on the Client's written approval and final payment.</div>
+
+  <h2>5. General</h2>
+  <div class="clause">This concept is an independent design and is not affiliated with or endorsed by the restaurant until this agreement is signed. Either party may end the agreement in writing; fees for work completed remain payable. Governed by the laws of England &amp; Wales.</div>
+
+  <div class="sign">
+    <div>Client — name, signature &amp; date</div>
+    <div>Carte — [YOUR NAME], signature &amp; date</div>
+  </div>
+  <div class="foot">Carte · hello@callpilotvoice.co.uk · wa.me/447901921642 — Cinematic restaurant websites.</div>
+</div>
+
+<!-- ========================= PAGE 2 — INVOICE ========================= -->
+<div class="sheet page-break">
+  <div class="top">
+    <div class="logo"><div class="mk">C</div><div><h1>Invoice</h1><span class="pill">Deposit — to begin</span></div></div>
+    <div class="meta">
+      <strong>Invoice #</strong> [CARTE-0001]<br>
+      Date: [DATE] · Due: [on receipt]<br>
+      Carte · hello@callpilotvoice.co.uk
+    </div>
+  </div>
+
+  <div class="two" style="margin-top:12px">
+    <div><h3>Billed to</h3><div class="clause">[CLIENT NAME]<br>[RESTAURANT]<br>[ADDRESS / CITY]<br>[EMAIL]</div></div>
+    <div><h3>From</h3><div class="clause">Carte<br>[YOUR NAME]<br>London, United Kingdom<br>hello@callpilotvoice.co.uk</div></div>
+  </div>
+
+  <table>
+    <tr><th>Description</th><th class="r">Qty</th><th class="r">Amount</th></tr>
+    <tr><td>Custom cinematic website — design &amp; build<br><span style="color:var(--muted);font-size:12px">[6] pages, mobile-first, 3D, bilingual</span></td><td class="r">1</td><td class="price">[AED 18,000]</td></tr>
+    <tr><td>Launch &amp; domain setup</td><td class="r">1</td><td class="price">included</td></tr>
+    <tr class="total"><td>Project total</td><td></td><td class="price">[AED 18,000]</td></tr>
+  </table>
+
+  <table style="margin-top:16px">
+    <tr><th>Payment schedule</th><th class="r">Amount</th><th class="r">Status</th></tr>
+    <tr><td><strong>Deposit (50%)</strong> — due now to begin</td><td class="price">[AED 9,000]</td><td class="r" style="color:var(--gold)">DUE NOW</td></tr>
+    <tr><td>Balance (50%) — on completion, before launch</td><td class="price">[AED 9,000]</td><td class="r">later</td></tr>
+  </table>
+
+  <div class="due"><b>Amount due now: [AED 9,000]</b> &nbsp;— work begins once the deposit is received. Final balance of [AED 9,000] is invoiced on completion; the site launches and files transfer on final payment.</div>
+
+  <h2>Payment details</h2>
+  <div class="clause two">
+    <div><h3>Bank transfer (Wise)</h3>Account name: [YOUR NAME / CARTE]<br>IBAN / Account: [____________]<br>Sort/SWIFT: [________]<br>Reference: [RESTAURANT]</div>
+    <div><h3>Other</h3>Wise / Payoneer / card link on request.<br>Currency: AED · GBP · QAR · KWD — as agreed.<br>VAT: [not registered / as applicable]</div>
+  </div>
+
+  <h2>Care plan (optional, recurring)</h2>
+  <table>
+    <tr><th>Item</th><th class="r">Monthly</th></tr>
+    <tr><td>Hosting, menu &amp; seasonal updates, monitoring, backups, small tweaks</td><td class="price">[AED 1,000]/mo</td></tr>
+  </table>
+
+  <div class="foot">Thank you. By paying the deposit you accept the Website Agreement (page 1), including the handover-on-final-payment terms.<br>Carte · hello@callpilotvoice.co.uk · wa.me/447901921642</div>
+</div>
+</body>
+</html>
