@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yasmine Palace · Levantine &amp; Qatari Cuisine · The Pearl, Doha — Carte concept (real photos)</title>
+<meta name="description" content="Yasmine Palace — luxury Levantine & Qatari dining at The Pearl, Doha. A Carte cinematic concept built with Yasmine Palace's own imagery.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%2307160f'/><text x='24' y='32' font-family='Georgia' font-size='20' fill='%23ecd98a' text-anchor='middle'>Y</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{--bg:#07160f;--bg2:#0c2118;--ink:#eef3ec;--mut:#9db5a4;--ac:#d4af37;--ac2:#ecd98a;--ln:rgba(212,175,55,.30);
+    --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--ar:'Tajawal',sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.08}.ar{font-family:var(--ar);direction:rtl}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--ac);margin-bottom:16px}
+  .pad{padding:110px 0}.reveal{opacity:0;transform:translateY(40px)}
+  .center{text-align:center}.section-head{text-align:center;margin-bottom:54px}.section-head h2{font-size:clamp(34px,6vw,58px)}
+  .btn{display:inline-block;border:1px solid var(--ac);color:var(--ac2);padding:14px 32px;border-radius:2px;text-decoration:none;font-size:13px;letter-spacing:.18em;text-transform:uppercase;transition:.3s}
+  .btn:hover{background:var(--ac);color:var(--bg)}.btn-solid{background:var(--ac);color:var(--bg)}.btn-solid:hover{background:var(--ac2)}
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:15px 28px;border-bottom:1px solid transparent;transition:.4s}
+  nav.solid{background:rgba(7,22,15,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--ln)}
+  .brand{font-family:var(--serif);font-size:25px;color:var(--ac2)}
+  .navlinks{display:flex;gap:24px;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase}
+  .navlinks a{color:var(--ink);text-decoration:none;opacity:.85}.navlinks a:hover{color:var(--ac2)}
+  .book-sm{border:1px solid var(--ac);color:var(--ac2)!important;padding:9px 16px}
+  @media(max-width:780px){.navlinks a:not(.book-sm){display:none}}
+  .realbadge{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:40;background:rgba(212,175,55,.16);border:1px solid var(--ln);color:var(--ac2);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:6px 16px;border-radius:30px}
+  .hero{height:100svh;display:flex;align-items:flex-end;justify-content:center;text-align:center;overflow:hidden;position:relative}
+  .hero-bg{position:absolute;inset:0;background:linear-gradient(rgba(4,12,8,.35),rgba(4,12,8,.86)),url('img/lp2.jpg') center/cover;transform:scale(1.06)}
+  .hero-inner{position:relative;z-index:6;padding:0 20px 12vh}
+  .hero .ar-name{font-size:clamp(30px,6vw,54px);color:var(--ac2);margin-bottom:6px}
+  .hero h1{font-size:clamp(42px,9vw,108px);color:#fff}
+  .tagline{margin-top:14px;font-size:clamp(14px,2.3vw,19px);letter-spacing:.14em;text-transform:uppercase;color:#e3ecdf}
+  .hero-cta{margin-top:30px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .tilt-wrap{perspective:1300px}.tilt-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:820px){.tilt-row{grid-template-columns:1fr}}
+  .tilt{position:relative;transform-style:preserve-3d;border-radius:12px;overflow:hidden;border:1px solid var(--ln);background:var(--bg2);box-shadow:0 26px 50px rgba(0,0,0,.5);animation:f3d 6s ease-in-out infinite}
+  @keyframes f3d{0%,100%{transform:rotateY(-11deg) rotateX(4deg)}50%{transform:rotateY(11deg) rotateX(-4deg)}}
+  .tilt-row .tilt:nth-child(2){animation-delay:-2s}.tilt-row .tilt:nth-child(3){animation-delay:-4s}
+  .tilt img{width:100%;height:340px;object-fit:cover;display:block}
+  .tilt .body{position:absolute;right:0;left:0;bottom:0;padding:24px;background:linear-gradient(transparent,rgba(3,10,6,.92));transform:translateZ(50px)}
+  .tilt h3{font-size:24px;color:var(--ac2)}.tilt .ar-sub{font-family:var(--ar);direction:rtl;color:var(--mut);font-size:16px;margin-top:2px}.tilt p{color:var(--mut);font-size:13.5px;margin-top:6px}
+  .badge3d{display:inline-block;margin-top:14px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ac);border:1px solid var(--ln);padding:6px 13px;border-radius:20px}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}@media(max-width:820px){.split{grid-template-columns:1fr;gap:34px}}
+  .split img{width:100%;height:520px;object-fit:cover;border-radius:10px;border:1px solid var(--ln)}
+  .split h2{font-size:clamp(30px,4.6vw,50px);margin-bottom:18px}.split p{color:var(--mut);margin-bottom:14px;font-size:16px;line-height:1.75}
+  .stats{background:var(--bg2);border-top:1px solid var(--ln);border-bottom:1px solid var(--ln)}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;text-align:center}@media(max-width:640px){.stat-grid{grid-template-columns:1fr}}
+  .stat .num{font-family:var(--serif);font-size:54px;color:var(--ac2)}.stat .lbl{color:var(--mut);margin-top:6px;font-size:14px}
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 60px;max-width:920px;margin:0 auto}@media(max-width:720px){.menu-grid{grid-template-columns:1fr}}
+  .dish{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--ln)}
+  .dish .d-name{font-size:18px;font-family:var(--serif)}.dish .d-desc{display:block;font-size:13px;color:var(--mut);margin-top:3px}.dish .d-price{color:var(--ac2);font-size:17px;white-space:nowrap}
+  .grid-gal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}@media(max-width:820px){.grid-gal{grid-template-columns:1fr 1fr}}
+  .grid-gal img{width:100%;height:220px;object-fit:cover;border-radius:8px;border:1px solid var(--ln);transition:transform .5s}.grid-gal img:hover{transform:scale(1.03)}
+  .band{background:linear-gradient(120deg,#0a1c13,#1c2410);border-top:1px solid var(--ln);border-bottom:1px solid var(--ln);text-align:center}
+  footer{border-top:1px solid var(--ln);padding:50px 0;text-align:center;color:var(--mut);font-size:14px}footer a{color:var(--ac2);text-decoration:none}
+  .demo-note{margin-top:22px;font-size:11.5px;color:#6f7d70}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <div class="brand">Yasmine Palace</div>
+  <div class="navlinks"><a href="#spaces">Spaces</a><a href="#menu">Menu</a><a href="#gallery">Gallery</a>
+    <a class="book-sm" href="https://yasminepalace.com/" target="_blank" rel="noopener">Reserve</a></div>
+</nav>
+<div class="realbadge">Carte concept · built with Yasmine Palace's own imagery</div>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="ar-name ar">قصر الياسمين</div>
+    <h1>Yasmine Palace</h1>
+    <div class="tagline">Levantine &amp; Qatari Cuisine · The Pearl, Doha</div>
+    <div class="hero-cta"><a class="btn btn-solid" href="https://yasminepalace.com/" target="_blank" rel="noopener">Reserve a Table</a><a class="btn" href="#spaces">Our Spaces</a></div>
+  </div>
+</section>
+
+<section class="pad" id="spaces">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">Interactive · 3D</div><h2>Four Worlds, One Palace</h2><span class="badge3d">Rotating in 3D</span></div>
+    <div class="tilt-wrap"><div class="tilt-row">
+      <div class="tilt"><img src="img/arddyar.jpg" alt="Fountain courtyard"><div class="body"><h3>The Courtyard</h3><div class="ar-sub">الصحن</div><p>Dining around the rose-water fountain</p></div></div>
+      <div class="tilt"><img src="img/lp5.jpg" alt="Majlis table"><div class="body"><h3>The Majlis</h3><div class="ar-sub">المجلس</div><p>Private booths set in turquoise &amp; gold</p></div></div>
+      <div class="tilt"><img src="img/img4.jpg" alt="Patisserie"><div class="body"><h3>The Patisserie</h3><div class="ar-sub">الحلويات</div><p>House-made Levantine sweets &amp; cakes</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="pad" style="padding-top:0">
+  <div class="wrap split">
+    <img class="reveal" src="img/rabweh1.jpg" alt="Yasmine Palace hall">
+    <div class="reveal">
+      <div class="eyebrow ar">قصر الياسمين</div>
+      <h2>A palace at The Pearl</h2>
+      <p>On the waterfront of Porto Arabia, Yasmine Palace brings the grandeur of the Levantine and Qatari table to Doha — four distinct dining worlds, each with its own mood, beneath hand-carved arches and lantern light.</p>
+      <p>Generous mezze, charcoal grills and Gulf pots, served with the warmth and ceremony of true palace hospitality.</p>
+      <a class="btn" style="margin-top:22px" href="#menu">The Menu</a>
+    </div>
+  </div>
+</section>
+
+<section class="stats pad">
+  <div class="wrap stat-grid">
+    <div class="stat reveal"><div class="num" data-count="4">0</div><div class="lbl">Dining concepts</div></div>
+    <div class="stat reveal"><div class="num" data-count="60">0</div><div class="lbl">Dishes on the menu</div></div>
+    <div class="stat reveal"><div class="num" data-count="200">0</div><div class="lbl">Seats &amp; majlis</div></div>
+  </div>
+</section>
+
+<section class="pad" id="menu">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">From the Table</div><h2>Levantine &amp; Gulf flavours</h2></div>
+    <div class="menu-grid">
+      <div class="dish reveal"><span><span class="d-name">Hummus &amp; Meat</span><span class="d-desc">chickpeas, tahini, pine nuts, lamb</span></span><span class="d-price">42</span></div>
+      <div class="dish reveal"><span><span class="d-name">Mixed Grill</span><span class="d-desc">shish taouk, kofta, lamb cutlets</span></span><span class="d-price">95</span></div>
+      <div class="dish reveal"><span><span class="d-name">Machboos Laham</span><span class="d-desc">Qatari spiced rice, lamb, loomi</span></span><span class="d-price">85</span></div>
+      <div class="dish reveal"><span><span class="d-name">Grilled Hammour</span><span class="d-desc">Gulf fish, lemon, saffron rice</span></span><span class="d-price">98</span></div>
+      <div class="dish reveal"><span><span class="d-name">Warak Enab</span><span class="d-desc">hand-rolled vine leaves, lemon</span></span><span class="d-price">44</span></div>
+      <div class="dish reveal"><span><span class="d-name">Umm Ali</span><span class="d-desc">warm pastry pudding, nuts</span></span><span class="d-price">38</span></div>
+    </div>
+    <div class="center reveal" style="margin-top:40px"><a class="btn btn-solid" href="https://yasminepalace.com/" target="_blank" rel="noopener">Reserve a Table</a></div>
+  </div>
+</section>
+
+<section class="pad" id="gallery" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">The Setting</div><h2>Inside the Palace</h2></div>
+    <div class="grid-gal">
+      <img class="reveal" src="img/arddyar.jpg" alt="">
+      <img class="reveal" src="img/img2.jpg" alt="">
+      <img class="reveal" src="img/img3.jpg" alt="">
+      <img class="reveal" src="img/lp5.jpg" alt="">
+      <img class="reveal" src="img/rabweh1.jpg" alt="">
+      <img class="reveal" src="img/lp3.jpg" alt="">
+      <img class="reveal" src="img/img4.jpg" alt="">
+      <img class="reveal" src="img/lp2.jpg" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="band pad">
+  <div class="wrap reveal">
+    <div class="eyebrow center" style="text-align:center">Reservations</div>
+    <h2 style="font-size:clamp(30px,5vw,52px)">A timeless escape through taste</h2>
+    <p class="ar" style="color:var(--ac2);font-size:20px;margin:14px 0 26px">أهلاً وسهلاً في قصر الياسمين</p>
+    <a class="btn btn-solid" href="https://yasminepalace.com/" target="_blank" rel="noopener">Reserve a Table</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="font-size:22px">Yasmine Palace</div>
+    <p style="margin-top:10px">Porto Arabia, The Pearl, Doha · <a href="https://yasminepalace.com/" target="_blank" rel="noopener">yasminepalace.com</a></p>
+    <p class="demo-note">Design concept by Carte — built with imagery from yasminepalace.com to show Yasmine Palace their own brand in a cinematic site. Not the official website; not affiliated with or endorsed by the restaurant. All imagery © Yasmine Palace.</p>
+  </div>
+</footer>
+
+<script>
+  const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40));
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.utils.toArray('.reveal').forEach(el=>gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%'}}));
+  gsap.utils.toArray('.num').forEach(el=>{const e=+el.dataset.count;ScrollTrigger.create({trigger:el,start:'top 85%',once:true,onEnter:()=>{gsap.to({v:0},{v:e,duration:1.6,onUpdate:function(){el.textContent=Math.round(this.targets()[0].v)}})}})});
+</script>
+</body>
+</html>
