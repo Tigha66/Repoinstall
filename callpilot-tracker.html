@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CallPilot — Sales Pipeline</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%230b1220'/><circle cx='24' cy='24' r='15' fill='none' stroke='%233b82f6' stroke-width='2.6'/><path d='M17 20a10 10 0 0 0 11 11l2.4-3-4-2-1.6 1.4a7 7 0 0 1-4.2-4.2L18 21z' fill='%2360a5fa'/></svg>">
+<style>
+  :root{--bg:#0a0f1a;--card:#111a2b;--card2:#0e1626;--ink:#eef3fb;--muted:#8da2c0;--blue:#3b82f6;--blue2:#60a5fa;--line:rgba(96,165,250,.18);
+    --send:#64748b;--sent:#0ea5e9;--demo:#a855f7;--reply:#f59e0b;--won:#22c55e;--lost:#ef4444}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:14px;
+    background-image:radial-gradient(900px 400px at 80% -10%,rgba(59,130,246,.14),transparent)}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:8px}
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo .mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(150deg,#16233c,#0b1220);border:1px solid var(--line);
+    display:grid;place-items:center}
+  .logo .mark svg{width:26px;height:26px}
+  .logo h1{font-size:20px;letter-spacing:-.2px}
+  .logo .sub{color:var(--muted);font-size:12px;letter-spacing:.04em}
+  .demo{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .chip{background:var(--card);border:1px solid var(--line);border-radius:30px;padding:8px 14px;font-size:12.5px;color:var(--ink);text-decoration:none;display:inline-flex;gap:7px;align-items:center}
+  .chip b{color:var(--blue2);letter-spacing:.02em}
+  .chip:hover{border-color:var(--blue)}
+  .bar{display:flex;gap:14px;flex-wrap:wrap;margin:22px 0 14px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;min-width:120px}
+  .stat .n{font-size:26px;font-weight:700}
+  .stat .l{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+  .tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  button.act{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 14px;font-size:13px;cursor:pointer}
+  button.act:hover{border-color:var(--blue);color:var(--blue2)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin:6px 2px 16px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:50%}
+  table{width:100%;border-collapse:separate;border-spacing:0 8px}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);padding:0 12px 4px}
+  td{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:13px 12px;vertical-align:top}
+  td:first-child{border-left:1px solid var(--line);border-radius:12px 0 0 12px}
+  td:last-child{border-right:1px solid var(--line);border-radius:0 12px 12px 0}
+  tr.prio td{box-shadow:inset 3px 0 0 var(--won)}
+  tr.corp td{opacity:.72}
+  .co{font-weight:600;font-size:14.5px}
+  .co .star{color:var(--won);font-size:12px;margin-left:6px}
+  .tag{display:inline-block;font-size:10.5px;letter-spacing:.04em;padding:2px 8px;border-radius:20px;margin-top:5px}
+  .tag.ind{background:rgba(34,197,94,.13);color:#86efac;border:1px solid rgba(34,197,94,.3)}
+  .tag.cor{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.28)}
+  .meta{color:var(--muted);font-size:12.5px;margin-top:3px}
+  .meta a{color:var(--blue2);text-decoration:none}
+  .status{border:none;border-radius:30px;padding:7px 14px;font-size:12px;font-weight:600;color:#06101f;cursor:pointer;white-space:nowrap}
+  .note{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:8px;font-size:12.5px;font-family:inherit;resize:vertical;min-height:38px}
+  .foot{margin-top:30px;color:var(--muted);font-size:12px;text-align:center}
+  .foot a{color:var(--blue2);text-decoration:none}
+  @media(max-width:760px){th:nth-child(3),td:nth-child(3){display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">
+      <div class="mark"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="#3b82f6" stroke-width="2.6"/><path d="M17 20a10 10 0 0 0 11 11l2.4-3-4-2-1.6 1.4a7 7 0 0 1-4.2-4.2L18 21z" fill="#60a5fa"/></svg></div>
+      <div>
+        <h1>CallPilot — Sales Pipeline</h1>
+        <div class="sub">AI phone receptionist · Austin home-services · run it like a pipeline</div>
+      </div>
+    </div>
+    <div class="demo">
+      <a class="chip" href="tel:+15717884804">📞 Demo line: <b>+1 571-788-4804</b></a>
+      <a class="chip" href="https://brisk-tundra-53bj.here.now/#try" target="_blank">🌐 Landing <b>/#try</b></a>
+    </div>
+  </header>
+
+  <div class="bar" id="stats"></div>
+
+  <div class="tools">
+    <button class="act" onclick="resetAll()">↺ Reset statuses</button>
+    <button class="act" onclick="exportCSV()">⤓ Export CSV</button>
+    <button class="act" onclick="copyPitch()">📋 Copy DM pitch</button>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot" style="background:var(--send)"></i>To send</span>
+    <span><i class="dot" style="background:var(--sent)"></i>Sent</span>
+    <span><i class="dot" style="background:var(--demo)"></i>Called demo</span>
+    <span><i class="dot" style="background:var(--reply)"></i>Replied</span>
+    <span><i class="dot" style="background:var(--won)"></i>Won</span>
+    <span><i class="dot" style="background:var(--lost)"></i>Lost</span>
+    <span style="margin-left:auto">⭐ = best fit (independent owner) · click a status to advance it</span>
+  </div>
+
+  <table>
+    <thead><tr><th>Company</th><th>Contact</th><th>Type / notes</th><th>Status</th><th style="width:24%">Notes</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <div class="foot">
+    CallPilot · hello@callpilotvoice.co.uk · saved in your browser only (localStorage) — your data never leaves this device.<br>
+    Demo number greets as whichever business script is currently live in your Telnyx assistant. Swap the script before each demo.
+  </div>
+</div>
+
+<script>
+const STATUSES = [
+  {k:'To send',  c:'var(--send)'},
+  {k:'Sent',     c:'var(--sent)'},
+  {k:'Called demo',c:'var(--demo)'},
+  {k:'Replied',  c:'var(--reply)'},
+  {k:'Won',      c:'var(--won)'},
+  {k:'Lost',     c:'var(--lost)'},
+];
+const LEADS = [
+  {co:'Platinum Air Heating & Cooling', prio:true,  type:'ind', t:'HVAC · independent, owner-run',
+   contact:'(512) 920-6343 · IG @myplatinum.air', link:'https://myplatinumair.com/', note:'BEST FIT. Send IG DM + contact form. Brand assistant as "Platinum Air" first.'},
+  {co:'Efficient AC, Electric & Plumbing', type:'ind', t:'Home services · family-owned 50+ yrs',
+   contact:'efficienttexas.com', link:'https://efficienttexas.com/', note:''},
+  {co:'Fox Service Company', type:'ind', t:'HVAC/plumbing/elec · independent since 1972',
+   contact:'(512) 488-1120', link:'https://www.foxservice.com/', note:''},
+  {co:'Texas Reliable Services', type:'ind', t:'Home services · family owned',
+   contact:'(512) 609-8103', link:'https://austintrs.com/', note:''},
+  {co:'SALT Service Co.', type:'ind', t:'AC/plumbing/elec · locally owned since 1984',
+   contact:'callsalt.com', link:'https://callsalt.com/', note:''},
+  {co:'Lantz Home Services', type:'ind', t:'HVAC/plumbing/elec · family-owned',
+   contact:'(512) 267-1188', link:'https://www.lantzhomeservices.com/', note:''},
+  {co:'Blue Diamond M.E.P.', type:'ind', t:'Mechanical/elec/plumbing · family-owned 30 yrs',
+   contact:'bluediamondmep.com', link:'https://www.bluediamondmep.com/', note:''},
+  {co:"Daniel's Plumbing & Air Conditioning", type:'cor', t:'Corporate (Southern Home Services) · slower',
+   contact:'(512) 456-3570 · danielsaustin.com', link:'https://www.danielsaustin.com/', note:'Original demo script. Group-owned = slow decision. Lower priority.'},
+  {co:'Abacus Plumbing, AC & Electrical', type:'cor', t:'Corporate (Wrench Group) · slower',
+   contact:'(512) 943-7070', link:'https://www.abacusplumbing.com/', note:'Group-owned. Lower priority — chase independents first.'},
+];
+const KEY='callpilot_pipeline_v1';
+let state = JSON.parse(localStorage.getItem(KEY)||'{}');
+
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function get(i){return state[i]||{s:0,n:''}}
+
+function render(){
+  const tb=document.getElementById('rows'); tb.innerHTML='';
+  LEADS.forEach((L,i)=>{
+    const st=get(i); const S=STATUSES[st.s];
+    const tr=document.createElement('tr');
+    tr.className=(L.prio?'prio ':'')+(L.type==='cor'?'corp':'');
+    tr.innerHTML=`
+      <td><div class="co">${L.co}${L.prio?'<span class="star">⭐ start here</span>':''}</div>
+          <div class="tag ${L.type}">${L.type==='ind'?'Independent':'Corporate group'}</div></td>
+      <td><div class="meta"><a href="${L.link}" target="_blank">${L.contact}</a></div></td>
+      <td><div class="meta">${L.t}</div></td>
+      <td><button class="status" style="background:${S.c}" onclick="cycle(${i})">${S.k}</button></td>
+      <td><textarea class="note" oninput="setNote(${i},this.value)" placeholder="notes…">${st.n||L.note||''}</textarea></td>`;
+    tb.appendChild(tr);
+  });
+  stats();
+}
+function cycle(i){const st=get(i);st.s=(st.s+1)%STATUSES.length;state[i]=st;save();render()}
+function setNote(i,v){const st=get(i);st.n=v;state[i]=st;save();stats()}
+function resetAll(){if(confirm('Reset all statuses & notes?')){state={};save();render()}}
+function stats(){
+  const c={}; STATUSES.forEach(s=>c[s.k]=0);
+  LEADS.forEach((_,i)=>c[STATUSES[get(i).s].k]++);
+  const el=document.getElementById('stats');
+  el.innerHTML=`
+    <div class="stat"><div class="n">${LEADS.length}</div><div class="l">Leads</div></div>
+    <div class="stat"><div class="n" style="color:var(--sent)">${c['Sent']+c['Called demo']+c['Replied']}</div><div class="l">In progress</div></div>
+    <div class="stat"><div class="n" style="color:var(--won)">${c['Won']}</div><div class="l">Won</div></div>
+    <div class="stat"><div class="n" style="color:var(--won)">$${(c['Won']*99).toLocaleString()}+</div><div class="l">Setup booked</div></div>
+    <div class="stat"><div class="n" style="color:var(--won)">$${(c['Won']*199).toLocaleString()}</div><div class="l">MRR won</div></div>`;
+}
+const PITCH=`Hi! I build AI phone receptionists for Austin home-services companies. Rather than explain it — call +1 571-788-4804 right now and you'll hear it answer like your front desk.
+
+It answers every call 24/7, books jobs, and texts you the caller's name, number, address and problem — so you never lose a job to voicemail again.
+
+Setup is $99, then $199/month, cancel anytime. Want me to set one up with your company name on it this week? — Abdelhak, CallPilot`;
+function copyPitch(){navigator.clipboard.writeText(PITCH).then(()=>alert('DM pitch copied to clipboard ✔'))}
+function exportCSV(){
+  let rows=[['Company','Type','Contact','Status','Notes']];
+  LEADS.forEach((L,i)=>{const st=get(i);rows.push([L.co,L.type==='ind'?'Independent':'Corporate',L.contact.replace(/,/g,' '),STATUSES[st.s].k,(st.n||L.note||'').replace(/,/g,';').replace(/\n/g,' ')])});
+  const csv=rows.map(r=>r.map(x=>`"${x}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='callpilot-pipeline.csv';a.click();
+}
+render();
+</script>
+</body>
+</html>
