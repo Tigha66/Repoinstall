@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carte — Outreach Emails (click-ready)</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%230b0c0f'/><circle cx='24' cy='24' r='17' fill='none' stroke='%23cda349' stroke-width='2.4'/><text x='24' y='31' font-family='Georgia,serif' font-size='18' fill='%23e6c97e' text-anchor='middle'>C</text></svg>">
+<style>
+  :root{--bg:#0b0c0f;--card:#15161c;--ink:#f3eee2;--muted:#9a9384;--gold:#cda349;--gold2:#e6c97e;--line:rgba(205,163,73,.22)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:14px;
+    background-image:radial-gradient(900px 400px at 82% -10%,rgba(205,163,73,.12),transparent)}
+  .wrap{max-width:860px;margin:0 auto;padding:30px 20px 80px}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .mark{width:40px;height:40px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;font-family:Georgia,serif;color:var(--gold2);font-size:20px;background:#0e0f13}
+  h1{font-size:20px;font-family:Georgia,serif}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:22px}
+  .tip{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--muted);margin-bottom:22px}
+  .tip b{color:var(--gold2)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;margin-bottom:22px;overflow:hidden}
+  .chead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line)}
+  .chead .name{font-family:Georgia,serif;font-size:17px;color:var(--gold2)}
+  .chead .to{color:var(--muted);font-size:12.5px}
+  .btns{display:flex;gap:8px;flex-wrap:wrap}
+  button,a.btn{font-family:inherit;font-size:12.5px;border-radius:8px;padding:8px 12px;cursor:pointer;text-decoration:none;border:1px solid var(--line);background:#0e0f13;color:var(--ink)}
+  button:hover,a.btn:hover{border-color:var(--gold);color:var(--gold2)}
+  .btn-go{background:var(--gold);color:#0b0c0f;border-color:var(--gold);font-weight:600}
+  .subject{padding:12px 18px 0;font-size:13px;color:var(--muted)}
+  .subject b{color:var(--ink)}
+  .body{padding:14px 18px 18px;background:#fbf9f5;color:#1c1a17;margin:12px;border-radius:10px;font-size:14px;line-height:1.6}
+  .body a{color:#b07a3c;font-weight:600}
+  .ar{direction:rtl;font-family:'Tajawal',sans-serif}
+  .muted{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="mark">C</div><div><h1>Carte — Outreach Emails</h1></div></header>
+  <div class="sub">10 personalised emails · click-ready · links stay clickable when pasted into Gmail.</div>
+
+  <div class="tip">📌 <b>How to use:</b> click <b>Copy (rich)</b> → open Gmail → <b>Compose</b> → paste in the body. The demo &amp; full-site links stay <b>clickable</b>. Put the address from <b>“To”</b> in the recipient field and the <b>Subject</b> line in. Or click <b>Open in Gmail</b> to auto-start a draft (then paste the rich body over the plain one to get clickable links).</div>
+
+  <div id="cards"></div>
+</div>
+
+<script>
+const WA="https://wa.me/447901921642";
+const L=[
+{name:"Bait Maryam", to:"info@baitmaryam.com",
+ subj:"I built Bait Maryam a website — a gift (15 seconds to see it)",
+ hook:"I'm a website designer and a real admirer of what Chef Salam has built. Rather than pitch you, I made you something — a cinematic concept website for Bait Maryam, bilingual Arabic &amp; English, with your signature dishes rotating in 3D.",
+ demo:"https://kindly-geyser-cz7n.here.now/", full:"https://lapis-mesa-vkrb.here.now/",
+ price:"AED 18,000", cur:"AED"},
+{name:"Gerbou", to:"info@gerbou.com",
+ subj:"A cinematic website concept for Gerbou (a gift)",
+ hook:"I love how Gerbou brings the magic of Emirati hospitality to the table — so I designed a concept website to match: elegant, bilingual, with your heritage dishes rotating in 3D.",
+ demo:"https://woody-prism-kpcb.here.now/", full:"https://glacial-trellis-5bqm.here.now/",
+ price:"AED 20,000", cur:"AED"},
+{name:"Karak House", to:"rmkarakhousedm@aaent.me",
+ subj:"I made Karak House a website — tap to see it (a gift)",
+ hook:"I love your spot on the Boulevard under the Burj — so I built you a little gift: a warm, cinematic concept website with your karak and dishes rotating in 3D.",
+ demo:"https://cobalt-mango-45rs.here.now/", full:"https://faint-jasper-33k2.here.now/",
+ price:"AED 14,000", cur:"AED"},
+{name:"Yasmine Palace", to:"info@yasminepalace.com",
+ subj:"A cinematic website concept for Yasmine Palace (a gift)",
+ hook:"I'm a website designer and an admirer of Yasmine Palace at The Pearl. I designed you a cinematic concept website — bilingual Arabic &amp; English, with your Levantine and Qatari dishes in 3D.",
+ demo:"https://rapid-canopy-wfba.here.now/", full:"https://russet-plume-xqct.here.now/",
+ price:"QAR 16,000", cur:"QAR"},
+{name:"Bayt El Talleh", to:"info@bayteltalleh.qa",
+ subj:"I built Bayt El Talleh a website — a gift (15 seconds)",
+ hook:"I love the Lebanese table you've created at Katara Hills — so I designed you a cinematic concept website, bilingual, with your mezze and mishwi rotating in 3D.",
+ demo:"https://whole-vortex-vn3p.here.now/", full:"https://bitter-trellis-rceb.here.now/",
+ price:"QAR 15,000", cur:"QAR"},
+{name:"Najd Village", to:"via najdvillage.com/contact",
+ subj:"A cinematic website concept for Najd Village (a gift)",
+ hook:"I'm a website designer and an admirer of the authentic Najdi table you've kept alive since 1996. I designed you a cinematic concept website — bilingual Arabic &amp; English, with your Saudi dishes in 3D.",
+ demo:"https://mystic-chant-gkz8.here.now/", full:"https://unfold-lagoon-rvnx.here.now/",
+ price:"SAR 16,000", cur:"SAR"},
+{name:"Maiz", to:"reservations@maiz.sa",
+ subj:"A refreshed cinematic website concept for Maiz (a gift)",
+ hook:"Maiz put Saudi fine dining on the world map. I designed a cinematic concept — bilingual, with your 13-regions journey in 3D — as a refresh idea you're free to use or ignore.",
+ demo:"https://supple-donkey-7bnv.here.now/", full:"https://calm-meadow-cgjn.here.now/",
+ price:"SAR 22,000", cur:"SAR"},
+{name:"Mala", to:"info@malakuwait.com",
+ subj:"I made Mala a website — a gift (tap to see it)",
+ hook:"I love how Mala reimagines Kuwaiti cuisine for a new generation — so I designed a bold, cinematic concept website to match, with your dishes rotating in 3D.",
+ demo:"https://centered-cairn-psge.here.now/", full:"https://serene-muse-v3rw.here.now/",
+ price:"KWD 1,500", cur:"KWD"},
+{name:"Gastronomica", to:"info@gastronomica-me.com",
+ subj:"A cinematic website concept for Gastronomica (a gift)",
+ hook:"I admire what Gastronomica has built across Kuwait — specialty coffee and an all-day kitchen with a real following. I designed you a clean, cinematic concept website as a gift.",
+ demo:"https://rising-realm-ms6j.here.now/", full:"https://glacial-virtue-z5sm.here.now/",
+ price:"KWD 1,500", cur:"KWD"},
+{name:"Noor Al Sham", to:"[verify on Instagram @nooralsham]",
+ subj:"A cinematic website concept for Noor Al Sham (a gift)",
+ hook:"I'm a website designer and an admirer of your journey from Damascus to Beirut in DIFC. I designed you a cinematic concept website — bilingual, with your tasting dishes in 3D.",
+ demo:"https://lilac-realm-2nc5.here.now/", full:"https://gleaming-serenity-fa49.here.now/",
+ price:"AED 18,000", cur:"AED"},
+];
+
+function bodyHTML(l){
+  return `<p>Hi ${l.name} team,</p>
+<p>${l.hook}</p>
+<p>Tap it on your phone — it's live:</p>
+<p>• Homepage concept: <a href="${l.demo}">${l.demo}</a><br>
+• Full multi-page site: <a href="${l.full}">${l.full}</a></p>
+<p>It's a free concept with no obligation. If you like the direction, I'd build the full site — menu, story, gallery, reservations — for <b>${l.price}</b>, plus an optional monthly care plan to keep it fresh. Could I send you a couple of options?</p>
+<p>Warm regards,<br>
+Abdelhak — Carte<br>
+hello@callpilotvoice.co.uk · <a href="${WA}">WhatsApp</a></p>`;
+}
+
+const root=document.getElementById('cards');
+L.forEach((l,i)=>{
+  const id="b"+i;
+  const card=document.createElement('div'); card.className='card';
+  const mailBody = `Hi ${l.name} team,\n\n${l.hook.replace(/&amp;/g,'&')}\n\nTap it on your phone — it's live:\n• Homepage concept: ${l.demo}\n• Full multi-page site: ${l.full}\n\nIt's a free concept with no obligation. If you like the direction, I'd build the full site for ${l.price}, plus an optional monthly care plan. Could I send you a couple of options?\n\nWarm regards,\nAbdelhak — Carte\nhello@callpilotvoice.co.uk`;
+  const toAddr = l.to.startsWith('via')||l.to.startsWith('[') ? '' : l.to;
+  const mailto = `mailto:${toAddr}?subject=${encodeURIComponent(l.subj)}&body=${encodeURIComponent(mailBody)}`;
+  card.innerHTML=`
+    <div class="chead">
+      <div><div class="name">${l.name}</div><div class="to">To: ${l.to}</div></div>
+      <div class="btns">
+        <button onclick="copyRich('${id}')">📋 Copy (rich)</button>
+        <button onclick="copyPlain('${id}')">Copy plain</button>
+        <a class="btn btn-go" href="${mailto}" target="_blank">✉ Open in Gmail</a>
+      </div>
+    </div>
+    <div class="subject">Subject: <b>${l.subj}</b></div>
+    <div class="body" id="${id}">${bodyHTML(l)}</div>`;
+  root.appendChild(card);
+});
+
+async function copyRich(id){
+  const el=document.getElementById(id);
+  try{
+    await navigator.clipboard.write([new ClipboardItem({
+      'text/html': new Blob([el.innerHTML],{type:'text/html'}),
+      'text/plain': new Blob([el.innerText],{type:'text/plain'})
+    })]);
+    flash('Copied with clickable links ✔ — paste into Gmail');
+  }catch(e){ copyPlain(id); }
+}
+function copyPlain(id){
+  const el=document.getElementById(id);
+  navigator.clipboard.writeText(el.innerText).then(()=>flash('Plain text copied ✔'));
+}
+function flash(msg){
+  const d=document.createElement('div');
+  d.textContent=msg;
+  d.style.cssText='position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#cda349;color:#0b0c0f;padding:11px 20px;border-radius:30px;font-weight:600;font-size:13px;z-index:99;box-shadow:0 10px 30px rgba(0,0,0,.4)';
+  document.body.appendChild(d); setTimeout(()=>d.remove(),2200);
+}
+</script>
+</body>
+</html>
