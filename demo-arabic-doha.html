@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لؤلؤة · مأكولات بحرية فاخرة · الدوحة</title>
+<meta name="description" content="لؤلؤة — وجهة المأكولات البحرية الفاخرة في قلب الدوحة. حجز الطاولات، قائمة الطعام، والمناسبات الخاصة.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{--bg:#06110f;--bg2:#0b1d1a;--ink:#eaf3f0;--muted:#9bb5ae;--teal:#2bb6a3;--teal2:#67e8d4;--pearl:#dfe9e6;--line:rgba(43,182,163,.28);
+    --head:'Reem Kufi',sans-serif;--sans:'Tajawal',system-ui,sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased;text-align:right}
+  h1,h2,h3{font-family:var(--head);font-weight:700;line-height:1.15}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:13px;letter-spacing:.16em;color:var(--teal2);margin-bottom:16px}
+  .pad{padding:120px 0}
+  .reveal{opacity:0;transform:translateY(40px)}
+  .center{text-align:center}.section-head{text-align:center;margin-bottom:60px}.section-head h2{font-size:clamp(34px,6vw,60px)}
+  .btn{display:inline-block;border:1px solid var(--teal);color:var(--teal2);padding:14px 34px;border-radius:40px;text-decoration:none;
+    font-size:15px;letter-spacing:.03em;transition:.3s}
+  .btn:hover{background:var(--teal);color:#06110f}
+  .btn-solid{background:var(--teal);color:#06110f}.btn-solid:hover{background:var(--teal2)}
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 30px;
+    border-bottom:1px solid transparent;transition:.4s}
+  nav.solid{background:rgba(6,17,15,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{font-family:var(--head);font-size:28px;font-weight:700;color:var(--teal2)}
+  .navlinks{display:flex;gap:26px;font-size:15px}
+  .navlinks a{color:var(--ink);text-decoration:none;opacity:.85}.navlinks a:hover{color:var(--teal2)}
+  .book-sm{border:1px solid var(--teal);color:var(--teal2)!important;padding:8px 18px;border-radius:30px}
+  @media(max-width:760px){.navlinks a:not(.book-sm){display:none}}
+  .hero{height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;position:relative}
+  .hero-bg{position:absolute;inset:0;background:linear-gradient(rgba(3,12,10,.5),rgba(3,12,10,.88)),
+    url('https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1600&auto=format&fit=crop') center/cover;transform:scale(1.08)}
+  .curtain{position:absolute;top:0;bottom:0;width:51%;background:linear-gradient(var(--bg2),var(--bg));z-index:5}
+  #cLeft{left:0}#cRight{right:0}
+  .hero-inner{position:relative;z-index:6;padding:0 20px}
+  .hero h1{font-size:clamp(52px,12vw,140px);color:var(--teal2)}
+  .tagline{margin-top:18px;font-size:clamp(16px,2.6vw,22px);letter-spacing:.05em;color:var(--muted)}
+  .hero-cta{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:6;font-size:13px;letter-spacing:.1em;color:var(--muted)}
+  .tilt-wrap{perspective:1300px}
+  .tilt-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:820px){.tilt-row{grid-template-columns:1fr}}
+  .tilt{position:relative;transform-style:preserve-3d;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--bg2);
+    box-shadow:0 26px 50px rgba(0,0,0,.5);animation:float3d 6s ease-in-out infinite;will-change:transform}
+  @keyframes float3d{0%,100%{transform:rotateY(-11deg) rotateX(4deg)}50%{transform:rotateY(11deg) rotateX(-4deg)}}
+  .tilt-row .tilt:nth-child(2){animation-delay:-2s}.tilt-row .tilt:nth-child(3){animation-delay:-4s}
+  .tilt img{width:100%;height:320px;object-fit:cover;display:block;filter:saturate(1.05) brightness(.9)}
+  .tilt .body{position:absolute;right:0;left:0;bottom:0;padding:24px;background:linear-gradient(transparent,rgba(2,10,9,.92));transform:translateZ(50px)}
+  .tilt h3{font-size:26px;color:var(--teal2)}.tilt p{color:var(--muted);font-size:15px;margin-top:5px}
+  .badge3d{display:inline-block;margin-top:14px;font-size:13px;letter-spacing:.05em;color:var(--teal2);border:1px solid var(--line);padding:6px 14px;border-radius:20px}
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 60px;max-width:920px;margin:0 auto}
+  @media(max-width:720px){.menu-grid{grid-template-columns:1fr}}
+  .dish{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line)}
+  .dish .d-name{font-size:19px;font-family:var(--head)}.dish .d-desc{display:block;font-size:14px;color:var(--muted);margin-top:3px}
+  .dish .d-price{color:var(--teal2);font-size:18px;white-space:nowrap}
+  .stats{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;text-align:center}
+  @media(max-width:640px){.stat-grid{grid-template-columns:1fr}}
+  .stat .num{font-family:var(--head);font-size:54px;color:var(--teal2)}.stat .lbl{color:var(--muted);margin-top:6px;font-size:15px}
+  .band{background:linear-gradient(120deg,#08201c,#0c2c27);border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
+  footer{border-top:1px solid var(--line);padding:46px 0;text-align:center;color:var(--muted);font-size:15px}
+  .demo-note{margin-top:18px;font-size:13px;color:#6f857f}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}.curtain{display:none}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <div class="brand">لؤلؤة</div>
+  <div class="navlinks">
+    <a href="#dishes">الأطباق</a><a href="#menu">القائمة</a><a href="#visit">زورونا</a>
+    <a class="book-sm" href="#book">احجز طاولة</a>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="curtain" id="cLeft"></div><div class="curtain" id="cRight"></div>
+  <div class="hero-inner">
+    <h1>لؤلؤة</h1>
+    <div class="tagline">مأكولات بحرية فاخرة · الدوحة</div>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="#book">احجز طاولة</a>
+      <a class="btn" href="#dishes">أطباقنا المميزة</a>
+    </div>
+  </div>
+  <div class="scroll-hint">مرّر للأسفل ↓</div>
+</section>
+
+<section class="pad" id="dishes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">تفاعلي · ثلاثي الأبعاد</div>
+      <h2>أطباقنا المميزة</h2>
+      <span class="badge3d">تدور بتقنية ثلاثية الأبعاد</span>
+    </div>
+    <div class="tilt-wrap">
+      <div class="tilt-row">
+        <div class="tilt"><img src="https://images.unsplash.com/photo-1535140728325-a4d3707eee61?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>روبيان الخليج</h3><p>روبيان طازج، زعفران، ليمون أسود</p></div></div>
+        <div class="tilt"><img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>هامور مشوي</h3><p>سمك هامور، فحم، صلصة الطحينة</p></div></div>
+        <div class="tilt"><img src="https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>صيادية</h3><p>أرز بنّي، بصل مكرمل، سمك مقلي</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats pad">
+  <div class="wrap stat-grid">
+    <div class="stat reveal"><div class="num" data-count="9">0</div><div class="lbl">أعوام من التميّز</div></div>
+    <div class="stat reveal"><div class="num" data-count="36">0</div><div class="lbl">طبقاً بحرياً</div></div>
+    <div class="stat reveal"><div class="num" data-count="90">0</div><div class="lbl">مقعداً مطلّاً على الكورنيش</div></div>
+  </div>
+</section>
+
+<section class="pad" id="menu">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">من القائمة</div><h2>كنوز البحر</h2></div>
+    <div class="menu-grid">
+      <div class="dish reveal"><span><span class="d-name">مجبوس روبيان</span><span class="d-desc">أرز بالزعفران، روبيان الخليج</span></span><span class="d-price">٩٥ ر.ق</span></div>
+      <div class="dish reveal"><span><span class="d-name">هامور بالطحينة</span><span class="d-desc">هامور طازج، صلصة الطحينة والصنوبر</span></span><span class="d-price">١١٠ ر.ق</span></div>
+      <div class="dish reveal"><span><span class="d-name">صيادية الدوحة</span><span class="d-desc">أرز بنّي، سمك مقلي، بصل مكرمل</span></span><span class="d-price">٨٥ ر.ق</span></div>
+      <div class="dish reveal"><span><span class="d-name">سلطة الجمبري</span><span class="d-desc">جمبري مشوي، أفوكادو، ليمون</span></span><span class="d-price">٦٠ ر.ق</span></div>
+      <div class="dish reveal"><span><span class="d-name">أم علي بالقشطة</span><span class="d-desc">حلوى دافئة، مكسّرات، قشطة طازجة</span></span><span class="d-price">٤٥ ر.ق</span></div>
+      <div class="dish reveal"><span><span class="d-name">قهوة عربية وتمر</span><span class="d-desc">قهوة بالهيل، تشكيلة تمور</span></span><span class="d-price">٣٠ ر.ق</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band pad" id="book">
+  <div class="wrap reveal">
+    <div class="eyebrow center" style="text-align:center">المناسبات الخاصة</div>
+    <h2 style="font-size:clamp(30px,5vw,52px)">احتفل على ضفاف الخليج</h2>
+    <p style="color:var(--muted);max-width:620px;margin:18px auto 28px;font-size:17px">قاعات خاصة تطلّ على الكورنيش تتسع حتى ٩٠ ضيفاً، مع قوائم بحرية مخصّصة لأرقى المناسبات.</p>
+    <a class="btn btn-solid" href="#">احجز الآن</a>
+  </div>
+</section>
+
+<footer id="visit">
+  <div class="wrap">
+    <div class="brand" style="font-size:24px">لؤلؤة</div>
+    <p style="margin-top:10px">كورنيش الدوحة، قطر · هاتف ‎+٩٧٤ ٤٤ ١٢٣ ٤٥٦</p>
+    <p style="margin-top:6px">يومياً ١:٠٠ ظهراً — ١٢:٠٠ منتصف الليل</p>
+    <p class="demo-note">نسخة عرض تجريبية صمّمتها Carte · غير مرتبطة بأي مطعم قائم · Carte — cinematic restaurant websites</p>
+  </div>
+</footer>
+
+<script>
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40));
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to('#cLeft',{xPercent:-100,ease:'power2.inOut',duration:1.4,delay:.2});
+  gsap.to('#cRight',{xPercent:100,ease:'power2.inOut',duration:1.4,delay:.2});
+  gsap.utils.toArray('.reveal').forEach(el=>{
+    gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 85%'}});
+  });
+  gsap.utils.toArray('.num').forEach(el=>{
+    const end=+el.dataset.count;
+    ScrollTrigger.create({trigger:el,start:'top 85%',once:true,onEnter:()=>{
+      gsap.to({v:0},{v:end,duration:1.6,ease:'power1.out',onUpdate:function(){el.textContent=Math.round(this.targets()[0].v)}});
+    }});
+  });
+</script>
+</body>
+</html>
