@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CallPilot — The AI Receptionist That Never Misses a Call</title>
+<meta name="description" content="CallPilot answers every call 24/7, books appointments, and sends you the details. Never miss another customer. Hear it live — call +1 (571) 788-4804.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%230b1f3a'/><circle cx='24' cy='24' r='15' fill='none' stroke='%234aa3ff' stroke-width='3'/><circle cx='24' cy='24' r='6' fill='%234aa3ff'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{--bg:#070d18;--bg2:#0e1828;--ink:#eef3fb;--mut:#94a3b8;--blue:#3b9bff;--blue2:#6fc0ff;--line:rgba(91,160,255,.18)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:'Sora',system-ui,sans-serif;font-weight:600;line-height:1.1}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 22px}
+  .eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--blue2);margin-bottom:18px}
+  .reveal{opacity:0;transform:translateY(34px)}
+  .btn{display:inline-block;border:1px solid var(--blue);color:var(--blue2);padding:15px 30px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:500;transition:.25s}
+  .btn:hover{background:var(--blue);color:#04101f}
+  .btn-solid{background:var(--blue);color:#04101f;border-color:var(--blue)}.btn-solid:hover{background:var(--blue2)}
+  .sect{padding:96px 0}
+  .section-head{text-align:center;max-width:680px;margin:0 auto 54px}
+  .section-head h2{font-size:clamp(28px,5vw,46px)}
+  .section-head p{color:var(--mut);margin-top:16px;line-height:1.7}
+  nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:15px 24px;transition:.4s;border-bottom:1px solid transparent}
+  nav.solid{background:rgba(7,13,24,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{display:inline-flex;align-items:center;gap:9px;font-family:'Sora';font-weight:700;font-size:20px;text-decoration:none;color:var(--ink)}
+  .navlinks{display:flex;gap:24px;align-items:center;font-size:14px}
+  .navlinks a{color:var(--ink);text-decoration:none;opacity:.85}.navlinks a:hover{opacity:1;color:var(--blue2)}
+  .navcta{border:1px solid var(--blue);color:var(--blue2)!important;padding:8px 15px;border-radius:7px;opacity:1!important}
+  @media(max-width:820px){.navlinks a:not(.navcta){display:none}}
+  /* HERO */
+  .hero{min-height:100svh;display:flex;align-items:center;text-align:center;background:radial-gradient(900px 520px at 50% -8%,rgba(59,155,255,.20),transparent 60%)}
+  .hero .wrap{padding-top:120px;padding-bottom:60px}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(59,155,255,.12);border:1px solid var(--line);color:var(--blue2);font-size:12.5px;letter-spacing:.04em;padding:7px 14px;border-radius:30px;margin-bottom:26px}
+  .dot{width:8px;height:8px;border-radius:50%;background:#28d27e;box-shadow:0 0 0 0 rgba(40,210,126,.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(40,210,126,.6)}70%{box-shadow:0 0 0 9px rgba(40,210,126,0)}100%{box-shadow:0 0 0 0 rgba(40,210,126,0)}}
+  .hero h1{font-size:clamp(38px,7vw,82px);letter-spacing:-.01em}
+  .hero h1 em{font-style:normal;color:var(--blue2)}
+  .hero p{color:var(--mut);font-size:clamp(15px,2vw,19px);line-height:1.7;max-width:60ch;margin:24px auto 0}
+  .hero-cta{margin-top:38px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .demo-call{margin-top:30px;font-size:14px;color:var(--mut)}
+  .demo-call b{color:var(--ink);font-family:'Sora';font-size:20px}
+  .stats{margin-top:46px;display:flex;gap:36px;justify-content:center;flex-wrap:wrap}
+  .stats div b{display:block;font-family:'Sora';font-size:26px;color:var(--blue2)}
+  .stats div span{color:var(--mut);font-size:13px}
+  /* try band */
+  .try{background:linear-gradient(120deg,#0a1830,#0e2444);border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
+  .try h2{font-size:clamp(26px,4.5vw,42px)}
+  .try .num{font-family:'Sora';font-weight:700;font-size:clamp(30px,6vw,56px);color:var(--blue2);margin:14px 0;letter-spacing:.02em}
+  .try p{color:var(--mut)}
+  /* features */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media(max-width:880px){.grid3{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.grid3{grid-template-columns:1fr}}
+  .card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:28px;transition:.3s}
+  .card:hover{transform:translateY(-5px);border-color:var(--blue)}
+  .card .ic{font-size:24px;margin-bottom:13px}
+  .card h4{font-size:19px;margin-bottom:8px}
+  .card p{color:var(--mut);font-size:14px;line-height:1.7}
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media(max-width:820px){.steps{grid-template-columns:1fr}}
+  .step{border:1px solid var(--line);border-radius:14px;padding:28px;background:var(--bg2)}
+  .step .n{font-family:'Sora';font-size:30px;color:var(--blue)}
+  .step h4{margin:8px 0;font-size:19px}.step p{color:var(--mut);font-size:14px;line-height:1.65}
+  /* pricing */
+  .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+  @media(max-width:880px){.price-grid{grid-template-columns:1fr;max-width:440px;margin:0 auto}}
+  .plan{border:1px solid var(--line);border-radius:16px;padding:32px 28px;background:var(--bg2);display:flex;flex-direction:column}
+  .plan.feat{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue),0 30px 60px rgba(0,0,0,.45)}
+  .plan .tag{align-self:flex-start;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue2);border:1px solid var(--line);border-radius:20px;padding:4px 11px;margin-bottom:14px}
+  .plan h3{font-size:22px}.plan .amt{font-family:'Sora';font-size:40px;color:var(--blue2);margin:14px 0 2px}.plan .amt span{font-size:15px;color:var(--mut);font-family:'Inter'}
+  .plan ul{list-style:none;margin:16px 0 24px}.plan li{padding:7px 0 7px 26px;position:relative;color:var(--mut);font-size:14.5px}
+  .plan li::before{content:"✓";position:absolute;left:0;color:var(--blue)}
+  .plan .btn{margin-top:auto;text-align:center}
+  /* who */
+  .who{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  .who span{background:var(--bg2);border:1px solid var(--line);border-radius:30px;padding:10px 18px;font-size:14px;color:var(--ink)}
+  /* faq */
+  .faq{max-width:780px;margin:0 auto}
+  .q{border-bottom:1px solid var(--line);padding:22px 0}.q h4{font-size:18px;margin-bottom:7px}.q p{color:var(--mut);font-size:15px;line-height:1.7}
+  .band{background:linear-gradient(120deg,#0a1830,#0e2444);border-top:1px solid var(--line);text-align:center}
+  .band h2{font-size:clamp(28px,5vw,48px)}.band p{color:var(--mut);margin-top:16px}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
+  footer a{color:var(--blue2);text-decoration:none}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="brand" href="#top">
+    <svg width="30" height="30" viewBox="0 0 48 48"><rect width="48" height="48" rx="10" fill="#102a4d"/><circle cx="24" cy="24" r="15" fill="none" stroke="#4aa3ff" stroke-width="3"/><circle cx="24" cy="24" r="6" fill="#4aa3ff"/></svg>
+    CallPilot</a>
+  <div class="navlinks">
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#try">Try it</a>
+    <a class="navcta" href="#contact">Get a Demo</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="pill"><span class="dot"></span> Answering calls 24 / 7</div>
+    <h1>Never miss another <em>customer call.</em></h1>
+    <p>CallPilot is an AI receptionist that answers every call instantly, 24/7 — books appointments, answers questions, and texts or emails you the details. The calls you miss today are the customers you lose. Not anymore.</p>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="#contact">Get a Free Demo</a>
+      <a class="btn" href="#how">See How It Works</a>
+    </div>
+    <div class="demo-call">📞 Hear it live — call <b>+1 (571) 788-4804</b> and talk to CallPilot now.</div>
+    <div class="stats">
+      <div><b>24/7</b><span>Always answers</span></div>
+      <div><b>&lt;1 ring</b><span>Instant pickup</span></div>
+      <div><b>0</b><span>Missed calls</span></div>
+      <div><b>$0</b><span>Lost customers</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="sect">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The hidden leak</div>
+      <h2>Every missed call is money walking out the door</h2>
+      <p>When you're with a customer, on a job, or closed for the night, the phone still rings — and most callers won't leave a voicemail. They just call your competitor.</p>
+    </div>
+    <div class="grid3">
+      <div class="card reveal"><div class="ic">📵</div><h4>You're busy</h4><p>On a job, with a client, or it's after hours — and the call goes unanswered.</p></div>
+      <div class="card reveal"><div class="ic">🏃</div><h4>They don't wait</h4><p>Most callers hang up on voicemail and dial the next business instead.</p></div>
+      <div class="card reveal"><div class="ic">💸</div><h4>You lose the job</h4><p>One missed call can be hundreds — or thousands — in lost revenue.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRY -->
+<section class="sect try" id="try">
+  <div class="wrap reveal">
+    <div class="eyebrow" style="color:var(--blue2)">Try it right now</div>
+    <h2>Don't take our word for it — call CallPilot</h2>
+    <div class="num">+1 (571) 788-4804</div>
+    <p>Pick up your phone, dial the number, and have a real conversation with the AI. That's exactly what your customers will experience.</p>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="sect" id="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">How it works</div>
+      <h2>Live in a day. Zero effort for you.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">01</div><h4>We set it up</h4><p>We build your AI receptionist with your hours, services, and answers — and connect it to your number.</p></div>
+      <div class="step reveal"><div class="n">02</div><h4>It answers every call</h4><p>24/7, instantly. It chats naturally, answers questions, and books appointments or takes a message.</p></div>
+      <div class="step reveal"><div class="n">03</div><h4>You get the details</h4><p>After each call you receive the caller's name, number, and reason — by text or email. Nothing slips through.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="sect" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">What it does</div><h2>A receptionist that never sleeps</h2></div>
+    <div class="grid3">
+      <div class="card reveal"><div class="ic">☎️</div><h4>Answers 24/7</h4><p>Nights, weekends, holidays, lunch rushes — every call, picked up on the first ring.</p></div>
+      <div class="card reveal"><div class="ic">📅</div><h4>Books Appointments</h4><p>Takes bookings and requests, captures all the details, and confirms with the caller.</p></div>
+      <div class="card reveal"><div class="ic">💬</div><h4>Answers Questions</h4><p>Hours, location, services, prices — trained on your business, so it sounds like your team.</p></div>
+      <div class="card reveal"><div class="ic">📧</div><h4>Sends You Summaries</h4><p>Every call's details land in your inbox or phone — name, number, and what they wanted.</p></div>
+      <div class="card reveal"><div class="ic">🔢</div><h4>Keeps Your Number</h4><p>Forward your existing line to CallPilot in two minutes. No new number to advertise.</p></div>
+      <div class="card reveal"><div class="ic">🗣️</div><h4>Natural Voice</h4><p>Warm, human-sounding, and polite — callers get a great experience, not a robot.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="sect" id="pricing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Pricing</div>
+      <h2>Costs less than one missed job a month</h2>
+      <p>A one-time setup, then a simple monthly plan. Cancel anytime.</p>
+    </div>
+    <div class="price-grid">
+      <div class="plan reveal">
+        <div class="tag">Solo</div><h3>Starter</h3>
+        <div class="amt">$99<span>/mo</span></div>
+        <ul><li>AI receptionist 24/7</li><li>Up to 200 minutes/mo</li><li>Call summaries by email</li><li>Keeps your number</li><li>$99 one-time setup</li></ul>
+        <a class="btn" href="#contact">Get Started</a>
+      </div>
+      <div class="plan feat reveal">
+        <div class="tag">Most Popular</div><h3>Business</h3>
+        <div class="amt">$199<span>/mo</span></div>
+        <ul><li>Everything in Starter</li><li>Up to 600 minutes/mo</li><li>Appointment booking</li><li>Text + email summaries</li><li>Custom voice & answers</li><li>Setup included</li></ul>
+        <a class="btn btn-solid" href="#contact">Get a Free Demo</a>
+      </div>
+      <div class="plan reveal">
+        <div class="tag">High Volume</div><h3>Pro</h3>
+        <div class="amt">$299<span>+/mo</span></div>
+        <ul><li>Everything in Business</li><li>Unlimited / high minutes</li><li>Multiple locations</li><li>Priority support</li><li>CRM / calendar integration</li><li>Setup included</li></ul>
+        <a class="btn" href="#contact">Enquire</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO -->
+<section class="sect" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">Built for</div><h2>Perfect for businesses that live on the phone</h2></div>
+    <div class="who reveal">
+      <span>🔧 Plumbers</span><span>❄️ HVAC</span><span>⚡ Electricians</span><span>🏠 Roofers</span>
+      <span>💇 Salons & Barbers</span><span>💅 Nail & Beauty</span><span>🦷 Dental & Clinics</span>
+      <span>🚗 Auto Repair</span><span>🍽️ Restaurants</span><span>🏘️ Real Estate</span><span>⚖️ Law Firms</span>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sect">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">Questions</div><h2>Good to know</h2></div>
+    <div class="faq">
+      <div class="q reveal"><h4>Will it sound like a robot?</h4><p>No — it uses a natural, human-sounding voice and conversational AI. Most callers won't realise it isn't a person. Call +1 (571) 788-4804 and hear for yourself.</p></div>
+      <div class="q reveal"><h4>Do I have to change my phone number?</h4><p>No. You simply forward your existing number to CallPilot — takes two minutes and you keep everything.</p></div>
+      <div class="q reveal"><h4>What happens after a call?</h4><p>You get the caller's name, number, and reason for calling by email (and text), so you can follow up or it books the appointment for you.</p></div>
+      <div class="q reveal"><h4>How long to set up?</h4><p>Usually live within a day. We configure it with your hours, services and answers — you do nothing.</p></div>
+      <div class="q reveal"><h4>Can I cancel anytime?</h4><p>Yes. No long contracts — it's month to month.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="sect band" id="contact">
+  <div class="wrap reveal">
+    <div class="eyebrow" style="color:var(--blue2)">Stop losing calls</div>
+    <h2>Get your free CallPilot demo</h2>
+    <p>Tell us about your business and we'll set up an AI receptionist trained on it — free. Hear it answer as your company before you decide anything.</p>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="mailto:hello@callpilotvoice.co.uk?subject=CallPilot%20demo">Email Us</a>
+      <a class="btn" href="tel:+15717884804">📞 Call the Live Demo</a>
+    </div>
+    <p style="margin-top:22px;font-size:14px">CallPilot · <a href="mailto:hello@callpilotvoice.co.uk" style="text-decoration:none">hello@callpilotvoice.co.uk</a> · Live demo: +1 (571) 788-4804</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><strong style="font-family:'Sora';color:var(--ink)">CallPilot</strong> — the AI receptionist that never misses a call · <a href="mailto:hello@callpilotvoice.co.uk">hello@callpilotvoice.co.uk</a> · © 2026</div>
+</footer>
+
+<script>
+(function(){
+  if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches && window.gsap){
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('.reveal').forEach(function(el){gsap.to(el,{opacity:1,y:0,duration:.85,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%',once:true}});});
+  }
+  var nav=document.getElementById('nav');
+  function s(){nav.classList.toggle('solid',window.scrollY>50);}
+  window.addEventListener('scroll',s,{passive:true});s();
+})();
+</script>
+</body>
+</html>
