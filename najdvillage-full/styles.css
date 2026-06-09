@@ -16,6 +16,9 @@ nav.solid{background:var(--bg);backdrop-filter:blur(10px);border-bottom:1px soli
 .navlinks{display:flex;gap:22px;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;align-items:center}
 .navlinks a{color:var(--ink);text-decoration:none;opacity:.85}.navlinks a:hover,.navlinks a.active{opacity:1;color:var(--ac2)}
 .book-sm{border:1px solid var(--ac);color:var(--ac2)!important;padding:9px 16px}
+.langtoggle{background:none;border:1px solid var(--ac);color:var(--ac2);padding:8px 13px;border-radius:2px;font-family:var(--sans);font-size:12px;letter-spacing:.08em;cursor:pointer}
+.langtoggle:hover{background:var(--ac);color:var(--bg)}
+html[dir=rtl] .navlinks{flex-direction:row-reverse}
 @media(max-width:860px){.navtoggle{display:block}.navlinks{position:fixed;inset:0 0 0 auto;width:74%;max-width:320px;flex-direction:column;justify-content:center;gap:26px;background:var(--bg);transform:translateX(100%);transition:transform .4s;font-size:15px}.navlinks.open{transform:translateX(0)}}
 .hero{height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;position:relative}
 .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.08)}

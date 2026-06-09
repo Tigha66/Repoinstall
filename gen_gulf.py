@@ -173,6 +173,9 @@ nav.solid{{background:var(--bg);backdrop-filter:blur(10px);border-bottom:1px sol
 .navlinks{{display:flex;gap:22px;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;align-items:center}}
 .navlinks a{{color:var(--ink);text-decoration:none;opacity:.85}}.navlinks a:hover,.navlinks a.active{{opacity:1;color:var(--ac2)}}
 .book-sm{{border:1px solid var(--ac);color:var(--ac2)!important;padding:9px 16px}}
+.langtoggle{{background:none;border:1px solid var(--ac);color:var(--ac2);padding:8px 13px;border-radius:2px;font-family:var(--sans);font-size:12px;letter-spacing:.08em;cursor:pointer}}
+.langtoggle:hover{{background:var(--ac);color:var(--bg)}}
+html[dir=rtl] .navlinks{{flex-direction:row-reverse}}
 @media(max-width:860px){{.navtoggle{{display:block}}.navlinks{{position:fixed;inset:0 0 0 auto;width:74%;max-width:320px;flex-direction:column;justify-content:center;gap:26px;background:var(--bg);transform:translateX(100%);transition:transform .4s;font-size:15px}}.navlinks.open{{transform:translateX(0)}}}}
 .hero{{height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;position:relative}}
 .hero-bg{{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.08)}}
@@ -237,7 +240,8 @@ def navhtml(r, active=None, full=True):
     a = "".join(lk(t, href) for t, href in links)
     brand = f'<a class="brand" href="{home}">{r["name"]}</a>' if full else f'<div class="brand">{r["name"]}</div>'
     tog = '<button class="navtoggle" id="navtoggle" aria-label="Menu">&#9776;</button>' if full else ''
-    return f'<nav id="nav">{brand}{tog}<div class="navlinks" id="navlinks">{a}<a class="book-sm" href="{r["web"]}" target="_blank" rel="noopener">Reserve</a></div></nav>'
+    lb = '<button id="langtoggle" class="langtoggle">العربية</button>' if r.get('bilingual') else ''
+    return f'<nav id="nav">{brand}{tog}<div class="navlinks" id="navlinks">{a}{lb}<a class="book-sm" href="{r["web"]}" target="_blank" rel="noopener">Reserve</a></div></nav>'
 
 def foot(r):
     return f"""<footer><div class="wrap"><div class="foot-grid">
@@ -295,7 +299,7 @@ def demo(r):
 <div class="stat reveal"><div class="num" data-count="{r['s3']}">0</div><div class="lbl">{r['l3']}</div></div></div></section>
 <section class="pad" id="menu"><div class="wrap"><div class="section-head reveal"><div class="eyebrow">From the Table</div><h2>A Taste of the Menu</h2></div><div class="menu-grid">{flatmenu(r)}</div></div></section>
 <section class="band pad" id="visit"><div class="wrap reveal"><div class="eyebrow center" style="text-align:center">Reservations</div><h2 style="font-size:clamp(30px,5vw,52px)">{r['cta']}</h2><p class="ar" style="color:var(--ac2);font-size:20px;margin:14px 0 26px">أهلاً وسهلاً</p><a class="btn btn-solid" href="{r['web']}" target="_blank" rel="noopener">Reserve a Table</a></div></section>
-{foot(r)}<script>{APP_JS}</script></body></html>"""
+{foot(r)}<script>{APP_JS}</script>{i18n_script(r)}</body></html>"""
 
 # ---- emit full pages ---------------------------------------------------------
 def page(r, name, body, active):
@@ -303,7 +307,7 @@ def page(r, name, body, active):
     return f"""{h}<link rel="stylesheet" href="styles.css">{GSAP}</head><body>
 {navhtml(r,active=active,full=True)}
 {body}
-{foot(r)}<script src="app.js"></script></body></html>"""
+{foot(r)}<script src="app.js"></script>{i18n_script(r)}</body></html>"""
 
 def full_index(r):
     body=f"""<section class="hero" id="top"><div class="hero-bg" style="background-image:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.82)),url('{img(r['heroimg'],1600)}')"></div>
@@ -373,6 +377,68 @@ for r in R:
     if r['slug'] in stat_over:
         s=stat_over[r['slug']]; r['s1'],r['l1'],r['s2'],r['l2'],r['s3'],r['l3']=s
     if r['slug'] in cta_over: r['cta']=cta_over[r['slug']]
+
+# ---- bilingual (AR/EN) -------------------------------------------------------
+import json
+BIL={
+ "najdvillage":dict(tag="مطبخ سعودي تقليدي · الرياض", cta="نصف المملكة على مائدة واحدة",
+   story=["منذ عام ١٩٩٦، تنقل القرية النجدية مائدة وسط الجزيرة العربية إلى الرياض — وصفات من قلب نجد، تُقدّم في أجواءٍ من الطين والسعف وكرم المجالس.",
+          "كل طبقٍ يُطهى على الطريقة القديمة: نارٌ هادئة، أفرانٌ طينية، وكرمٌ يُعرّف الضيافة السعودية."],
+   labels=["عاماً من التراث","طبقاً سعودياً","مقعداً في القرية"]),
+ "maiz":dict(tag="مطبخ سعودي راقٍ · الدرعية · الرياض", cta="رحلة عبر المملكة العربية السعودية",
+   story=["وضعت ميز المطبخ السعودي الفاخر على خريطة العالم — تطلّ على حي الطريف المُدرج في اليونسكو في الدرعية التاريخية، وتأخذكم في رحلةٍ عبر مناطق المملكة الثلاث عشرة، ونجدٌ في قلبها.",
+          "وصفاتٌ تراثية تلتقي بتقنياتٍ حديثة: حبوبٌ أصيلة، لومي، ونارٌ هادئة — مُقدّمة لليوم."],
+   labels=["منطقة سعودية","الدرعية لليونسكو","مقعداً تطلّ على الطريف"]),
+ "yasminepalace":dict(tag="مطبخ شامي وقطري · الدوحة", cta="انضمّوا إلى مائدتنا",
+   story=["يقدّم قصر الياسمين فخامة المائدة الشامية والخليجية في قلب الدوحة — مازاتٌ سخيّة، مشاوٍ على الفحم، وطبخاتٌ قطرية تُقدّم بكرم القصور.",
+          "أجواءٌ من الدفء والتفاصيل، حيث يُستقبل كل ضيفٍ كأنه من العائلة."],
+   labels=["عاماً من الضيافة","طبقاً في القائمة","مقعداً ومجلساً"]),
+ "mala":dict(tag="مطبخ كويتي عصري · مدينة الكويت", cta="نكهةٌ كويتية بحلّةٍ جديدة",
+   story=["تُعيد مالا تصوّر المطبخ الكويتي لجيلٍ جديد — نكهات الخليج الجريئة والعطرة، مُقدّمة بثقةٍ ولون.",
+          "بهارات البزار واللومي والزعفران تلتقي بتقنياتٍ حديثة في مكانٍ شابٍ كطعامه."],
+   labels=["أعوامٌ من التجديد","طبقاً كويتياً عصرياً","مقعداً في المكان"]),
+ "bayteltalleh":dict(tag="مطبخ لبناني بيتي · كتارا · الدوحة", cta="المائدة اللبنانية، في الدوحة",
+   story=["بيت التلة يقدّم المائدة اللبنانية العائلية في كتارا: مازاتٌ بيتية، مشاوٍ على الفحم، وضيافةٌ دافئة تُقدّم كما ينبغي.",
+          "قوائمُ محدّدة، أطباقٌ سخيّة، وكرمٌ بيروتيٌ أصيل."],
+   labels=["عاماً من المائدة اللبنانية","مازةً ومشاوي","مقعداً في كتارا"]),
+}
+for r in R:
+    if r['slug'] in BIL:
+        b=BIL[r['slug']]; r['bilingual']=True
+        r['ar_tag']=b['tag']; r['ar_cta']=b['cta']; r['ar_story']=b['story']
+        r['ar_l1'],r['ar_l2'],r['ar_l3']=b['labels']
+
+COMMON_AR={
+ "Home":"الرئيسية","Menu":"القائمة","Events":"المناسبات","Our Story":"قصتنا","Gallery":"المعرض","Visit":"زورونا","Reserve":"احجز",
+ "Dishes":"الأطباق","Reserve a Table":"احجز طاولة","View the Menu":"تصفّح القائمة","See the Full Menu":"القائمة كاملة",
+ "View Gallery":"شاهد المعرض","Visit Us":"زورونا","Enquire & Visit":"استفسر وزُرنا","Email Us":"راسلنا","Signature Dishes":"أطباقنا المميزة",
+ "Scroll":"مرّر للأسفل","Interactive · 3D":"تفاعلي · ثلاثي الأبعاد","Rotating in 3D":"يدور بتقنية ثلاثية الأبعاد",
+ "From the Table":"من المائدة","A Taste of the Menu":"لمحة من القائمة","The Experience":"الأجواء","Our Setting":"أجواؤنا",
+ "Reservations":"الحجوزات","The Menu":"القائمة","Private Dining":"المجالس الخاصة","Find us":"موقعنا","Opening hours":"أوقات العمل",
+ "Contact & reservations":"التواصل والحجز","Hours":"الأوقات","Contact":"التواصل","Plan your event":"خطّط لمناسبتك",
+ "Dishes & setting":"الأطباق والأجواء","Private dining & celebrations":"المجالس والمناسبات الخاصة",
+ # menu category names
+ "Starters":"المقبلات","From the Fire":"من النار","Home Pots":"الطبخات","Sweets":"الحلويات","To Begin":"البداية","Mains":"الأطباق الرئيسية",
+ "Tasting":"التذوق","Cold Mezze":"مقبلات باردة","Hot Mezze":"مقبلات ساخنة","Charcoal":"على الفحم","Gulf Pots":"الطبخات الخليجية",
+ "Small Plates":"أطباق صغيرة","Bold & New":"الجديد","Breakfast & Fwala":"الفطور والفوالة",
+}
+def ar_dict(r):
+    d=dict(COMMON_AR)
+    d[r['tag']]=r['ar_tag']; d[r['cta']]=r['ar_cta']
+    d[r['story'][0]]=r['ar_story'][0]; d[r['story'][1]]=r['ar_story'][1]
+    d[r['l1']]=r['ar_l1']; d[r['l2']]=r['ar_l2']; d[r['l3']]=r['ar_l3']
+    return d
+TOGGLE_JS="""<script>(function(){var AR=__ARDICT__;
+var SEL=['.navlinks a','.eyebrow','.section-head h2','.band h2','.split h2','.tagline','.btn','.stat .lbl','.scroll-hint','.phero-in h1','.phero-in p','.menu-cat h3','.badge3d','.split p','.foot-grid strong'];
+var btn=document.getElementById('langtoggle');var lang='en';
+function nodes(){var a=[];SEL.forEach(function(s){document.querySelectorAll(s).forEach(function(e){a.push(e)})});return a;}
+function setLang(l){lang=l;var H=document.documentElement;H.lang=l;H.dir=(l==='ar')?'rtl':'ltr';
+ nodes().forEach(function(e){if(l==='ar'){if(e.getAttribute('data-en')===null)e.setAttribute('data-en',e.textContent.trim());var k=e.getAttribute('data-en');if(AR[k]!=null)e.textContent=AR[k];}else{if(e.getAttribute('data-en')!==null)e.textContent=e.getAttribute('data-en');}});
+ if(btn)btn.textContent=(l==='ar')?'EN':'العربية';}
+if(btn)btn.addEventListener('click',function(){setLang(lang==='en'?'ar':'en')});})();</script>"""
+def i18n_script(r):
+    if not r.get('bilingual'): return ""
+    return TOGGLE_JS.replace("__ARDICT__", json.dumps(ar_dict(r), ensure_ascii=False))
 
 # ---- write -------------------------------------------------------------------
 base="/home/daytona/project"
