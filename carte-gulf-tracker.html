@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carte — Gulf Sales Pipeline</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%230b0c0f'/><circle cx='24' cy='24' r='17' fill='none' stroke='%23cda349' stroke-width='2.4'/><circle cx='24' cy='24' r='11' fill='none' stroke='%23cda349' stroke-width='1' opacity='.55'/><text x='24' y='30.5' font-family='Georgia,serif' font-size='18' fill='%23e6c97e' text-anchor='middle'>C</text></svg>">
+<style>
+  :root{--bg:#0b0c0f;--card:#15161c;--card2:#101117;--ink:#f3eee2;--muted:#9a9384;--gold:#cda349;--gold2:#e6c97e;--line:rgba(205,163,73,.22);
+    --send:#6b7280;--sent:#3b82f6;--view:#06b6d4;--reply:#f59e0b;--concept:#a855f7;--dep:#14b8a6;--won:#22c55e;--lost:#ef4444}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:14px;
+    background-image:radial-gradient(900px 400px at 82% -10%,rgba(205,163,73,.12),transparent)}
+  .wrap{max-width:1240px;margin:0 auto;padding:28px 20px 80px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:8px}
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo .mark{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;font-family:Georgia,serif;color:var(--gold2);font-size:22px;background:#0e0f13}
+  .logo h1{font-size:20px;font-family:Georgia,serif;letter-spacing:.02em}
+  .logo .sub{color:var(--muted);font-size:12px}
+  .demo{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{background:var(--card);border:1px solid var(--line);border-radius:30px;padding:8px 14px;font-size:12.5px;color:var(--ink);text-decoration:none}
+  .chip b{color:var(--gold2)}.chip:hover{border-color:var(--gold)}
+  .bar{display:flex;gap:14px;flex-wrap:wrap;margin:22px 0 14px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;min-width:120px}
+  .stat .n{font-size:24px;font-weight:700;font-family:Georgia,serif}
+  .stat .l{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+  .tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  button.act{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 14px;font-size:13px;cursor:pointer}
+  button.act:hover{border-color:var(--gold);color:var(--gold2)}
+  .legend{display:flex;gap:13px;flex-wrap:wrap;color:var(--muted);font-size:11.5px;margin:6px 2px 16px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:50%}
+  table{width:100%;border-collapse:separate;border-spacing:0 8px}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);padding:0 12px 4px}
+  td{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:13px 12px;vertical-align:top}
+  td:first-child{border-left:1px solid var(--line);border-radius:12px 0 0 12px}
+  td:last-child{border-right:1px solid var(--line);border-radius:0 12px 12px 0}
+  tr.hot td{box-shadow:inset 3px 0 0 var(--won)}
+  .co{font-weight:600;font-size:14.5px}.co .star{color:var(--won);font-size:12px;margin-left:6px}
+  .meta{color:var(--muted);font-size:12.5px;margin-top:3px}
+  .city{display:inline-block;font-size:10.5px;letter-spacing:.04em;padding:2px 9px;border-radius:20px;margin-top:5px;background:rgba(205,163,73,.12);color:var(--gold2);border:1px solid var(--line)}
+  .links2 a{color:var(--gold2);text-decoration:none;font-size:12px;display:inline-block;margin-right:10px}
+  .links2 a:hover{text-decoration:underline}
+  .val{font-family:Georgia,serif;color:var(--gold2);font-size:15px}
+  .status{border:none;border-radius:30px;padding:7px 13px;font-size:11.5px;font-weight:600;color:#06101f;cursor:pointer;white-space:nowrap}
+  .note{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:8px;font-size:12.5px;font-family:inherit;resize:vertical;min-height:38px}
+  .foot{margin-top:30px;color:var(--muted);font-size:12px;text-align:center}
+  @media(max-width:820px){th:nth-child(3),td:nth-child(3){display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">
+      <div class="mark">C</div>
+      <div><h1>Carte — Gulf Pipeline</h1><div class="sub">Cinematic restaurant websites · Dubai · Doha · Kuwait · Riyadh</div></div>
+    </div>
+    <div class="demo">
+      <a class="chip" href="https://nimble-ledger-s3vb.here.now/" target="_blank">🌐 Gulf landing</a>
+      <a class="chip" href="https://wa.me/447901921642" target="_blank">💬 WhatsApp <b>+44 7901 921642</b></a>
+    </div>
+  </header>
+
+  <div class="bar" id="stats"></div>
+
+  <div class="tools">
+    <button class="act" onclick="resetAll()">↺ Reset</button>
+    <button class="act" onclick="exportCSV()">⤓ Export CSV</button>
+    <button class="act" onclick="copyDM()">📋 Copy DM</button>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot" style="background:var(--send)"></i>To send</span>
+    <span><i class="dot" style="background:var(--sent)"></i>Sent</span>
+    <span><i class="dot" style="background:var(--view)"></i>Viewed</span>
+    <span><i class="dot" style="background:var(--reply)"></i>Replied</span>
+    <span><i class="dot" style="background:var(--concept)"></i>Concept approved</span>
+    <span><i class="dot" style="background:var(--dep)"></i>Deposit paid</span>
+    <span><i class="dot" style="background:var(--won)"></i>Won</span>
+    <span><i class="dot" style="background:var(--lost)"></i>Lost</span>
+    <span style="margin-left:auto">⭐ = best fit · click status to advance · values in AED</span>
+  </div>
+
+  <table>
+    <thead><tr><th>Restaurant</th><th>Contact</th><th>Assets</th><th>Deal (AED)</th><th>Status</th><th style="width:22%">Notes</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <div class="foot">Carte · hello@callpilotvoice.co.uk · saved in your browser only (localStorage).<br>
+  Swap the assistant/demo content per prospect before sending. Take 50% deposit before building. Keep the site on your URL until paid in full.</div>
+</div>
+
+<script>
+const STATUSES=[
+ {k:'To send',c:'var(--send)'},{k:'Sent',c:'var(--sent)'},{k:'Viewed',c:'var(--view)'},{k:'Replied',c:'var(--reply)'},
+ {k:'Concept approved',c:'var(--concept)'},{k:'Deposit paid',c:'var(--dep)'},{k:'Won',c:'var(--won)'},{k:'Lost',c:'var(--lost)'}];
+const LEADS=[
+ {co:'Bait Maryam',star:true,hot:true,city:'Dubai',cuisine:'Levantine · Michelin-recognised',
+  contact:'054 704 4774 · @bait.maryam · info@baitmaryam.com',
+  demo:'https://kindly-geyser-cz7n.here.now/',full:'https://lapis-mesa-vkrb.here.now/',val:18000,
+  note:'Demo + full site built. Send full-site link. Chef Salam Dakkak.'},
+ {co:'Gerbou',star:true,hot:true,city:'Dubai',cuisine:'Contemporary Emirati · fine dining',
+  contact:'+971 50 287 8882 · @gerbou · info@gerbou.com',
+  demo:'https://woody-prism-kpcb.here.now/',full:'https://glacial-trellis-5bqm.here.now/',val:20000,
+  note:'Demo + full site built. Curated by Tashkeel. Higher tier.'},
+ {co:'Karak House',star:true,city:'Dubai',cuisine:'Homegrown Emirati café · Karak chai',
+  contact:'+971 4 551 6852 · @karakhouse · rmkarakhousedm@aaent.me',
+  demo:'https://cobalt-mango-45rs.here.now/',full:'',val:14000,
+  note:'Demo built. Downtown, Burj Khalifa view. Casual = faster yes.'},
+ {co:'Yasmine Palace',star:true,city:'Doha',cuisine:'Levantine / Qatari',
+  contact:'yasminepalace.com',demo:'',full:'',val:16000,
+  note:'Independent. Build demo next. DM via IG / site form.'},
+ {co:'Najd Village',star:true,city:'Riyadh',cuisine:'Traditional Saudi',
+  contact:'najdvillage.com',demo:'',full:'',val:16000,
+  note:'Independent since 1996. Riyadh demo style ready (Darat Najd).'},
+ {co:'Maiz',city:'Riyadh',cuisine:'Saudi fine dining · Diriyah',
+  contact:'maiz.sa',demo:'',full:'',val:25000,
+  note:'Flagship reference. Has strong site already — pitch refresh/care.'},
+ {co:'Mala',star:true,city:'Kuwait',cuisine:'Modern Kuwaiti · homegrown',
+  contact:'search @mala.kw',demo:'',full:'',val:15000,
+  note:'Young brand, IG-led. Good fit. Build demo.'},
+ {co:'Gastronomica',star:true,city:'Kuwait',cuisine:'Café group · homegrown',
+  contact:'gastronomica-me.com',demo:'',full:'',val:15000,
+  note:'Multi-site café group — recurring care potential.'},
+ {co:'Noor Al Sham',city:'Dubai',cuisine:'Contemporary Levantine · DIFC',
+  contact:'search @nooralsham',demo:'',full:'',val:18000,note:'Chef-led tasting menu. DIFC.'},
+ {co:'Bayt El Talleh',city:'Doha',cuisine:'Lebanese · Katara',
+  contact:'via visitqatar.com',demo:'',full:'',val:15000,note:'Homestyle Levantine, Katara Village.'},
+];
+const KEY='carte_gulf_pipeline_v1';
+let state=JSON.parse(localStorage.getItem(KEY)||'{}');
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function get(i){return state[i]||{s:0,n:''}}
+function render(){
+  const tb=document.getElementById('rows');tb.innerHTML='';
+  LEADS.forEach((L,i)=>{
+    const st=get(i),S=STATUSES[st.s];
+    let assets='';
+    if(L.demo&&L.demo.indexOf('__')<0)assets+=`<a href="${L.demo}" target="_blank">Demo ↗</a>`;
+    else assets+=`<span style="color:var(--muted);font-size:12px">demo: to build</span>`;
+    if(L.full)assets+=`<a href="${L.full}" target="_blank">Full site ↗</a>`;
+    const tr=document.createElement('tr');tr.className=L.hot?'hot':'';
+    tr.innerHTML=`
+      <td><div class="co">${L.co}${L.star?'<span class="star">⭐</span>':''}</div><div class="city">${L.city}</div><div class="meta">${L.cuisine}</div></td>
+      <td><div class="meta">${L.contact}</div></td>
+      <td><div class="links2">${assets}</div></td>
+      <td><div class="val">${L.val.toLocaleString()}</div><div class="meta">+care/mo</div></td>
+      <td><button class="status" style="background:${S.c}" onclick="cycle(${i})">${S.k}</button></td>
+      <td><textarea class="note" oninput="setNote(${i},this.value)" placeholder="notes…">${st.n||L.note||''}</textarea></td>`;
+    tb.appendChild(tr);
+  });
+  stats();
+}
+function cycle(i){const st=get(i);st.s=(st.s+1)%STATUSES.length;state[i]=st;save();render()}
+function setNote(i,v){const st=get(i);st.n=v;state[i]=st;save()}
+function resetAll(){if(confirm('Reset all?')){state={};save();render()}}
+function stats(){
+  const c={};STATUSES.forEach(s=>c[s.k]=0);let won=0,pipe=0;
+  LEADS.forEach((L,i)=>{const k=STATUSES[get(i).s].k;c[k]++;if(k==='Won')won+=L.val;if(['Replied','Concept approved','Deposit paid'].includes(k))pipe+=L.val});
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="n">${LEADS.length}</div><div class="l">Leads</div></div>
+    <div class="stat"><div class="n" style="color:var(--reply)">${c['Replied']+c['Concept approved']+c['Deposit paid']}</div><div class="l">Active</div></div>
+    <div class="stat"><div class="n" style="color:var(--won)">${c['Won']}</div><div class="l">Won</div></div>
+    <div class="stat"><div class="n" style="color:var(--gold2)">AED ${pipe.toLocaleString()}</div><div class="l">In pipeline</div></div>
+    <div class="stat"><div class="n" style="color:var(--won)">AED ${won.toLocaleString()}</div><div class="l">Won value</div></div>`;
+}
+const DM=`Hi 👋 I'm a website designer and I loved your restaurant so much I built you something — a cinematic concept website, bilingual Arabic & English, with your dishes rotating in 3D. Tap it on your phone: [DEMO LINK]. It's a free gift, no obligation. If you like it, I'd love to make it yours. — Abdelhak, Carte · wa.me/447901921642`;
+function copyDM(){navigator.clipboard.writeText(DM).then(()=>alert('DM copied — paste the demo link in ✔'))}
+function exportCSV(){
+  let rows=[['Restaurant','City','Cuisine','Contact','Deal AED','Status','Notes']];
+  LEADS.forEach((L,i)=>{const st=get(i);rows.push([L.co,L.city,L.cuisine,L.contact.replace(/,/g,' '),L.val,STATUSES[st.s].k,(st.n||L.note||'').replace(/,/g,';')])});
+  const csv=rows.map(r=>r.map(x=>`"${x}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='carte-gulf-pipeline.csv';a.click();
+}
+render();
+</script>
+</body>
+</html>
