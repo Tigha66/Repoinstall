@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>دارة نجد · مطبخ سعودي أصيل · الرياض</title>
+<meta name="description" content="دارة نجد — تجربة طعام سعودية تراثية في الدرعية التاريخية بالرياض. حجز الطاولات، قائمة الطعام، والمناسبات.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{--bg:#120c06;--bg2:#1d140a;--ink:#f6ecdd;--muted:#c0a989;--sand:#c98f3c;--sand2:#e7b86a;--clay:#a85f2e;--line:rgba(201,143,60,.30);
+    --head:'Aref Ruqaa',serif;--sans:'Tajawal',system-ui,sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased;text-align:right}
+  h1,h2,h3{font-family:var(--head);font-weight:700;line-height:1.2}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:13px;letter-spacing:.16em;color:var(--sand2);margin-bottom:16px}
+  .pad{padding:120px 0}
+  .reveal{opacity:0;transform:translateY(40px)}
+  .center{text-align:center}.section-head{text-align:center;margin-bottom:60px}.section-head h2{font-size:clamp(36px,6.5vw,64px)}
+  .btn{display:inline-block;border:1px solid var(--sand);color:var(--sand2);padding:14px 34px;border-radius:3px;text-decoration:none;
+    font-size:16px;letter-spacing:.03em;transition:.3s}
+  .btn:hover{background:var(--sand);color:#120c06}
+  .btn-solid{background:var(--sand);color:#120c06}.btn-solid:hover{background:var(--sand2)}
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 30px;
+    border-bottom:1px solid transparent;transition:.4s}
+  nav.solid{background:rgba(18,12,6,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{font-family:var(--head);font-size:30px;font-weight:700;color:var(--sand2)}
+  .navlinks{display:flex;gap:26px;font-size:15px}
+  .navlinks a{color:var(--ink);text-decoration:none;opacity:.85}.navlinks a:hover{color:var(--sand2)}
+  .book-sm{border:1px solid var(--sand);color:var(--sand2)!important;padding:8px 18px;border-radius:3px}
+  @media(max-width:760px){.navlinks a:not(.book-sm){display:none}}
+  .hero{height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;position:relative}
+  .hero-bg{position:absolute;inset:0;background:linear-gradient(rgba(12,8,4,.5),rgba(12,8,4,.88)),
+    url('https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=1600&auto=format&fit=crop') center/cover;transform:scale(1.08)}
+  .curtain{position:absolute;top:0;bottom:0;width:51%;background:linear-gradient(var(--bg2),var(--bg));z-index:5}
+  #cLeft{left:0}#cRight{right:0}
+  .hero-inner{position:relative;z-index:6;padding:0 20px}
+  .hero h1{font-size:clamp(54px,12vw,140px);color:var(--sand2)}
+  .tagline{margin-top:20px;font-size:clamp(16px,2.6vw,22px);letter-spacing:.05em;color:var(--muted)}
+  .hero-cta{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:6;font-size:13px;letter-spacing:.1em;color:var(--muted)}
+  .tilt-wrap{perspective:1300px}
+  .tilt-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:820px){.tilt-row{grid-template-columns:1fr}}
+  .tilt{position:relative;transform-style:preserve-3d;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--bg2);
+    box-shadow:0 26px 50px rgba(0,0,0,.55);animation:float3d 6s ease-in-out infinite;will-change:transform}
+  @keyframes float3d{0%,100%{transform:rotateY(-11deg) rotateX(4deg)}50%{transform:rotateY(11deg) rotateX(-4deg)}}
+  .tilt-row .tilt:nth-child(2){animation-delay:-2s}.tilt-row .tilt:nth-child(3){animation-delay:-4s}
+  .tilt img{width:100%;height:320px;object-fit:cover;display:block;filter:saturate(1.08) brightness(.9)}
+  .tilt .body{position:absolute;right:0;left:0;bottom:0;padding:24px;background:linear-gradient(transparent,rgba(8,5,2,.93));transform:translateZ(50px)}
+  .tilt h3{font-size:28px;color:var(--sand2)}.tilt p{color:var(--muted);font-size:15px;margin-top:5px}
+  .badge3d{display:inline-block;margin-top:14px;font-size:13px;letter-spacing:.05em;color:var(--sand2);border:1px solid var(--line);padding:6px 14px;border-radius:20px}
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 60px;max-width:920px;margin:0 auto}
+  @media(max-width:720px){.menu-grid{grid-template-columns:1fr}}
+  .dish{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line)}
+  .dish .d-name{font-size:20px;font-family:var(--head)}.dish .d-desc{display:block;font-size:14px;color:var(--muted);margin-top:3px}
+  .dish .d-price{color:var(--sand2);font-size:18px;white-space:nowrap}
+  .stats{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;text-align:center}
+  @media(max-width:640px){.stat-grid{grid-template-columns:1fr}}
+  .stat .num{font-family:var(--head);font-size:56px;color:var(--sand2)}.stat .lbl{color:var(--muted);margin-top:6px;font-size:15px}
+  .band{background:linear-gradient(120deg,#1a1109,#2a1c0d);border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
+  footer{border-top:1px solid var(--line);padding:46px 0;text-align:center;color:var(--muted);font-size:15px}
+  .demo-note{margin-top:18px;font-size:13px;color:#8a7458}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}.curtain{display:none}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <div class="brand">دارة نجد</div>
+  <div class="navlinks">
+    <a href="#dishes">الأطباق</a><a href="#menu">القائمة</a><a href="#visit">زورونا</a>
+    <a class="book-sm" href="#book">احجز طاولة</a>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="curtain" id="cLeft"></div><div class="curtain" id="cRight"></div>
+  <div class="hero-inner">
+    <h1>دارة نجد</h1>
+    <div class="tagline">مطبخ سعودي أصيل · الدرعية · الرياض</div>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="#book">احجز طاولة</a>
+      <a class="btn" href="#dishes">أطباقنا المميزة</a>
+    </div>
+  </div>
+  <div class="scroll-hint">مرّر للأسفل ↓</div>
+</section>
+
+<section class="pad" id="dishes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">تفاعلي · ثلاثي الأبعاد</div>
+      <h2>أطباقنا المميزة</h2>
+      <span class="badge3d">تدور بتقنية ثلاثية الأبعاد</span>
+    </div>
+    <div class="tilt-wrap">
+      <div class="tilt-row">
+        <div class="tilt"><img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>كبسة لحم</h3><p>أرز بسمتي، لحم ضأن نجدي، بهارات</p></div></div>
+        <div class="tilt"><img src="https://images.unsplash.com/photo-1547573854-74d2a71d0826?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>جريش</h3><p>قمح مجروش، لبن، بصل مكرمل</p></div></div>
+        <div class="tilt"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>كليجا</h3><p>عجينة التمر، هيل، قرفة</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats pad">
+  <div class="wrap stat-grid">
+    <div class="stat reveal"><div class="num" data-count="28">0</div><div class="lbl">عاماً من التراث</div></div>
+    <div class="stat reveal"><div class="num" data-count="42">0</div><div class="lbl">طبقاً سعودياً</div></div>
+    <div class="stat reveal"><div class="num" data-count="150">0</div><div class="lbl">مقعداً في الدارة</div></div>
+  </div>
+</section>
+
+<section class="pad" id="menu">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">من القائمة</div><h2>سفرة نجدية</h2></div>
+    <div class="menu-grid">
+      <div class="dish reveal"><span><span class="d-name">كبسة لحم حاشي</span><span class="d-desc">أرز، لحم حاشي، دقوس حار</span></span><span class="d-price">٨٥ ر.س</span></div>
+      <div class="dish reveal"><span><span class="d-name">مندي دجاج</span><span class="d-desc">دجاج بلدي، أرز مدخّن، سمن</span></span><span class="d-price">٦٥ ر.س</span></div>
+      <div class="dish reveal"><span><span class="d-name">مرقوق نجدي</span><span class="d-desc">عجين، مرق خضار، لحم طري</span></span><span class="d-price">٧٠ ر.س</span></div>
+      <div class="dish reveal"><span><span class="d-name">جريش بالبصل</span><span class="d-desc">قمح مجروش، لبن، بصل مكرمل</span></span><span class="d-price">٥٥ ر.س</span></div>
+      <div class="dish reveal"><span><span class="d-name">معصوب</span><span class="d-desc">خبز، موز، قشطة وعسل</span></span><span class="d-price">٤٠ ر.س</span></div>
+      <div class="dish reveal"><span><span class="d-name">قهوة سعودية وتمر</span><span class="d-desc">قهوة بالهيل والزعفران، تمر سكري</span></span><span class="d-price">٢٥ ر.س</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band pad" id="book">
+  <div class="wrap reveal">
+    <div class="eyebrow center" style="text-align:center">المناسبات الخاصة</div>
+    <h2 style="font-size:clamp(32px,5.5vw,54px)">اجمع ضيوفك في دارتنا</h2>
+    <p style="color:var(--muted);max-width:620px;margin:18px auto 28px;font-size:17px">مجالس خاصة على الطراز النجدي تتسع حتى ١٥٠ ضيفاً، بقوائم تراثية مخصّصة للولائم والمناسبات الوطنية.</p>
+    <a class="btn btn-solid" href="#">احجز الآن</a>
+  </div>
+</section>
+
+<footer id="visit">
+  <div class="wrap">
+    <div class="brand" style="font-size:26px">دارة نجد</div>
+    <p style="margin-top:10px">بوليفارد الدرعية، الرياض · هاتف ‎+٩٦٦ ١١ ١٢٣ ٤٥٦٧</p>
+    <p style="margin-top:6px">يومياً ١:٠٠ ظهراً — ١٢:٠٠ منتصف الليل</p>
+    <p class="demo-note">نسخة عرض تجريبية صمّمتها Carte · غير مرتبطة بأي مطعم قائم · Carte — cinematic restaurant websites</p>
+  </div>
+</footer>
+
+<script>
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40));
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to('#cLeft',{xPercent:-100,ease:'power2.inOut',duration:1.4,delay:.2});
+  gsap.to('#cRight',{xPercent:100,ease:'power2.inOut',duration:1.4,delay:.2});
+  gsap.utils.toArray('.reveal').forEach(el=>{
+    gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 85%'}});
+  });
+  gsap.utils.toArray('.num').forEach(el=>{
+    const end=+el.dataset.count;
+    ScrollTrigger.create({trigger:el,start:'top 85%',once:true,onEnter:()=>{
+      gsap.to({v:0},{v:end,duration:1.6,ease:'power1.out',onUpdate:function(){el.textContent=Math.round(this.targets()[0].v)}});
+    }});
+  });
+</script>
+</body>
+</html>
