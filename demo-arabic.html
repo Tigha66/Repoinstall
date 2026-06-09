@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مَجْلِس · مطعم خليجي فاخر · دبي</title>
+<meta name="description" content="مَجْلِس — تجربة طعام إماراتية معاصرة في قلب دبي. حجز الطاولات، قائمة الطعام، والمناسبات الخاصة.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{--bg:#0d0b07;--bg2:#161109;--ink:#f4ecdc;--muted:#b6a888;--gold:#c9a24b;--gold2:#e8cf8e;--line:rgba(201,162,75,.30);
+    --serif:'Amiri',serif;--sans:'Tajawal',system-ui,sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased;text-align:right}
+  h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.15}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:13px;letter-spacing:.18em;color:var(--gold);margin-bottom:16px}
+  .pad{padding:120px 0}
+  .reveal{opacity:0;transform:translateY(40px)}
+  .center{text-align:center}.section-head{text-align:center;margin-bottom:60px}.section-head h2{font-size:clamp(34px,6vw,62px)}
+  .btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:14px 34px;border-radius:3px;text-decoration:none;
+    font-size:15px;letter-spacing:.04em;transition:background .3s,color .3s}
+  .btn:hover{background:var(--gold);color:#0d0b07}
+  .btn-solid{background:var(--gold);color:#0d0b07}.btn-solid:hover{background:var(--gold2)}
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 30px;
+    transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+  nav.solid{background:rgba(13,11,7,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--gold2)}
+  .navlinks{display:flex;gap:26px;font-size:15px}
+  .navlinks a{color:var(--ink);text-decoration:none;opacity:.85}.navlinks a:hover{opacity:1;color:var(--gold2)}
+  .book-sm{border:1px solid var(--gold);color:var(--gold)!important;padding:8px 18px;border-radius:3px}
+  @media(max-width:760px){.navlinks a:not(.book-sm){display:none}}
+  .hero{height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:linear-gradient(rgba(8,6,3,.45),rgba(8,6,3,.85)),
+    url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092?q=80&w=1600&auto=format&fit=crop') center/cover;transform:scale(1.08)}
+  .curtain{position:absolute;top:0;bottom:0;width:51%;background:linear-gradient(var(--bg2),var(--bg));z-index:5}
+  #cLeft{left:0}#cRight{right:0}
+  .hero-inner{position:relative;z-index:6;padding:0 20px}
+  .hero h1{font-size:clamp(56px,13vw,150px);color:var(--gold2)}
+  .tagline{margin-top:18px;font-size:clamp(16px,2.6vw,22px);letter-spacing:.06em;color:var(--muted)}
+  .hero-cta{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:6;font-size:13px;letter-spacing:.1em;color:var(--muted)}
+  /* 3D dishes */
+  .tilt-wrap{perspective:1300px}
+  .tilt-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:820px){.tilt-row{grid-template-columns:1fr}}
+  .tilt{position:relative;transform-style:preserve-3d;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--bg2);
+    box-shadow:0 26px 50px rgba(0,0,0,.5);animation:float3d 6s ease-in-out infinite;will-change:transform}
+  @keyframes float3d{0%,100%{transform:rotateY(-11deg) rotateX(4deg)}50%{transform:rotateY(11deg) rotateX(-4deg)}}
+  .tilt-row .tilt:nth-child(2){animation-delay:-2s}.tilt-row .tilt:nth-child(3){animation-delay:-4s}
+  .tilt img{width:100%;height:320px;object-fit:cover;display:block;filter:saturate(1.05) brightness(.92)}
+  .tilt .body{position:absolute;right:0;left:0;bottom:0;padding:24px;background:linear-gradient(transparent,rgba(5,4,2,.92));transform:translateZ(50px)}
+  .tilt h3{font-size:26px;color:var(--gold2)}.tilt p{color:var(--muted);font-size:15px;margin-top:5px}
+  .badge3d{display:inline-block;margin-top:14px;font-size:13px;letter-spacing:.06em;color:var(--gold);border:1px solid var(--line);padding:6px 14px;border-radius:20px}
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 60px;max-width:920px;margin:0 auto}
+  @media(max-width:720px){.menu-grid{grid-template-columns:1fr}}
+  .dish{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line)}
+  .dish .d-name{font-size:19px;font-family:var(--serif)}.dish .d-desc{display:block;font-size:14px;color:var(--muted);margin-top:3px}
+  .dish .d-price{color:var(--gold2);font-size:18px;white-space:nowrap}
+  .stats{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;text-align:center}
+  @media(max-width:640px){.stat-grid{grid-template-columns:1fr}}
+  .stat .num{font-family:var(--serif);font-size:54px;color:var(--gold2)}.stat .lbl{color:var(--muted);margin-top:6px;font-size:15px}
+  .band{background:linear-gradient(120deg,#15100a,#241a0d);border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
+  footer{border-top:1px solid var(--line);padding:46px 0;text-align:center;color:var(--muted);font-size:15px}
+  .demo-note{margin-top:18px;font-size:13px;color:#7a6f59}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}.curtain{display:none}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <div class="brand">مَجْلِس</div>
+  <div class="navlinks">
+    <a href="#dishes">الأطباق</a><a href="#menu">القائمة</a><a href="#visit">زورونا</a>
+    <a class="book-sm" href="#book">احجز طاولة</a>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="curtain" id="cLeft"></div><div class="curtain" id="cRight"></div>
+  <div class="hero-inner">
+    <h1>مَجْلِس</h1>
+    <div class="tagline">مطبخ إماراتي معاصر · دبي</div>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="#book">احجز طاولة</a>
+      <a class="btn" href="#dishes">أطباقنا المميزة</a>
+    </div>
+  </div>
+  <div class="scroll-hint">مرّر للأسفل ↓</div>
+</section>
+
+<!-- 3D DISHES -->
+<section class="pad" id="dishes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">تفاعلي · ثلاثي الأبعاد</div>
+      <h2>أطباقنا المميزة</h2>
+      <span class="badge3d">تدور بتقنية ثلاثية الأبعاد</span>
+    </div>
+    <div class="tilt-wrap">
+      <div class="tilt-row">
+        <div class="tilt"><img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>مجبوس لحم</h3><p>أرز بسمتي، لحم ضأن، بهارات اللوميّ</p></div></div>
+        <div class="tilt"><img src="https://images.unsplash.com/photo-1547573854-74d2a71d0826?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>هريس</h3><p>قمح مهروس، دجاج بلدي، سمن عربي</p></div></div>
+        <div class="tilt"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>لقيمات</h3><p>عجينة ذهبية، دبس التمر، سمسم</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats pad">
+  <div class="wrap stat-grid">
+    <div class="stat reveal"><div class="num" data-count="12">0</div><div class="lbl">عاماً من الضيافة</div></div>
+    <div class="stat reveal"><div class="num" data-count="48">0</div><div class="lbl">طبقاً في القائمة</div></div>
+    <div class="stat reveal"><div class="num" data-count="120">0</div><div class="lbl">مقعداً للمناسبات</div></div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="pad" id="menu">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">من القائمة</div><h2>نكهات من الخليج</h2></div>
+    <div class="menu-grid">
+      <div class="dish reveal"><span><span class="d-name">مجبوس روبيان</span><span class="d-desc">روبيان طازج، أرز بالزعفران</span></span><span class="d-price">٨٥ د.إ</span></div>
+      <div class="dish reveal"><span><span class="d-name">ثريد لحم</span><span class="d-desc">رقاق، مرق الخضار، لحم طري</span></span><span class="d-price">٧٠ د.إ</span></div>
+      <div class="dish reveal"><span><span class="d-name">سمك هامور مشوي</span><span class="d-desc">هامور خليجي، صلصة الليمون الأسود</span></span><span class="d-price">٩٥ د.إ</span></div>
+      <div class="dish reveal"><span><span class="d-name">بلاليط</span><span class="d-desc">شعيرية محلاة، بيض، هيل وزعفران</span></span><span class="d-price">٤٠ د.إ</span></div>
+      <div class="dish reveal"><span><span class="d-name">خبيصة التمر</span><span class="d-desc">دقيق محمّص، تمر، سمن وهيل</span></span><span class="d-price">٣٨ د.إ</span></div>
+      <div class="dish reveal"><span><span class="d-name">قهوة عربية وتمر</span><span class="d-desc">قهوة بالهيل، تشكيلة تمور فاخرة</span></span><span class="d-price">٢٥ د.إ</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BAND -->
+<section class="band pad" id="book">
+  <div class="wrap reveal">
+    <div class="eyebrow center" style="text-align:center">المناسبات الخاصة</div>
+    <h2 style="font-size:clamp(30px,5vw,52px)">اجمع أحبّتك حول مجلسنا</h2>
+    <p style="color:var(--muted);max-width:620px;margin:18px auto 28px;font-size:17px">قاعات خاصة تتسع حتى ١٢٠ ضيفاً، بقوائم مخصّصة من تراث المطبخ الخليجي — للأعراس والمناسبات والاجتماعات.</p>
+    <a class="btn btn-solid" href="#">احجز الآن</a>
+  </div>
+</section>
+
+<footer id="visit">
+  <div class="wrap">
+    <div class="brand" style="font-size:24px">مَجْلِس</div>
+    <p style="margin-top:10px">شارع الشيخ محمد بن راشد، وسط مدينة دبي · هاتف ‎+٩٧١ ٤ ١٢٣ ٤٥٦٧</p>
+    <p style="margin-top:6px">يومياً ١٢:٠٠ ظهراً — ١٢:٠٠ منتصف الليل</p>
+    <p class="demo-note">هذه نسخة عرض تجريبية صمّمتها Carte · غير مرتبطة بأي مطعم قائم · ‎Carte — cinematic restaurant websites</p>
+  </div>
+</footer>
+
+<script>
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40));
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to('#cLeft',{xPercent:-100,ease:'power2.inOut',duration:1.4,delay:.2});
+  gsap.to('#cRight',{xPercent:100,ease:'power2.inOut',duration:1.4,delay:.2});
+  gsap.utils.toArray('.reveal').forEach(el=>{
+    gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 85%'}});
+  });
+  gsap.utils.toArray('.num').forEach(el=>{
+    const end=+el.dataset.count;
+    ScrollTrigger.create({trigger:el,start:'top 85%',once:true,onEnter:()=>{
+      gsap.to({v:0},{v:end,duration:1.6,ease:'power1.out',onUpdate:function(){el.textContent=Math.round(this.targets()[0].v)}});
+    }});
+  });
+</script>
+</body>
+</html>
