@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gerbou · Contemporary Emirati Fine Dining · Dubai</title>
+<meta name="description" content="Gerbou — contemporary Emirati fine dining celebrating the magic of Arab hospitality. Nad Al Sheba, Dubai.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%230a0a0a'/><circle cx='24' cy='24' r='16' fill='none' stroke='%23c2a878' stroke-width='1.6'/><text x='24' y='31' font-family='Georgia' font-size='20' fill='%23f2f0ea' text-anchor='middle'>G</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Inter:wght@300;400;500&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{--bg:#0a0a0a;--bg2:#141414;--ink:#f2f0ea;--muted:#9a978f;--accent:#c2a878;--accent2:#dcc9a3;--line:rgba(255,255,255,.14);
+    --serif:'Playfair Display',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--ar:'Reem Kufi',sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08}
+  .ar{font-family:var(--ar);direction:rtl}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  .pad{padding:120px 0}
+  .reveal{opacity:0;transform:translateY(40px)}
+  .center{text-align:center}.section-head{text-align:center;margin-bottom:56px}.section-head h2{font-size:clamp(34px,6vw,60px)}
+  .btn{display:inline-block;border:1px solid var(--ink);color:var(--ink);padding:15px 34px;border-radius:0;text-decoration:none;
+    font-size:12px;letter-spacing:.24em;text-transform:uppercase;transition:.3s}
+  .btn:hover{background:var(--ink);color:#0a0a0a}
+  .btn-solid{background:var(--ink);color:#0a0a0a;border-color:var(--ink)}.btn-solid:hover{background:var(--accent);border-color:var(--accent)}
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 30px;
+    border-bottom:1px solid transparent;transition:.4s}
+  nav.solid{background:rgba(10,10,10,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{font-family:var(--serif);font-size:24px;letter-spacing:.16em;text-transform:uppercase}
+  .navlinks{display:flex;gap:26px;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+  .navlinks a{color:var(--ink);text-decoration:none;opacity:.8}.navlinks a:hover{opacity:1;color:var(--accent2)}
+  .book-sm{border:1px solid var(--ink);padding:9px 16px}
+  @media(max-width:780px){.navlinks a:not(.book-sm){display:none}}
+  .hero{height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;position:relative}
+  .hero-bg{position:absolute;inset:0;background:linear-gradient(rgba(5,5,5,.55),rgba(5,5,5,.85)),
+    url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1600&auto=format&fit=crop') center/cover;transform:scale(1.08);filter:grayscale(.3)}
+  .curtain{position:absolute;top:0;bottom:0;width:51%;background:linear-gradient(var(--bg2),var(--bg));z-index:5}
+  #cLeft{left:0}#cRight{right:0}
+  .hero-inner{position:relative;z-index:6;padding:0 20px}
+  .hero .ar-name{font-size:clamp(34px,7vw,64px);color:var(--accent2);margin-bottom:10px;letter-spacing:.05em}
+  .hero h1{font-size:clamp(52px,13vw,150px);letter-spacing:.14em;text-transform:uppercase}
+  .tagline{margin-top:20px;font-size:clamp(13px,2.2vw,17px);letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+  .hero-cta{margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:6;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+  .tilt-wrap{perspective:1300px}
+  .tilt-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:820px){.tilt-row{grid-template-columns:1fr}}
+  .tilt{position:relative;transform-style:preserve-3d;border-radius:2px;overflow:hidden;border:1px solid var(--line);background:var(--bg2);
+    box-shadow:0 26px 50px rgba(0,0,0,.6);animation:float3d 6s ease-in-out infinite;will-change:transform}
+  @keyframes float3d{0%,100%{transform:rotateY(-11deg) rotateX(4deg)}50%{transform:rotateY(11deg) rotateX(-4deg)}}
+  .tilt-row .tilt:nth-child(2){animation-delay:-2s}.tilt-row .tilt:nth-child(3){animation-delay:-4s}
+  .tilt img{width:100%;height:330px;object-fit:cover;display:block;filter:grayscale(.25) brightness(.92)}
+  .tilt .body{position:absolute;right:0;left:0;bottom:0;padding:24px;background:linear-gradient(transparent,rgba(0,0,0,.92));transform:translateZ(50px)}
+  .tilt h3{font-size:24px;color:var(--accent2)}.tilt .ar-sub{font-family:var(--ar);direction:rtl;color:var(--muted);font-size:16px;margin-top:2px}
+  .tilt p{color:var(--muted);font-size:13.5px;margin-top:6px}
+  .badge3d{display:inline-block;margin-top:14px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);border:1px solid var(--line);padding:6px 13px}
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 60px;max-width:920px;margin:0 auto}
+  @media(max-width:720px){.menu-grid{grid-template-columns:1fr}}
+  .dish{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line)}
+  .dish .d-name{font-size:18px;font-family:var(--serif)}.dish .d-desc{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+  .dish .d-price{color:var(--accent2);font-size:17px;white-space:nowrap}
+  .stats{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;text-align:center}
+  @media(max-width:640px){.stat-grid{grid-template-columns:1fr}}
+  .stat .num{font-family:var(--serif);font-size:54px;color:var(--accent2)}.stat .lbl{color:var(--muted);margin-top:6px;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+  .band{background:#000;border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
+  footer{border-top:1px solid var(--line);padding:50px 0;text-align:center;color:var(--muted);font-size:14px}
+  footer a{color:var(--accent2);text-decoration:none}
+  .demo-note{margin-top:22px;font-size:11.5px;color:#6a6a64}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}.curtain{display:none}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <div class="brand">Gerbou</div>
+  <div class="navlinks">
+    <a href="#dishes">Dishes</a><a href="#menu">Menu</a><a href="#visit">Visit</a>
+    <a class="book-sm" href="https://www.gerbou.com/" target="_blank" rel="noopener">Reserve</a>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="curtain" id="cLeft"></div><div class="curtain" id="cRight"></div>
+  <div class="hero-inner">
+    <div class="ar-name ar">قربو</div>
+    <h1>Gerbou</h1>
+    <div class="tagline">Experience the magic of Arab hospitality</div>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="https://www.gerbou.com/" target="_blank" rel="noopener">Reserve a Table</a>
+      <a class="btn" href="#dishes">Signature Dishes</a>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<section class="pad" id="dishes">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">Interactive · 3D</div><h2>Signature Dishes</h2><span class="badge3d">Rotating in 3D</span></div>
+    <div class="tilt-wrap"><div class="tilt-row">
+      <div class="tilt"><img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>A Taste of Gerbou</h3><div class="ar-sub">ذواقة قربو</div><p>A curated journey of Emirati flavours, to share</p></div></div>
+      <div class="tilt"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>Charcoal Kunafa</h3><div class="ar-sub">كنافة الفحم</div><p>Charcoal-grilled kunafa, cheese, syrup</p></div></div>
+      <div class="tilt"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>Aseeda Fondant</h3><div class="ar-sub">عصيدة</div><p>Modern take on a heritage Emirati sweet</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="stats pad">
+  <div class="wrap stat-grid">
+    <div class="stat reveal"><div class="num" data-count="13">0</div><div class="lbl">Regions of flavour</div></div>
+    <div class="stat reveal"><div class="num" data-count="591">0</div><div class="lbl">5-star reviews</div></div>
+    <div class="stat reveal"><div class="num" data-count="4">0</div><div class="lbl">Services daily</div></div>
+  </div>
+</section>
+
+<section class="pad" id="menu">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">Selected Menu</div><h2>Heritage, reimagined</h2></div>
+    <div class="menu-grid">
+      <div class="dish reveal"><span><span class="d-name">A Taste of Gerbou</span><span class="d-desc">chef's curated tasting, to share</span></span><span class="d-price">240</span></div>
+      <div class="dish reveal"><span><span class="d-name">Aseeda Loaf</span><span class="d-desc">slow-cooked wheat, date molasses, ghee</span></span><span class="d-price">55</span></div>
+      <div class="dish reveal"><span><span class="d-name">Balaleet</span><span class="d-desc">sweet vermicelli, saffron, egg</span></span><span class="d-price">48</span></div>
+      <div class="dish reveal"><span><span class="d-name">Madrouba</span><span class="d-desc">creamy spiced rice, chicken, dried lime</span></span><span class="d-price">72</span></div>
+      <div class="dish reveal"><span><span class="d-name">Charcoal Kunafa</span><span class="d-desc">charcoal-grilled, cheese, syrup</span></span><span class="d-price">58</span></div>
+      <div class="dish reveal"><span><span class="d-name">Um Ali</span><span class="d-desc">warm pastry pudding, nuts, cream</span></span><span class="d-price">46</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band pad" id="visit">
+  <div class="wrap reveal">
+    <div class="eyebrow center" style="text-align:center">Reservations</div>
+    <h2 style="font-size:clamp(30px,5vw,52px)">Welcome to our humble abode</h2>
+    <p class="ar" style="color:var(--accent2);font-size:20px;margin:14px 0 26px">أهلاً وسهلاً</p>
+    <a class="btn btn-solid" href="https://www.gerbou.com/" target="_blank" rel="noopener">Reserve a Table</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="font-size:22px">Gerbou</div>
+    <p style="margin-top:10px">Nad Al Sheba, Dubai, UAE · <a href="tel:+971502878882">+971 50 287 8882</a></p>
+    <p style="margin-top:6px"><a href="mailto:info@gerbou.com">info@gerbou.com</a> · <a href="https://instagram.com/gerbou" target="_blank" rel="noopener">@gerbou</a></p>
+    <p class="demo-note">Design concept by Carte — not the official Gerbou website, not affiliated with or endorsed by the restaurant.</p>
+  </div>
+</footer>
+
+<script>
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40));
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to('#cLeft',{xPercent:-100,ease:'power2.inOut',duration:1.4,delay:.2});
+  gsap.to('#cRight',{xPercent:100,ease:'power2.inOut',duration:1.4,delay:.2});
+  gsap.utils.toArray('.reveal').forEach(el=>gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%'}}));
+  gsap.utils.toArray('.num').forEach(el=>{const end=+el.dataset.count;
+    ScrollTrigger.create({trigger:el,start:'top 85%',once:true,onEnter:()=>{gsap.to({v:0},{v:end,duration:1.6,ease:'power1.out',onUpdate:function(){el.textContent=Math.round(this.targets()[0].v)}});}});});
+</script>
+</body>
+</html>

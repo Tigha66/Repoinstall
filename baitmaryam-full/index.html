@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bait Maryam · Levantine Home Cooking · Jumeirah Lake Towers, Dubai</title>
+<meta name="description" content="Bait Maryam — Michelin-recognised Levantine home cooking by Chef Salam Dakkak in Jumeirah Lake Towers, Dubai. Your home, away from home.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%230f1310'/><path d='M24 9 9 21v18h30V21z' fill='none' stroke='%23c9a24b' stroke-width='2.2'/><text x='24' y='34' font-family='Georgia' font-size='15' fill='%23e3cd97' text-anchor='middle'>م</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@300;400;500&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+<nav id="nav">
+  <a class="brand" href="index.html">Bait Maryam</a>
+  <button class="navtoggle" id="navtoggle" aria-label="Menu">&#9776;</button>
+  <div class="navlinks" id="navlinks">
+    <a href="index.html" class="active">Home</a><a href="menu.html">Menu</a><a href="events.html">Gatherings</a>
+    <a href="about.html">Our Story</a><a href="gallery.html">Gallery</a><a href="visit.html">Visit</a>
+    <a class="book-sm" href="https://www.baitmaryam.com/" target="_blank" rel="noopener">Reserve</a>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-bg" style="background-image:linear-gradient(rgba(8,10,8,.5),rgba(8,10,8,.84)),url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092?q=80&w=1600&auto=format&fit=crop')"></div>
+  <div class="curtain" id="cLeft"></div><div class="curtain" id="cRight"></div>
+  <div class="hero-inner">
+    <div class="ar-name ar">بيت مريم</div>
+    <h1>Bait Maryam</h1>
+    <div class="tagline">Levantine Home Cooking · Jumeirah Lake Towers<span class="ar">بيتك ومطرحك — بيتك بعيداً عن البيت</span></div>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="https://www.baitmaryam.com/" target="_blank" rel="noopener">Reserve a Table</a>
+      <a class="btn" href="menu.html">View the Menu</a>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<section class="pad">
+  <div class="wrap split">
+    <div class="reveal">
+      <div class="eyebrow">Our Story</div>
+      <h2>A table set with love</h2>
+      <p>Named after Chef Salam Dakkak's mother, <em>Maryam</em>, this passionately run home brings the soul of the Levant to Dubai — recipes carried across generations and cooked exactly the way family should be fed.</p>
+      <p>A warm welcome, a quiet lakeside room, and food made with love.</p>
+      <a class="btn" style="margin-top:24px" href="about.html">Our Story</a>
+    </div>
+    <img class="reveal" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1100&auto=format&fit=crop" alt="dining room">
+  </div>
+</section>
+
+<section class="michelin pad-sm">
+  <div class="wrap mich-row reveal">
+    <div class="m">MICHELIN<span>Recognised 2023–2025</span></div>
+    <div class="m">Bib Gourmand<span>Soulful, great value</span></div>
+    <div class="m">★ 4.7<span>Loved by guests</span></div>
+  </div>
+</section>
+
+<section class="pad" id="dishes">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">Interactive · 3D</div><h2>Signature Dishes</h2><span class="badge3d">Rotating in 3D</span></div>
+    <div class="tilt-wrap"><div class="tilt-row">
+      <div class="tilt"><img src="https://images.unsplash.com/photo-1547573854-74d2a71d0826?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>Warak Enab</h3><div class="ar-sub">ورق عنب</div><p>Hand-rolled vine leaves, rice, lemon &amp; olive oil</p></div></div>
+      <div class="tilt"><img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>Mansaf</h3><div class="ar-sub">منسف</div><p>Lamb, jameed yoghurt, almonds over fragrant rice</p></div></div>
+      <div class="tilt"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop" alt=""><div class="body"><h3>Knafeh Nabulsieh</h3><div class="ar-sub">كنافة نابلسية</div><p>Warm cheese, semolina, syrup &amp; pistachio</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="pad-sm" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">From the Table</div><h2>A Taste of Home</h2></div>
+    <div class="menu-grid">
+      <div class="dish reveal"><span><span class="d-name">Hummus Beiruti</span><span class="d-desc">chickpeas, tahini, garlic, parsley</span></span><span class="d-price">32</span></div>
+      <div class="dish reveal"><span><span class="d-name">Kibbeh Maqliyeh</span><span class="d-desc">bulgur shells, spiced lamb, pine nuts</span></span><span class="d-price">46</span></div>
+      <div class="dish reveal"><span><span class="d-name">Musakhan Rolls</span><span class="d-desc">sumac chicken, caramelised onion, taboon</span></span><span class="d-price">48</span></div>
+      <div class="dish reveal"><span><span class="d-name">Maqluba</span><span class="d-desc">upside-down rice, lamb, fried vegetables</span></span><span class="d-price">62</span></div>
+    </div>
+    <div class="center reveal" style="margin-top:40px"><a class="btn" href="menu.html">See the Full Menu</a></div>
+  </div>
+</section>
+
+<section class="pad">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">The Experience</div><h2>Lakeside, calm &amp; warm</h2></div>
+    <div class="grid-gal">
+      <img class="reveal" src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop" alt="">
+      <img class="reveal" src="https://images.unsplash.com/photo-1542528180-1c2803fa048c?q=80&w=800&auto=format&fit=crop" alt="">
+      <img class="reveal" src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=800&auto=format&fit=crop" alt="">
+    </div>
+    <div class="center reveal" style="margin-top:36px"><a class="btn" href="gallery.html">View Gallery</a></div>
+  </div>
+</section>
+
+<section class="band pad">
+  <div class="wrap reveal">
+    <div class="eyebrow center" style="text-align:center">Reservations</div>
+    <h2 style="font-size:clamp(30px,5vw,52px)">Join us at our table</h2>
+    <p class="ar" style="color:var(--gold2);font-size:20px;margin:14px 0 26px">أهلاً وسهلاً في بيت مريم</p>
+    <a class="btn btn-solid" href="https://www.baitmaryam.com/" target="_blank" rel="noopener">Reserve a Table</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><div class="foot-grid">
+    <div><div class="brand" style="font-size:20px">Bait Maryam</div><p style="margin-top:8px">Cluster D, Jumeirah Lake Towers<br>Dubai, UAE</p></div>
+    <div><strong style="color:var(--ink);font-weight:500">Hours</strong><p style="margin-top:8px">Daily · 10:00 — 23:00</p></div>
+    <div><strong style="color:var(--ink);font-weight:500">Contact</strong><p style="margin-top:8px"><a href="tel:+9710547044774">054 704 4774</a><br><a href="mailto:info@baitmaryam.com">info@baitmaryam.com</a><br><a href="https://instagram.com/bait.maryam" target="_blank" rel="noopener">@bait.maryam</a></p></div>
+  </div><p class="demo-note">Design concept by Carte — not the official Bait Maryam website, not affiliated with or endorsed by the restaurant.</p></div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
