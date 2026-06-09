@@ -104,6 +104,7 @@ function bodyHTML(l){
 <p>Tap it on your phone — it's live:</p>
 <p>• Homepage concept: <a href="${l.demo}">${l.demo}</a><br>
 • Full multi-page site: <a href="${l.full}">${l.full}</a></p>
+<p><span class="muted" style="color:#6b655c">The photos shown are samples — your final website uses <b>your own food photography and menu</b> (or I can arrange premium shots for you).</span></p>
 <p>It's a free concept with no obligation. If you like the direction, I'd build the full site — menu, story, gallery, reservations — for <b>${l.price}</b>, plus an optional monthly care plan to keep it fresh. Could I send you a couple of options?</p>
 <p>Warm regards,<br>
 Abdelhak — Carte<br>
@@ -114,7 +115,7 @@ const root=document.getElementById('cards');
 L.forEach((l,i)=>{
   const id="b"+i;
   const card=document.createElement('div'); card.className='card';
-  const mailBody = `Hi ${l.name} team,\n\n${l.hook.replace(/&amp;/g,'&')}\n\nTap it on your phone — it's live:\n• Homepage concept: ${l.demo}\n• Full multi-page site: ${l.full}\n\nIt's a free concept with no obligation. If you like the direction, I'd build the full site for ${l.price}, plus an optional monthly care plan. Could I send you a couple of options?\n\nWarm regards,\nAbdelhak — Carte\nhello@callpilotvoice.co.uk`;
+  const mailBody = `Hi ${l.name} team,\n\n${l.hook.replace(/&amp;/g,'&')}\n\nTap it on your phone — it's live:\n• Homepage concept: ${l.demo}\n• Full multi-page site: ${l.full}\n\nThe photos shown are samples — your final website uses your own food photography and menu (or I can arrange premium shots for you).\n\nIt's a free concept with no obligation. If you like the direction, I'd build the full site for ${l.price}, plus an optional monthly care plan. Could I send you a couple of options?\n\nWarm regards,\nAbdelhak — Carte\nhello@callpilotvoice.co.uk`;
   const toAddr = l.to.startsWith('via')||l.to.startsWith('[') ? '' : l.to;
   const mailto = `mailto:${toAddr}?subject=${encodeURIComponent(l.subj)}&body=${encodeURIComponent(mailBody)}`;
   card.innerHTML=`
