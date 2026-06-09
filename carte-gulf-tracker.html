@@ -114,7 +114,7 @@ const LEADS=[
   contact:'+966 92 003 3511 · @najdvillagesa · najdvillage.com',demo:'https://mystic-chant-gkz8.here.now/',full:'https://unfold-lagoon-rvnx.here.now/',orig:'https://najdvillage.com/',val:16000,
   note:'Independent since 1996. Riyadh demo style ready (Darat Najd).'},
  {co:'Maiz',city:'Riyadh',cuisine:'Saudi fine dining · Diriyah',
-  contact:'+966 92 001 5513 · @maizriyadh · reservations@maiz.sa',demo:'https://supple-donkey-7bnv.here.now/',full:'https://calm-meadow-cgjn.here.now/',orig:'https://maiz.sa/',val:25000,
+  contact:'+966 92 001 5513 · @maizriyadh · reservations@maiz.sa',demo:'https://supple-donkey-7bnv.here.now/',full:'https://calm-meadow-cgjn.here.now/',orig:'https://maiz.sa/',real:'https://lunar-yoga-k2v3.here.now/',val:25000,
   note:'Flagship reference. Has strong site already — pitch refresh/care.'},
  {co:'Mala',star:true,city:'Kuwait',cuisine:'Modern Kuwaiti · homegrown',
   contact:'+965 9807 3643 · @mala.kuwait · malakuwait.com',demo:'https://centered-cairn-psge.here.now/',full:'https://serene-muse-v3rw.here.now/',orig:'https://www.malakuwait.com/',val:15000,
@@ -140,6 +140,7 @@ function render(){
     else assets+=`<span style="color:var(--muted);font-size:12px">demo: to build</span>`;
     if(L.full)assets+=`<a href="${L.full}" target="_blank">Full site ↗</a>`;
     if(L.orig)assets+=`<a href="${L.orig}" target="_blank" style="opacity:.75">Original ↗</a>`;
+    if(L.real)assets+=`<a href="${L.real}" target="_blank" style="color:#86efac">Real photos ↗</a>`;
     const tr=document.createElement('tr');tr.className=L.hot?'hot':'';
     tr.innerHTML=`
       <td><div class="co">${L.co}${L.star?'<span class="star">⭐</span>':''}</div><div class="city">${L.city}</div><div class="meta">${L.cuisine}</div></td>
