@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CallPilot — Outreach Emails (click-ready)</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%230b1220'/><circle cx='24' cy='24' r='15' fill='none' stroke='%233b82f6' stroke-width='2.6'/><path d='M17 20a10 10 0 0 0 11 11l2.4-3-4-2-1.6 1.4a7 7 0 0 1-4.2-4.2L18 21z' fill='%2360a5fa'/></svg>">
+<style>
+  :root{--bg:#0a0f1a;--card:#111a2b;--ink:#eef3fb;--mut:#8da2c0;--blue:#3b82f6;--blue2:#60a5fa;--ln:rgba(96,165,250,.18);--grn:#22c55e}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:14px;
+    background-image:radial-gradient(900px 400px at 80% -10%,rgba(59,130,246,.14),transparent)}
+  .wrap{max-width:880px;margin:0 auto;padding:30px 20px 80px}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .mk{width:42px;height:42px;border-radius:12px;border:1px solid var(--ln);display:grid;place-items:center;background:#0c1424}
+  h1{font-size:20px}.sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+  .tip{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--mut);margin-bottom:14px}
+  .tip b{color:var(--blue2)}
+  .filter{display:flex;gap:8px;margin-bottom:18px}
+  .filter button{background:var(--card);border:1px solid var(--ln);color:var(--ink);border-radius:30px;padding:7px 16px;font:inherit;font-size:13px;cursor:pointer}
+  .filter button.on{background:var(--blue);color:#06101f;border-color:var(--blue);font-weight:600}
+  .card{background:var(--card);border:1px solid var(--ln);border-radius:14px;margin-bottom:20px;overflow:hidden}
+  .chead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--ln)}
+  .chead .name{font-size:16px;font-weight:600;color:var(--blue2)}
+  .chead .to{color:var(--mut);font-size:12.5px}
+  .flag{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:20px;border:1px solid var(--ln);color:var(--blue2);margin-left:6px}
+  .btns{display:flex;gap:8px;flex-wrap:wrap}
+  button.b,a.b{font-family:inherit;font-size:12.5px;border-radius:8px;padding:8px 12px;cursor:pointer;text-decoration:none;border:1px solid var(--ln);background:#0e1626;color:var(--ink)}
+  button.b:hover,a.b:hover{border-color:var(--blue);color:var(--blue2)}
+  .go{background:var(--blue);color:#06101f;border-color:var(--blue);font-weight:600}
+  .subject{padding:12px 18px 0;font-size:13px;color:var(--mut)}.subject b{color:var(--ink)}
+  .body{padding:14px 18px 18px;background:#fbf9f5;color:#1c1a17;margin:12px;border-radius:10px;font-size:14px;line-height:1.6}
+  .body a{color:#2563eb;font-weight:600}
+  .body .note{color:#6b655c;font-size:13px}
+  .flash{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--blue);color:#06101f;padding:11px 20px;border-radius:30px;font-weight:600;font-size:13px;z-index:99}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="mk"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="#3b82f6" stroke-width="2.6"/><path d="M17 20a10 10 0 0 0 11 11l2.4-3-4-2-1.6 1.4a7 7 0 0 1-4.2-4.2L18 21z" fill="#60a5fa"/></svg></div>
+    <div><h1>CallPilot — Outreach Emails</h1></div></header>
+  <div class="sub">Click-ready · links stay clickable when pasted into Gmail · every email states the demo greeting is general and personalised on sign-up.</div>
+
+  <div class="tip">📌 <b>How to use:</b> click <b>Copy (rich)</b> → Gmail → Compose → paste (links stay clickable) → add the <b>To</b> + <b>Subject</b> → send. The demo line uses a <b>general greeting</b> so it's safe to email everyone at once. US leads use the US demo; UK leads use the UK demo.</div>
+
+  <div class="filter">
+    <button class="on" onclick="filt('all',this)">All</button>
+    <button onclick="filt('us',this)">🇺🇸 US</button>
+    <button onclick="filt('uk',this)">🇬🇧 UK</button>
+  </div>
+
+  <div id="cards"></div>
+</div>
+
+<script>
+const LAND="https://brisk-tundra-53bj.here.now/";
+const USD="+1 571-788-4804", UKD="+44 20 3838 9029";
+const L=[
+// ---- US (Austin) ----
+{name:"Peanut Plumbing", region:"us", to:"info@peanutplumbingtx.com (or contact form)", trade:"plumber",
+ hook:"When your team's on a job and the phone rings, those calls go to voicemail — and the customer rings the next plumber."},
+{name:"The Plumbinator", region:"us", to:"contact form · plumbinatoraustin.com", trade:"plumber",
+ hook:"When you're under a sink and the phone rings, those calls go to voicemail and you lose the job."},
+{name:"Brad B Plumbing", region:"us", to:"contact form · bradbplumbing.com", trade:"plumber",
+ hook:"Missed calls while you're on a job are lost jobs — they ring the next plumber."},
+{name:"M & B Hair Salon", region:"us", to:"contact form · mnbatx.com", trade:"salon",
+ hook:"When you're mid-haircut and the phone rings, the booking often slips to voicemail."},
+{name:"South Austin Barber Shop", region:"us", to:"contact form · southaustinbarbershop.com", trade:"salon",
+ hook:"Busy chair, ringing phone — those calls become missed walk-ins."},
+{name:"Capitol City Barbershop", region:"us", to:"DM @capitolcitybarber · contact form", trade:"salon",
+ hook:"When all your barbers are busy, the phone goes unanswered and you lose the booking."},
+{name:"A-Plus Air Conditioning", region:"us", to:"contact form · aplustexas.com", trade:"hvac",
+ hook:"In peak season the phones don't stop — and the calls you miss go straight to a competitor."},
+{name:"Cedar Park Overhead Doors", region:"us", to:"contact form · cedarparkoverheaddoors.com", trade:"garage",
+ hook:"Emergency garage-door calls come any hour — voicemail loses them to the next company."},
+// ---- UK (London) ----
+{name:"Allerco Plumbing & Heating", region:"uk", to:"contact form · allercoplumbingandheating.com", trade:"plumber",
+ hook:"When you're on a job and the phone rings, those calls go to voicemail — and the customer rings the next plumber."},
+{name:"Rowlen", region:"uk", to:"contact form · rowlen.co.uk", trade:"plumber",
+ hook:"Missed calls while you're working are lost jobs — they ring the next firm."},
+{name:"Flush Plumbing & Heating", region:"uk", to:"contact form · flushplumbingandheating.co.uk", trade:"plumber",
+ hook:"Busy on a callout, phone ringing — those go to voicemail and you lose the work."},
+{name:"Fantastic Handyman", region:"uk", to:"020 3404 4045 · fantastichandyman.co.uk", trade:"handyman",
+ hook:"When your team's out on jobs, ringing phones become missed bookings."},
+];
+
+function bodyHTML(l){
+  const demo = l.region==='uk'? UKD : USD;
+  return `<p>Hi ${l.name} team,</p>
+<p>${l.hook} I build <b>AI receptionists</b> that answer every call 24/7, book the job, and text you the caller's name, number and details.</p>
+<p>🔊 Hear a live one right now — call <a href="tel:${demo.replace(/[^+\d]/g,'')}">${demo}</a>. Talk to it like a customer would.<br>
+🌐 How it works: <a href="${LAND}">${LAND}</a></p>
+<p class="note">Note: the demo line uses a <b>general greeting</b> so anyone can try it. When you come on board, I set it to answer in <b>${l.name}'s own name</b> — "Thanks for calling ${l.name}…" — with your hours, services and how you want calls handled.</p>
+<p>Simple pricing: <b>${l.region==='uk'?'£79 setup, £79/month':'$99 setup, $99/month'}</b>, live tomorrow, cancel anytime. One job you don't miss pays for the whole year. Want me to switch yours on this week?</p>
+<p>Best,<br>Abdelhak — CallPilot<br>hello@callpilotvoice.co.uk · <a href="${LAND}">${LAND}</a></p>`;
+}
+function plain(l){
+  const demo = l.region==='uk'? UKD : USD;
+  return `Hi ${l.name} team,\n\n${l.hook} I build AI receptionists that answer every call 24/7, book the job, and text you the caller's name, number and details.\n\nHear a live one now — call ${demo}. Talk to it like a customer would.\nHow it works: ${LAND}\n\nNote: the demo line uses a general greeting so anyone can try it. When you come on board, I set it to answer in ${l.name}'s own name, with your hours and services.\n\nPricing: ${l.region==='uk'?'£79 setup, £79/month':'$99 setup, $99/month'}, live tomorrow, cancel anytime. One job you don't miss pays for the whole year. Want me to switch yours on this week?\n\nBest,\nAbdelhak — CallPilot\nhello@callpilotvoice.co.uk`;
+}
+
+const root=document.getElementById('cards');
+function render(f){
+  root.innerHTML='';
+  L.forEach((l,i)=>{
+    if(f!=='all' && l.region!==f) return;
+    const id='b'+i;
+    const subj=`${l.name} — never miss a call again (hear a live AI receptionist)`;
+    const toAddr = l.to.includes('@') ? l.to.split(' ')[0] : '';
+    const mailto=`mailto:${toAddr}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(plain(l))}`;
+    const card=document.createElement('div');card.className='card';
+    card.innerHTML=`<div class="chead">
+        <div><span class="name">${l.name}</span><span class="flag">${l.region==='uk'?'🇬🇧 UK':'🇺🇸 US'}</span><div class="to">To: ${l.to}</div></div>
+        <div class="btns"><button class="b" onclick="cr('${id}')">📋 Copy (rich)</button><button class="b" onclick="cp('${id}')">Copy plain</button><a class="b go" href="${mailto}" target="_blank">✉ Gmail</a></div>
+      </div>
+      <div class="subject">Subject: <b>${subj}</b></div>
+      <div class="body" id="${id}">${bodyHTML(l)}</div>`;
+    root.appendChild(card);
+  });
+}
+function filt(f,btn){document.querySelectorAll('.filter button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');render(f)}
+async function cr(id){const el=document.getElementById(id);try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([el.innerHTML],{type:'text/html'}),'text/plain':new Blob([el.innerText],{type:'text/plain'})})]);flash('Copied with clickable links ✔')}catch(e){cp(id)}}
+function cp(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>flash('Plain text copied ✔'))}
+function flash(m){const d=document.createElement('div');d.className='flash';d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),2000)}
+render('all');
+</script>
+</body>
+</html>
