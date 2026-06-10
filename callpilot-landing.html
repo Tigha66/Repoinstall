@@ -193,27 +193,40 @@
       <div class="eyebrow">Pricing</div>
       <h2>Costs less than one missed job a month</h2>
       <p>A one-time setup, then a simple monthly plan. Cancel anytime.</p>
+      <div class="curtoggle" style="display:inline-flex;gap:0;margin-top:18px;border:1px solid var(--line);border-radius:30px;overflow:hidden">
+        <button id="cur-usd" onclick="setCur('usd')" style="background:var(--blue);color:#06101f;border:none;padding:8px 20px;font:inherit;font-weight:600;cursor:pointer">🇺🇸 USD</button>
+        <button id="cur-gbp" onclick="setCur('gbp')" style="background:transparent;color:var(--ink);border:none;padding:8px 20px;font:inherit;cursor:pointer">🇬🇧 GBP</button>
+      </div>
     </div>
     <div class="price-grid">
       <div class="plan reveal">
         <div class="tag">Solo</div><h3>Starter</h3>
-        <div class="amt">$99<span>/mo</span></div>
-        <ul><li>AI receptionist 24/7</li><li>Up to 200 minutes/mo</li><li>Call summaries by email</li><li>Keeps your number</li><li>$99 one-time setup</li></ul>
+        <div class="amt"><b class="amtval" data-usd="$99" data-gbp="£79">$99</b><span>/mo</span></div>
+        <ul><li>AI receptionist 24/7</li><li>Up to 200 minutes/mo</li><li>Call summaries by email</li><li>Keeps your number</li><li><b class="setupval" data-usd="$99" data-gbp="£79">$99</b> one-time setup</li></ul>
         <a class="btn" href="#contact">Get Started</a>
       </div>
       <div class="plan feat reveal">
         <div class="tag">Most Popular</div><h3>Business</h3>
-        <div class="amt">$199<span>/mo</span></div>
+        <div class="amt"><b class="amtval" data-usd="$199" data-gbp="£149">$199</b><span>/mo</span></div>
         <ul><li>Everything in Starter</li><li>Up to 600 minutes/mo</li><li>Appointment booking</li><li>Text + email summaries</li><li>Custom voice & answers</li><li>Setup included</li></ul>
         <a class="btn btn-solid" href="#contact">Get a Free Demo</a>
       </div>
       <div class="plan reveal">
         <div class="tag">High Volume</div><h3>Pro</h3>
-        <div class="amt">$299<span>+/mo</span></div>
+        <div class="amt"><b class="amtval" data-usd="$299" data-gbp="£249">$299</b><span>+/mo</span></div>
         <ul><li>Everything in Business</li><li>Unlimited / high minutes</li><li>Multiple locations</li><li>Priority support</li><li>CRM / calendar integration</li><li>Setup included</li></ul>
         <a class="btn" href="#contact">Enquire</a>
       </div>
     </div>
+    <script>
+      function setCur(c){
+        document.querySelectorAll('.amtval,.setupval').forEach(function(e){e.textContent=e.getAttribute('data-'+c)});
+        var u=document.getElementById('cur-usd'),g=document.getElementById('cur-gbp');
+        var on='background:var(--blue);color:#06101f;border:none;padding:8px 20px;font:inherit;font-weight:600;cursor:pointer';
+        var off='background:transparent;color:var(--ink);border:none;padding:8px 20px;font:inherit;cursor:pointer';
+        u.style.cssText=(c==='usd'?on:off);g.style.cssText=(c==='gbp'?on:off);
+      }
+    </script>
   </div>
 </section>
 
